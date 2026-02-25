@@ -4,8 +4,7 @@
 
 ### General
 
-- [Material de la cátedra](https://placeholder.com)
-- [Cartelera Virtual (Gestión Docente)](https://gestiondocente.info.unlp.edu.ar/cartelera/#form[materia]=30&)
+- [Material de la cátedra](https://ideas.info.unlp.edu.ar/teoria-de-la-computacion-y-verificacion-de-programas/Communication/Board/View/show?idCourseTool=b6baef25-ef8e-41e1-9419-8086a6335278)
 
 ## Práctica
 
