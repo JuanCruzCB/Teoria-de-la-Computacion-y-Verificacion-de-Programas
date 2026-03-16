@@ -214,6 +214,151 @@
 
 <h1 align="center">Clase 2 - 17 de marzo, 2026</h1>
 
-## ?
+## Clasificación de problemas
+
+### Problemas computables decidibles
+
+- Lenguajes aceptados por una MT que siempre para.
+- Si $w \in L(M)$, $M$ acepta.
+- Si $w \notin L(M)$, $M$ rechaza.
+- Se dice que $L$ es **recursivo** o **decidible**.
+- $R$ es el conjunto de estos lenguajes.
+
+### Problemas computables no decidibles
+
+- Lenguajes aceptados por una MT que a partir de algunas instancias negativas no paran.
+- Si $w \in L(M)$, $M$ acepta.
+- Si $w \notin L(M)$, $M$ rechaza o loopea.
+- Se dice que $L$ es **recursivamente enumerable** o **semi-decidible**.
+- $RE$ es el conjunto de estos lenguajes.
+
+### Problemas no computables
+
+- Lenguajes sin MT que los acepten (a partir de algunas instancias positivas no paran).
+- Si $w \in L(M)$, $M$ acepta o loopea.
+- Si $w \notin L(M)$, $M$ rechaza o loopea.
+- Se dice que $L$ no es **recursivamente enumerable**.
+
+## Jerarquía de la computabilidad
+
+### Diagrama de Venn
+
+![Jerarquía de la computabilidad](https://i.imgur.com/wZMwJ7i.png)
+
+### Definiciones formales
+
+- $\Sigma$ es el **alfabeto** universal de todos los símbolos posibles: $\Sigma = \lbrace a, b, c, \ldots, z, 0, 1, 2, \ldots, 9, \ldots \rbrace$.
+- $\Sigma^*$ es el **conjunto** universal de todas las cadenas de símbolos de $\Sigma$: $\Sigma^* = \lbrace \lambda, a, b, c, \ldots, z, 0, 1, 2, \ldots, 9, aa, ab, ac, \ldots \rbrace$.
+- $\mathcal{L}$ es el **conjunto** universal de todos los lenguajes sobre $\Sigma$: $\mathcal{P(\Sigma^*)}$, es decir, el conjunto de partes de $\Sigma^*$.
+- Un lenguaje $L$ es **recursivo** $(L \in R)$ si y solo si existe una MT $M$ que lo acepta y siempre para (lo decide). Es decir, para toda cadena $w$ de $\Sigma^*$:
+  - Si $w \in L$, entonces $M$ a partir de $w$ para en el estado $q_A$.
+  - Si $w \notin L$, entonces $M$ a partir de $w$ para en el estado $q_R$.
+- Un lenguaje $L$ es **recursivamente enumerable** $(L \in RE)$ si y solo si existe una MT $M$ que lo acepta. Es decir, para toda cadena $w$ de $\Sigma^*$:
+  - Si $w \in L$, entonces $M$ a partir de $w$ para en el estado $q_A$.
+  - Si $w \notin L$, entonces $M$ a partir de $w$ para en el estado $q_R$ o loopea.
+- Se cumple que $R \subset RE \subset \mathcal{L}$, es decir, todo lenguaje recursivo es recursivamente enumerable, pero no todo lenguaje recursivamente enumerable es recursivo, y todo lenguaje recursivamente enumerable es un lenguaje sobre $\Sigma$, pero no todo lenguaje sobre $\Sigma$ es recursivamente enumerable.
+  - Las inclusiones son **estrictas**, es decir, $R \subsetneq RE \subsetneq \mathcal{L}$, porque existen lenguajes que son recursivamente enumerables pero no recursivos, y existen lenguajes que no son recursivamente enumerables.
+
+### Propiedades de la clase $R$ (lenguajes recursivos)
+
+1. **Si $L \in R$, entonces $L^C \in R$**.
+   1. Es decir, si existe una MT $M_1$ que decide $L$, también existe una MT $M_2$ que decide el complemento de $L$.
+   2. Coloquialmente, si un problema es decidible, entonces también lo es el problema opuesto.
+   3. Se demuestra invirtiendo los estados de aceptación y rechazo de $M_1$ para construir $M_2$. Es decir, $M_2$ hace exactamente lo mismo que $M_1$, pero cuando $M_1$ acepta, $M_2$ rechaza, y cuando $M_1$ rechaza, $M_2$ acepta. De esta forma $M_2$ decide el complemento de $L$.
+2. **Si $L_1 \in R$ y $L_2 \in R$, entonces $L_1 \cap L_2 \in R$**.
+   1. Es decir, si existe una MT $M_1$ que decide $L_1$ y una MT $M_2$ que decide $L_2$, también existe una MT $M_3$ que decide la intersección entre $L_1$ y $L_2$.
+   2. Coloquialmente, si dos problemas son decidibles, entonces también lo es el problema de decidir si ambas condiciones se cumplen a la vez.
+   3. Se demuestra construyendo una MT $M_3$ que ejecute secuencialmente $M_1$ y $M_2$ y acepte si y solo si ambas aceptan, es decir, $M_3$ acepta una cadena de entrada $w$ si y solo si $M_1$ acepta $w$ y luego $M_2$ acepta $w$. De esta forma $M_3$ decide la intersección entre $L_1$ y $L_2$.
+3. **Si $L_1 \in R$ y $L_2 \in R$, entonces $L_1 \cup L_2 \in R$**.
+   1. Es decir, si existe una MT $M_1$ que decide $L_1$ y una MT $M_2$ que decide $L_2$, también existe una MT $M_3$ que decide la unión entre $L_1$ y $L_2$.
+   2. Coloquialmente, si dos problemas son decidibles, entonces también lo es el problema de decidir si al menos una de las condiciones se cumple.
+   3. Se demuestra construyendo una MT $M_3$ que ejecute secuencialmente $M_1$ y $M_2$ y acepte si al menos una de las dos acepta, es decir, $M_3$ acepta una cadena de entrada $w$ si y solo si $M_1$ acepta $w$ o $M_2$ acepta $w$. De esta forma $M_3$ decide la unión entre $L_1$ y $L_2$.
+
+### Propiedades de la clase $RE$ (lenguajes recursivamente enumerables)
+
+1. **Si $L_1 \in RE$ y $L_2 \in RE$, entonces $L_1 \cup L_2 \in RE$**.
+   1. Es decir, si existe una MT $M_1$ que acepta $L_1$ y una MT $M_2$ que acepta $L_2$, también existe una MT $M_3$ que acepta la unión entre $L_1$ y $L_2$.
+   2. Coloquialmente, si dos problemas son semi-decidibles, entonces también lo es el problema de decidir si al menos una de las condiciones se cumple.
+   3. Para demostrarlo, no se puede hacer lo que se hizo en el caso de los lenguajes recursivos, porque las MT $M_1$ y $M_2$ pueden loopear para algunas cadenas de entrada, por lo que no es seguro ejecutar secuencialmente $M_1$ y $M_2$ y esperar a que terminen, porque pueden no terminar nunca. Se puede demostrar usando una MT de tres cintas, donde la primera cinta contiene la cadena de entrada, la segunda cinta se usa para simular $M_1$ y la tercera cinta se usa para simular $M_2$. La MT va ejecutando paso por paso las simulaciones de $M_1$ y $M_2$ de forma intercalada, es decir, ejecuta un paso de $M_1$, luego un paso de $M_2$, luego otro paso de $M_1$, luego otro paso de $M_2$, y así sucesivamente. De esta forma, si al menos una de las dos MT acepta la cadena de entrada, entonces la MT $M_3$ también la acepta, porque eventualmente llegará a ese paso en el que una de las dos MT acepte.
+2. **Si $L_1 \in RE$ y $L_2 \in RE$, entonces $L_1 \cap L_2 \in RE$**.
+
+### La clase $\text{CO-RE}$
+
+- El conjunto $\text{CO-RE}$ tiene los complementos de los lenguajes del conjunto $RE$, es decir, $L \in RE$ si y solo si $L^C \in \text{CO-RE}$.
+- Se cumple $R \subseteq RE \cap \text{CO-RE}$ porque:
+  - Por definición, $R \subseteq RE$.
+  - Si $L \in R$, entonces $L^C \in R$ (por propiedad), por lo que $L^C \in RE$, por lo que $L \in \text{CO-RE}$, por lo que $L \in RE \cap \text{CO-RE}$.
+- Se cumple $RE \cap \text{CO-RE} \subseteq R$ porque:
+  - ...
+- Por lo tanto tenemos una igualdad: $R = RE \cap \text{CO-RE}$.
+
+### Las cuatro regiones de la jerarquía de la computabilidad
+
+![Regiones de la jerarquía de la computabilidad](https://i.imgur.com/9mVb6j5.png)
+
+1. **Conjunto $R$**.
+   1. Lenguajes con MT que siempre paran.
+   2. Si $L$ está en $R$, entonces $L^C$ también está en $R$.
+2. **Conjunto $RE - R$**.
+   1. Lenguajes con MT que no siempre paran.
+   2. Si $L$ está en $RE$, entonces $L^C$ está en $\text{CO-RE}$.
+3. **Conjunto $\text{CO-RE} - R$**.
+   1. Lenguajes sin MT, pero con complementos con MT.
+   2. Si $L$ está en $\text{CO-RE}$, entonces $L^C$ está en $RE$.
+4. **Conjunto $\mathcal{L} - (RE \cup \text{CO-RE})$**.
+   1. Lenguajes sin MT, con complementos sin MT.
+   2. Si $L$ está en $\mathcal{L} - (RE \cup \text{CO-RE})$, entonces $L^C$ también está en $\mathcal{L} - (RE \cup \text{CO-RE})$.
+
+## Ejemplos de lenguajes no recursivos
+
+### Halting Problem
+
+- Dada una MT $M$ y una cadena de entrada $w$, ¿$M$ se detiene a partir de $w$?
+- Formalmente: $HP = \lbrace (\langle M \rangle, w) \mid M \text{ es una MT que se detiene a partir de } w \rbrace$.
+- $\langle M \rangle$ es la codificación de la MT $M$ como una cadena de símbolos de $\Sigma$.
+- En 1936 Turing demostró que $HP \in RE - R$, es decir, existe una MT que acepta $HP$, pero no existe una MT que lo decida.
+- No existe ninguna MT $M'$ que para **toda** MT $M$ y **toda** cadena de entrada $w$ pueda decidir si $M$ se detiene a partir de $w$. Sin embargo, para **algunas** MT $M$ y **algunas** cadenas de entrada $w$, existen MT $M'$ que sí pueden decidir el problema. Lo que sucede es que la solución general es la que no existe.
+- Por ejemplo, si $M$ va siempre hacia la derecha, si $M$ se mueve en un espacio acotado de celdas, etc, se puede decidir, usando MT $M'$ "ingeniosas".
+- En general siempre se considera el peor caso, es decir, todas las entradas posibles. En dicho caso, el único algoritmo posible para $HP$ es la fuerza bruta (ejecutar $M$ y esperar a que eventualmente responda).
+
+### Problema de las ecuaciones diofánticas
+
+- Dada una ecuación algebraica con coeficientes enteros y variables enteras, como por ejemplo $2x^3 + 5y^3 = 6z^3$, ¿la ecuación tiene solución?
+- Formalmente: $L = \lbrace \psi \mid \psi \text{ es una ecuación diofántica que tiene solución} \rbrace$
+- En 1970 Matiyasevich demostró que $L \in RE - R$, es decir, existe una MT que acepta $L$, pero no existe una MT que lo decida.
+
+### Problema de decisión en la lógica de predicados
+
+- Dada una fórmula $\Phi$ en la lógica de predicados, ¿$\Phi$ es un teorema? es decir, existe una demostración de $\Phi$ a partir de los axiomas de la lógica de predicados?
+- Formalmente: $L = \lbrace \Phi \mid \text{existe una prueba de la fórmula } \Phi \text{ en la LP} \rbrace$
+- En 1936 Turing demostró que $L \in RE - R$, es decir, existe una MT que acepta $L$, pero no existe una MT que lo decida.
+
+### Problema de pertenencia al conjunto de Mandelbrot (CM)
+
+- El CM es un conjunto de números complejos del plano definido por la sucesión $z_0 = 0$, $z_{n+1} = z_n^2 + c$, tal que $c$ está en el conjunto CM si y solo si la sucesión está acotada. El problema dice: dado un número complejo $c$, ¿$c$ pertenece al conjunto CM?
+- Formalmente: $L = \lbrace c \in \mathbb{C} \mid c \text{ está en el CM} \rbrace$
+- En 1989 Blum demostró que $L \in \text{CO-RE} - R$, es decir, no existe una MT que acepte $L$, pero sí existe una MT que acepta el complemento de $L$.
+- Hay elementos del CM que una MT no puede reconocer. La dificultad está en el contorno del conjunto.
+- Existe una MT que acepta todos los números complejos que NO están en el CM.
+
+### Problema de decisión en la aritmmética
+
+- ¿La fórmula $\Theta$ es un enunciado aritmético verdadero?
+- Formalmente: $L = \lbrace \Theta \mid \Theta \text{ es un enunciado aritmético verdadero} \rbrace$
+- En 1931 Gödel demostró que $L \in \mathcal{L} - (RE \cup \text{CO-RE})$, es decir, no existe una MT que acepte $L$ ni tampoco existe una MT que acepte el complemento de $L$.
+- También se puede expresar que $L \notin RE$ y que $L^C \notin RE$.
+- Hay enunciados **verdaderos** que una MT no puede reconocer.
+- Hay enunciados **falsos** que una MT no puede reconocer.
+- Nota: si excluimos a la multiplicación, el problema se vuelve decidible.
+
+### Problema del cubrimiento del plano con polígonos (teselación del plano)
+
+- Dado un conjunto finito $C$ de figuras poligonales conocidas como teselas o mosaicos, ¿C puede cubrir el plano sin dejar huecos ni producir solapamientos?
+- Formalmente: $L = \lbrace C \mid C \text{ es un conjunto finito de figuras poligonales que cubren el plano} \rbrace$
+- En 1966 Berger demostró que $L \in \mathcal{L} - (RE \cup \text{CO-RE})$, es decir, no existe una MT que acepte $L$ ni tampoco existe una MT que acepte el complemento de $L$.
+- También se puede expresar que $L \notin RE$ y que $L^C \notin RE$.
+- Hay conjuntos de polígonos que cubren el plano que una MT no puede reconocer.
+- Hay conjuntos de polígonos que no cubren el plano que una MT no puede reconocer.
+- Nota: si hay periodicidad, el problema se vuelve decidible.
 
 ---
