@@ -8,6 +8,14 @@
 
 ## Práctica
 
+- Cada práctica:
+  - Se puede resolver de forma individual, o en grupos de 2 o 3 personas.
+  - Se publica cada dos semanas, y desde la fecha de publicación hay como máximo dos semanas para entregar.
+  - Puede tener ejercicios "dificiles" que si son resueltos correctamente producen un "bonus" que se contemplará para la calificación final de la materia.
+  - Se puede entregar, opcionalmente. Si se decide entregar, se debe hacerlo a través de un mensaje por IDEAS a Leandro Mendoza + todos los ayudantes con el formato:
+    - Nombre, apellido y número de legajo de cada integrante del grupo.
+    - Link a un documento de Google Docs que tenga (1) lo anterior (2) la resolución de la práctica (3) rol de comentarista para cualquier persona que tenga el link.
+
 ## Teoría
 
 ## Cómo se aprueba la cursada?
