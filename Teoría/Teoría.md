@@ -297,16 +297,16 @@
 ![Regiones de la jerarquía de la computabilidad](https://i.imgur.com/9mVb6j5.png)
 
 1. **Conjunto $R$**.
-   1. Lenguajes con MT que siempre paran.
+   1. Lenguajes aceptados por MT que siempre paran.
    2. Si $L$ está en $R$, entonces $L^C$ también está en $R$.
 2. **Conjunto $RE - R$**.
-   1. Lenguajes con MT que no siempre paran.
+   1. Lenguajes aceptados por MT que no siempre paran.
    2. Si $L$ está en $RE$, entonces $L^C$ está en $\text{CO-RE}$.
 3. **Conjunto $\text{CO-RE} - R$**.
-   1. Lenguajes sin MT, pero con complementos con MT.
+   1. Lenguajes que no son aceptados por ninguna MT, pero sus complementos sí son aceptados por alguna MT.
    2. Si $L$ está en $\text{CO-RE}$, entonces $L^C$ está en $RE$.
 4. **Conjunto $\mathcal{L} - (RE \cup \text{CO-RE})$**.
-   1. Lenguajes sin MT, con complementos sin MT.
+   1. Lenguajes que no son aceptados por ninguna MT, ni tampoco sus complementos son aceptados por alguna MT.
    2. Si $L$ está en $\mathcal{L} - (RE \cup \text{CO-RE})$, entonces $L^C$ también está en $\mathcal{L} - (RE \cup \text{CO-RE})$.
 
 ## Ejemplos de lenguajes no recursivos
@@ -362,3 +362,91 @@
 - Nota: si hay periodicidad, el problema se vuelve decidible.
 
 ---
+
+<h1 align="center">Clase 3 - 26 de marzo, 2026</h1>
+
+## Indecibilidad
+
+### Máquina de Turing Universal
+
+- Una máquina de Turing Universal (MTU) es una MT capaz de ejecutar cualquier otra MT (noción de programa almacenado, Turing 1936).
+- Esquema general:
+
+![Esquema de una MTU](https://i.imgur.com/OhaSW2X.png)
+
+- La MTU recibe una MT $M$ codificada mediante una cadena (por eso se simboliza $\langle M \rangle$) y una cadena de entrada $w$. Luego ejecuta a la MT $M$ a partir de la cadena de entrada $w$.
+
+### Codificación de una MT y una cadena de entrada
+
+- Hay varias formas de codificar una MT $M$. La más común es asignar un número natural a cada símbolo del alfabeto $\Gamma$ de $M$, a cada estado del conjunto $Q$ de $M$, y a cada acción posible (moverse a la izquierda, a la derecha o quedarse en el mismo lugar).
+- Ejemplo:
+  - Sea $M = (Q, \Gamma, \delta, q_0, q_A, q_R)$ con $Q = \lbrace q_0, q_A, q_R \rbrace$ y $\Gamma = \lbrace s, t, B \rbrace$.
+  - El código de $q_0$ es $1$.
+  - El código de $q_A$ es $2$.
+  - El código de $q_R$ es $3$.
+  - El código del símbolo blanco es $1$.
+  - El código del símbolo $s$ es $2$.
+  - El código del símbolo $t$ es $3$.
+  - El código de la acción "moverse a la derecha" es $1$.
+  - El código de la acción "moverse a la izquierda" es $2$.
+  - El código de la acción "quedarse en el mismo lugar" es $3$.
+  - Si la función de transición $\delta$ de $M$ es la siguiente:
+    - $\delta(q_0, s) = (q_0, t, L)$
+    - $\delta(q_0, t) = (q_0, s, L)$
+    - $\delta(q_0, B) = (q_A, B, S)$
+  - Entonces el código de $M$, denotado como $\langle M \rangle$, es: $(1,2,1,3,2),(1,3,1,2,2),(1,1,2,1,3)$.
+  - Y si la cadena de entrada $w$ es $st$, entonces tenemos: $(1,2,1,3,2),(1,3,1,2,2),(1,1,2,1,3)\#2,3$.
+
+### Enumeración de las máquinas de Turing
+
+- El hecho de que podemos codificar a cualquier MT como una cadena implica que podemos enumerar a todas las MT que existen, es decir, podemos asignar un número natural a cada MT. - La enumeración más común es el **orden canónico**, donde los códigos de las MT se ordenan primero de menor a mayor longitud, y luego los códigos con longitudes iguales se ordenan lexicográficamente.
+- Las primeras cadenas según el orden canónico son:
+  - $\lambda$ (cadena vacía)
+  - $0$
+  - $1$
+  - $00$
+  - $01$
+  - $10$
+  - $11$
+  - $\cdots$
+
+### Probando que $R \subsetneq RE$
+
+- Para probar que $R \subsetneq RE$ hay que probar dos cosas:
+  1. $R \subseteq RE$.
+  2. $R \neq RE$.
+
+#### Tabla con todas las MT y todas las cadenas de entrada
+
+- La siguiente tabla T representa el comportamiento de todas las MT $M$ con respecto a todas las cadenas $w$:
+
+| T            | $w_0$    | $w_1$    | $w_2$    | $w_3$    | $w_4$    | $\cdots$ |
+| ------------ | -------- | -------- | -------- | -------- | -------- | -------- |
+| **$M_0$**    | 1        | 0        | 1        | 1        | 1        | $\cdots$ |
+| **$M_1$**    | 1        | 0        | 0        | 1        | 0        | $\cdots$ |
+| **$M_2$**    | 0        | 0        | 1        | 0        | 1        | $\cdots$ |
+| **$M_3$**    | 0        | 1        | 1        | 1        | 1        | $\cdots$ |
+| **$M_4$**    | 0        | 1        | 1        | 1        | 0        | $\cdots$ |
+| **$\cdots$** | $\cdots$ | $\cdots$ | $\cdots$ | $\cdots$ | $\cdots$ | $\cdots$ |
+
+- $T(M_i, w_j) = 1$ si $M_i$ acepta $w_j$ y 0 si $M_i$ rechaza $w_j$. Los valores en la tabla son puramente de ejemplo.
+- La fila 0 representa al lenguaje $L(M_0) = \lbrace w_0, w_2, w_3, w_4, \ldots \rbrace$
+- La fila 1 representa al lenguaje $L(M_1) = \lbrace w_0, w_3, \ldots \rbrace$
+- La fila 2 representa al lenguaje $L(M_2) = \lbrace w_2, w_4, \ldots \rbrace$
+- $\cdots$
+- Por lo tanto, las filas representan todos los lenguajes posibles aceptados por una MT, es decir, el conjunto $RE$.
+
+#### Diagonalización
+
+- La diagonal de la tabla mostrada es $D = \lbrace w_0, w_2, w_3, \ldots \rbrace$. Representa al lenguaje $D = \lbrace w_i \mid M_i \text{ acepta } w_i \rbrace$
+- La diagonal con los unos y ceros invertidos es $D^C = \lbrace w_1, w_4, \ldots \rbrace$. Representa al lenguaje $D^C = \lbrace w_i \mid M_i \text{ rechaza } w_i \rbrace$
+- Prueba de que $D$ está en $RE$: Existe una MT $M$ que acepta $D$. Dada una cadena de entrada $w$, $M$ hace lo siguiente:
+  1. Busca el índice $i$ tal que $w = w_i$ en el orden canónico (genera cadenas en el orden canónico hasta encontrar a $w$).
+  2. Busca el código $\langle M_i \rangle$ de la MT $M_i$ en el orden canónico (genera códigos de MT en el orden canónico hasta encontrar a $M_i$).
+  3. Ejecuta a $M_i$ a partir de $w_i$ y acepta si y solo si $M_i$ acepta.
+  4. Por lo tanto se cumple que $D = \lbrace w_i \mid M_i \text{ acepta } w_i \rbrace \in RE$
+- Prueba de que $D^C$ no está en $RE$: La diagonal invertida es diferente de todas las filas de la tabla, porque difiere al menos en un elemento de cada fila, es decir, difiere en el elemento de la diagonal. Como las filas representan a todos los lenguajes que están en $RE$, entonces $D^C$ es diferente a todos los lenguajes de $RE$, por lo que $D^C \notin RE$.
+- Por lo tanto tenemos que $D \in RE$ y $D^C \notin RE$. Esto implica directamente que $D \in RE - R$, porque si $D$ estuviera en $R$, entonces $D^C$ también estaría en $R$ (por propiedad de los lenguajes recursivos), lo cual es una contradicción, porque ya se demostró que $D^C \notin RE$ y como $R \subseteq RE$, entonces $D^C \notin R$.
+- Por lo tanto, $R \subsetneq RE$.
+- Así, se han hallado los primeros dos lenguajes no decidibles: $D$ y $D^C$. A partir de éstos se pueden encontrar otros lenguajes que también están fuera de $R$ e incluso de $RE$, usando el famoso método de la **reducción**.
+- La diagonalización es muy útil para encontrar los primeros lenguajes en un conjunto. Consiste en encontrar un lenguaje "separador". Por ejemplo, el lenguaje $D^C$ actúa como separador entre los conjuntos $RE$ y $\mathcal{L}$, ya que pertenece a $\mathcal{L}$ pero no a $RE$.
