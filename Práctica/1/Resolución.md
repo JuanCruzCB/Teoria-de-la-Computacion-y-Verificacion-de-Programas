@@ -6,15 +6,47 @@
 
 ### a. Dados $\Sigma = \lbrace a, b, c \rbrace$ y $L = \lbrace a^n b^n c^n \mid n \geq  0 \rbrace$, obtener $\Sigma^* \cap L$, $\Sigma^* \cup L$ y $L^C$ (es decir, el complemento de $L$ con respecto a $\Sigma^*$).
 
+1. Por regla general, si se cumple que $A \subseteq B$, entonces también se cumple que $A \cap B = A$. En este caso, como se sabe que todo lenguaje es un subconjunto de $\Sigma^*$, entonces se cumple que $L \subseteq \Sigma^*$. Por lo tanto, **se cumple que $\Sigma^* \cap L = L$**.
+2. Otra regla general dice que si se cumple que $A \subseteq B$, entonces también se cumple que $A \cup B = B$. En este caso, dado que $L \subseteq \Sigma^*$, **se cumple que $\Sigma^* \cup L = \Sigma^*$**.
+3. El complemento de un conjunto $A$ con respecto a un conjunto universal $U$ (en este caso, $\Sigma^*$) se define como el conjunto de todos los elementos de $U$ que NO están en $A$. Por lo tanto, **se cumple que $L^C = \Sigma^* - L$**.
+
 ### b. Definir el problema de la satisfactibilidad de las fórmulas booleanas en la forma de problema de búsqueda (visión de MT calculadora), de decisión (visión de MT reconocedora), y de enumeración (visión de MT generadora).
+
+En los primeros 2 casos, la cadena de entrada $w$ es una fórmula booleana. En el tercer caso, la MT generadora no tiene cadena de entrada, es decir, la cinta inicia vacía.
+
+En los 3 casos el alfabeto de la MT es $\Sigma = \lbrace 0, 1, \lnot, \land, \lor, (, ) \rbrace$, donde 0 simboliza falso, 1 simboliza verdadero, y los demás símbolos son los conectivos lógicos y los paréntesis.
+
+Una cadena posible podría ser, por ejemplo, $w = (0 \land 1) \lor \lnot 0$. En este caso, el resultado es verdadero, ya que la fórmula se evalúa como $0 \land 1 = 0$, $\lnot 0 = 1$, y $0 \lor 1 = 1$.
+
+1. **Problema de búsqueda**: La MT calculadora encuentra la primer asignación de valores de verdad a las variables que hace que la fórmula booleana $w$ sea verdadera. Es decir, la MT (1) deja en la cinta la asignación de valores de verdad a las variables que hace que la fórmula sea verdadera, o (2) borra toda la cinta si tal asignación no existe.
+2. **Problema de decisión**: La MT reconocedora decide si la fórmula booleana $w$ es satisfactible o no. Es decir, la MT para en $q_A$ si existe alguna asignación de valores de verdad a las variables que hace que la fórmula sea verdadera, y para en $q_R$ si tal asignación no existe.
+3. **Problema de enumeración**: La MT generadora genera una por una todas las fórmulas booleanas satisfactibles, que son infinitas.
 
 ### c. ¿Qué postula la Tesis de Church-Turing?
 
+La tesis de Church-Turing postula que todo algoritmo, es decir, todo proceso mecánico de resolución de problemas, puede ser simulado por una máquina de Turing. En otras palabras, cualquier función que pueda ser computada por un algoritmo puede ser computada por una máquina de Turing. Si bien esta tesis no es un teorema demostrable, está ampliamente aceptada en la comunidad científica y matemática y es fundamental para la teoría de la computación.
+
 ### d. ¿Cuándo dos MT son equivalentes? ¿Cuándo dos modelos de MT son equivalentes?
+
+Dos MT son equivalentes si reconocen el mismo lenguaje, es decir, si resuelven el mismo problema de decisión. Formalmente, dos MT $M_1$ y $M_2$ son equivalentes si $L(M_1) = L(M_2)$, donde $L(M)$ es el lenguaje que reconoce la MT $M$.
+
+Dos modelos de MT son equivalentes si pueden simularse de forma mutua, es decir, si dada una MT del modelo A existe una MT equivalente en el modelo B, y viceversa. Por ejemplo, una MT con varias cintas puede simular a una MT con una sola cinta, y una MT con una sola cinta puede simular a una MT con varias cintas. Por lo tanto, ambos modelos son equivalentes.
 
 ### e. ¿En qué se diferencian los lenguajes recursivos, los lenguajes recursivamente enumerables no recursivos, y los lenguajes no recursivamente enumerables?
 
+Los lenguajes **recursivos** son aquellos para los cuales existe al menos una MT que los reconoce y además siempre se detiene (es decir, jamás entra en loop). En otras palabras, para cada cadena de entrada, la MT se detiene en el estado $q_A$ si la cadena pertenece al lenguaje, y se detiene en el estado $q_R$ si la cadena no pertenece al lenguaje.
+
+Los lenguajes **recursivamente enumerables no recursivos** son aquellos para los cuales existe al menos una MT que los reconoce, pero no existe ninguna MT que los reconozca y siempre se detenga. En otras palabras, para cada cadena de entrada, la MT se detiene en el estado $q_A$ si la cadena pertenece al lenguaje, pero si la cadena no pertenece al lenguaje, la MT puede o bien detenerse en el estado $q_R$ o bien entrar en loop.
+
+Los lenguajes **no recursivamente enumerables** son aquellos para los cuales no existe ninguna MT que los reconozca. Es decir, no existe ninguna MT que siempre se detenga en el estado $q_A$ para cada cadena de entrada que pertenece al lenguaje. Incluso para este tipo de cadenas válidas, la MT puede loopear.
+
 ### f. Probar que $R \subseteq RE \subseteq \mathcal{L}$. Ayuda: usar las definiciones.
+
+1. **$R \subseteq RE$**:
+   1. $R$ es el conjunto de lenguajes para los cuales existe al menos una MT que los reconoce y siempre se detiene.
+   2. $RE$ es el conjunto de lenguajes para los cuales existe al menos una MT que los reconoce, pero no siempre se detiene para las cadenas que no pertenecen al lenguaje.
+   3. ...
+2. **$RE \subseteq \mathcal{L}$**:
 
 ### g. Explicar por qué (a) el lenguaje $\Sigma^*$ de todas las cadenas, (b) el lenguaje vacío $\emptyset$, y (c) cualquier lenguaje finito, son recursivos. Alcanza con dar la idea general. Ayuda para (c): por cada cadena del lenguaje podría definirse un conjunto específico de transiciones.
 
