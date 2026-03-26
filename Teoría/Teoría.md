@@ -450,3 +450,70 @@
 - Por lo tanto, $R \subsetneq RE$.
 - Así, se han hallado los primeros dos lenguajes no decidibles: $D$ y $D^C$. A partir de éstos se pueden encontrar otros lenguajes que también están fuera de $R$ e incluso de $RE$, usando el famoso método de la **reducción**.
 - La diagonalización es muy útil para encontrar los primeros lenguajes en un conjunto. Consiste en encontrar un lenguaje "separador". Por ejemplo, el lenguaje $D^C$ actúa como separador entre los conjuntos $RE$ y $\mathcal{L}$, ya que pertenece a $\mathcal{L}$ pero no a $RE$.
+
+### Ejemplo de diagonalización: los números reales vs los naturales
+
+- Se puede probar por diagonalización que el conjunto de los números reales es **más grande** que el conjunto de los números naturales, lo que implica que los números reales no se pueden enumerar. Simbólicamente: $|\mathbb{R}| > |\mathbb{N}|$.
+- Supongamos que lo anterior NO se cumple. Sea por ejemplo la siguiente enumeración de **todos** los reales entre $0$ y $1$:
+  - $0.1287...$
+  - $0.8550...$
+  - $0.1380...$
+  - $0.2751...$
+  - $\cdots$
+- Sea el número real $0.1581...$ que se forma tomando el primer dígito de la primera fila, el segundo dígito de la segunda fila, el tercer dígito de la tercera fila, el cuarto dígito de la cuarta fila, y así sucesivamente. El número $0.1581...$ es diferente a todos los números de la enumeración, porque difiere al menos en un dígito de cada número de la enumeración, es decir, difiere en el dígito de la diagonal. Por lo tanto, $0.1581...$ no está en la enumeración, lo cual es una contradicción, porque se asumió que la enumeración contenía a todos los números reales entre $0$ y $1$. Por lo tanto, $|\mathbb{R}| > |\mathbb{N}|$.
+
+### Tamaño de los conjuntos $RE$ y $\mathcal{L}$
+
+- $|\mathbb{N}| = |RE|$ porque las MT se pueden enumerar, y entonces los lenguajes de $RE$ también se pueden enumerar.
+- $|\mathbb{R}| = |\mathcal{L}|$ porque:
+  - $|\mathbb{R}| = |\mathcal{P}(\mathbb{N})|$ porque $|\mathbb{N}| = |\Sigma^*|$ porque las cadenas de $\Sigma^*$ se pueden enumerar. Así, $|P(\mathbb{N})| = |P(\Sigma^*)|$. $P(\Sigma^*) = \mathcal{L}$ porque $\mathcal{L}$ es el conjunto de partes de $\Sigma^*$. Así, finalmente, $|P(\Sigma^*)| = |\mathcal{L}|$.
+  - Resumiendo: $|\mathbb{R}| = |P(\mathbb{N})| = |P(\Sigma^*)| = |\mathcal{L}|$
+- Como $|\mathbb{N}| = |RE|$ y $|\mathbb{R}| = |\mathcal{L}|$, entonces $\mathcal{L}$ es mucho más grande que $RE$, lo que implica que hay muchos más problemas no computables que problemas computables, es decir, la mayoría de los problemas son no computables. A su vez, como se sabe que $R \subsetneq RE$, entonces también hay muchos más problemas computables no decidibles que problemas computables decidibles, es decir, la mayoría de los problemas computables son no decidibles. El conjunto de problemas que más nos interesa $(R)$ es el más pequeño de todos.
+
+### Dificultad del Halting Problem
+
+- $HP$ es uno de los lenguajes más difíciles de $RE$.
+- Si $HP$ fuera decidible, entonces todo lenguaje de $RE$ sería decidible también:
+  - Sea $M_{HP}$ una MT que decide $HP$ y $M$ una MT que reconoce algún lenguaje $L$ de $RE$. La siguiente MT $M'$ decide $L$:
+    - $M'$ primero decide si $M$ para a partir de $w$.
+    - Si $M$ no para a partir de $w$, entonces $M'$ rechaza.
+    - Si $M$ para a partir de $w$, entonces $M'$ ejecuta a $M$ a partir de $w$ y responde igual que $M$.
+- $HP$ está en la frontera de $RE$, lo más lejos posible de $R$. Se dice que es $RE-completo$, identifica el grado de dificultad de $RE$, representa el problema general de la indecibilidad.
+- Si $HP$ fuera decidible muchos enunciados matemáticos se probarían facilmente, como por ejemplo la conjetura de Goldbach o el último teorema de Fermat (que sí fue resuelto eventualmente).
+
+### Computabilidad vs. tamaño de un lenguaje
+
+- La computabilidad de un lenguaje tiene mucho más que ver con su definición, su contorno, que con su tamaño.
+- $HP \subseteq \Sigma^*$ y sin embargo $HP$ es más difícil que $\Sigma^*$, porque $HP$ no es decidible mientras que $\Sigma^*$ sí.
+- $HP^C \subseteq \Sigma^*$ y sin embargo $HP^C$ es más difícil que $\Sigma^*$, porque $HP^C$ no es recursivamente enumerable mientras que $\Sigma^*$ es decidible.
+- El conjunto de Mandelbrot, perteneciente a $\text{CO-RE} - R$, ilustra muy bien la relación entre computabilidad y contorno.
+
+### La demostración de Turing de que $HP$ no es decidible
+
+- Se supone que $HP$ es decidible y se llega a una contradicción.
+- Sea $M_{HP}$ una MT que decide $HP$. Utilizando $M_{HP}$ se construye una MT $C$ que hace lo siguiente:
+  1. Si $M_{HP}$ dice que $M$ se detiene a partir de $w$, entonces $C$ loopea.
+  2. Si $M_{HP}$ dice que $M$ no se detiene a partir de $w$, entonces $C$ acepta.
+  3. Es decir, $C$ le lleva la contra a $M_{HP}$.
+- Si la entrada de $C$ es su propio código $\langle C \rangle$, entonces:
+  1. Si $M_{HP}$ dice que $C$ se detiene desde $\langle C \rangle$, entonces $C$ loopea desde $\langle C \rangle$, absurdo.
+  2. Si $M_{HP}$ dice que $C$ no se detiene desde $\langle C \rangle$, entonces $C$ se detiene desde $\langle C \rangle$, absurdo.
+- Así, $C$ no puede existir, y como se construyó a partir de $M_{HP}$, entonces $M_{HP}$ tampoco puede existir, por lo que $HP$ no es decidible.
+
+### Autorreferencia
+
+- La demostración de Turing de que $HP$ no es decidible se basa en la autorreferencia, es decir, en el hecho de que una MT pueda recibir su propio código como entrada.
+- La autorreferencia es muy útil para probar algunos enunciados.
+- Se caracteriza por encontrar paradojas, es decir, enunciados que se contradicen a sí mismos.
+- Ejemplos:
+  - **Paradoja del mentiroso**: Si Juan dice "estoy mintiendo", ¿está diciendo la verdad o está mintiendo? Si está diciendo la verdad, entonces está mintiendo, lo cual es una contradicción. Si está mintiendo, entonces está diciendo la verdad, lo cual también es una contradicción.
+  - **Paradoja de Russell**: Sea $U$ el conjunto de todos los conjuntos que no son elementos de si mismos. ¿$U$ es un elemento de sí mismo? Si $U$ es un elemento de sí mismo, entonces no es un conjunto que no es elemento de sí mismo, lo cual es una contradicción. Si $U$ no es un elemento de sí mismo, entonces es un conjunto que no es elemento de sí mismo, lo cual también es una contradicción.
+  - **Paradoja del barbero**: En un pueblo hay un barbero que afeita a todos los hombres que no se afeitan a sí mismos. ¿El barbero se afeita a sí mismo? Si el barbero se afeita a sí mismo, entonces no se afeita a sí mismo, lo cual es una contradicción. Si el barbero no se afeita a sí mismo, entonces se afeita a sí mismo, lo cual también es una contradicción.
+
+---
+
+<h1 align="center">Clase 4 - 31 de marzo, 2026</h1>
+
+## ...
+
+---
