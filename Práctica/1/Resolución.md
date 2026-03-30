@@ -92,12 +92,67 @@ Se puede usar una MT con 4 cintas donde la primer cinta contiene la cadena de en
 
 ### a. La clase $R$ es cerrada con respecto a la operación de unión. Ayuda: la prueba es similar a la desarrollada para la intersección.
 
+Se quiere probar que dados dos lenguajes $L_1$ y $L_2$ que pertenecen a $R$, entonces el lenguaje $L_3 = L_1 \cup L_2$ también pertenece a $R$.
+
+Como se sabe que $L_1$ y $L_2$ pertenecen a $R$ (por hipótesis) existen dos MT $M_1$ y $M_2$ que deciden $L_1$ y $L_2$ respectivamente, y además siempre se detienen.
+
+Lo que se quiere hacer es construir una MT $M_3$ que decida $L_3$ y siempre se detenga. Para esto, $M_3$ puede funcionar así:
+
+1. $M_3$ simula a $M_1$.
+2. Si $M_1$ acepta, $M_3$ acepta.
+3. Si $M_1$ rechaza, $M_3$ simula a $M_2$.
+   1. Si $M_2$ acepta, $M_3$ acepta.
+   2. Si $M_2$ rechaza, $M_3$ rechaza.
+
+De esta forma, $M_3$ reconoce $L_3$ y siempre se detiene, por lo tanto $L_3 \in R$, y se concluye que la clase $R$ es cerrada con respecto a la operación de unión.
+
 ### b. La clase $RE$ es cerrada con respecto a la operación de intersección. Ayuda: la prueba es similar a la desarrollada para la clase $R$.
 
+Se quiere probar que dados dos lenguajes $L_1$ y $L_2$ que pertenecen a $RE$, entonces el lenguaje $L_3 = L_1 \cap L_2$ también pertenece a $RE$.
+
+Como se sabe que $L_1$ y $L_2$ pertenecen a $RE$ (por hipótesis) existen dos MT $M_1$ y $M_2$ que reconocen $L_1$ y $L_2$ respectivamente, pero **pueden loopear para las cadenas que no pertenecen a sus respectivos lenguajes**.
+
+Lo que se quiere hacer es construir una MT $M_3$ que reconozca $L_3$. Para esto, $M_3$ puede funcionar así:
+
+1. $M_3$ simula a $M_1$ y a $M_2$ en paralelo y paso por paso, es decir, en cada paso de $M_3$, se ejecuta un paso de $M_1$ y un paso de $M_2$.
+2. Si $M_1$ acepta y $M_2$ acepta, entonces $M_3$ acepta.
+3. En cualquier otro caso $M_3$ no acepta, lo que implica que o loopea o rechaza.
+
+De esta forma, $M_3$ reconoce $L_3$, y se concluye que $L_3 \in RE$, y por lo tanto la clase $RE$ es cerrada con respecto a la operación de intersección.
+
 ## 5. Sean $L_1$ y $L_2$ dos lenguajes recursivamente enumerables de números naturales codificados en unario (por ejemplo, el número 5 se representa con 11111). Probar que también es recursivamente enumerable el lenguaje $L = \lbrace x \mid \text{x es un número natural codificado en unario y existen y, z tales que y + z = x, con y} \in L_1, z \in L_2 \rbrace$. Ayuda: la prueba es similar a la vista en clase, de la clausura de la clase $RE$ con respecto a la operación de concatenación.
+
+$L_1$ y $L_2$ son recursivamente enumerables, por lo tanto existen dos MT $M_1$ y $M_2$ que reconocen $L_1$ y $L_2$ respectivamente, pero pueden loopear para las cadenas que no pertenecen a sus respectivos lenguajes.
+
+El lenguaje $L$ es el conjunto de todas las cadenas $x$ tales que existen $a \in L_1$ y $b \in L_2$ tales que $x = a + b$, donde la suma está definida sobre números en unario.
+
+Se puede notar que la suma en unario es equivalente a la concatenación de cadenas. Es decir, si $a$ es una cadena de $L_1$ y $b$ es una cadena de $L_2$, entonces la suma de los números que $a$ y $b$ representan corresponde a la concatenación de las cadenas $a$ y $b$. Por ejemplo, si $a = 111$ (que representa el número 3) y $b = 11111$ (que representa el número 5), entonces la suma de los números que representan $a$ y $b$ es 8, lo que corresponde a la cadena $x = 11111111$ (que representa el número 8). A su vez, esta cadena es el resultado de concatenar $a$ y $b$. Por lo tanto, $L = L_1 \cdot L_2$, donde $\cdot$ representa la operación de concatenación de lenguajes.
+
+Se construye una MT $M$ que reconoce $L$ de la siguiente manera: dada una entrada $w$, $M$ considera todas las posibles particiones $x = a \cdot b$ y simula en paralelo, un paso a la vez, las ejecuciones de $M_1$ sobre $a$ y de $M_2$ sobre $b$. Si existe una partición $x = a \cdot b$ tal que $M_1$ acepta $a$ y $M_2$ acepta $b$, entonces $M$ acepta $x$. En cualquier otro caso, $M$ no acepta, lo que implica que o loopea o rechaza.
+
+Por lo tanto, si $w \in L$, dicha partición debe existir y ambas máquinas aceptan en tiempo finito, por lo cual la simulación de $M$ eventualmente encuentra esta partición y acepta $w$. Si $w \notin L$, entonces no existe tal partición, por lo cual $M$ no acepta $w$, lo que implica que o loopea o rechaza. Por ende $L \in RE$.
 
 ## 6. Dada una MT $M_1$ con alfabeto $\Gamma = \lbrace 0, 1, B \rbrace$:
 
 ### a. Construir una MT $M_2$, utilizando la MT $M_1$, que acepte, cualquiera sea su cadena de entrada, si y solo si la MT $M_1$ acepta al menos una cadena. Ayuda: Si $M_1$ acepta al menos una cadena, entonces existe al menos una cadena de símbolos $0$ y $1$, de tamaño $n$, tal que $M_1$ la acepta en $k$ pasos. Teniendo en cuenta esto, pensar cómo $M_2$ podría simular $M_1$ considerando todas las cadenas de símbolos $0$ y $1$ hasta encontrar eventualmente una que la acepte $M_1$ (¡cuidándose de los casos en que $M_1$ entre en loop!).
 
+Se quiere construir una MT $M_2$ que acepte **cualquier** cadena de entrada si y solo si la MT $M_1$ acepta al menos una cadena, cuando $M_2$ simula a $M_1$.
+
+Como tenemos un si y solo si, esto implica dos cosas: (1) si $M_1$ acepta al menos una cadena, entonces $M_2$ acepta cualquier cadena de entrada, y (2) si $M_1$ no acepta ninguna cadena, entonces $M_2$ no acepta ninguna cadena de entrada.
+
+$M_2$ puede funcionar de esta manera:
+
+1. Ignora su entrada original, es decir, borra toda la cinta.
+2. Genera la próxima cadena sobre el alfabeto $\lbrace 0, 1 \rbrace$, en orden canónico.
+3. Simula en paralelo las ejecuciones de $M_1$ sobre todas las cadenas generadas hasta ahora, avanzando un paso en cada simulación por iteración.
+4. Si en alguna de estas simulaciones $M_1$ acepta alguna cadena, entonces $M_2$ acepta.
+
+Si $M_1$ acepta al menos una cadena, entonces existe alguna cadena $w$ tal que $M_1$ la acepta en una cantidad finita de pasos. Como $M_2$ tarde o temprano generará esa misma cadena $w$ y además simula todas las ejecuciones en paralelo, llegará a detectar esa aceptación de $M_1$ y por lo tanto aceptará cualquier cadena de entrada, cumpliendo con la condición (1).
+
+Si $M_1$ no acepta ninguna cadena, entonces no existe ninguna cadena $w$ tal que $M_1$ la acepte. Por lo tanto, $M_2$ nunca detectará una aceptación de $M_1$, y por lo tanto no aceptará ninguna cadena de entrada, cumpliendo con la condición (2).
+
+Por lo tanto, $M_2$ acepta cualquier cadena de entrada si y solo si $M_1$ acepta al menos una cadena.
+
 ### b. ¿Se puede construir además una MT $M_3$, utilizando la MT $M_1$, que acepte, cualquiera sea su cadena de entrada, si y solo si la MT $M_1$ acepta a lo sumo una cadena? Justificar.
+
+???
