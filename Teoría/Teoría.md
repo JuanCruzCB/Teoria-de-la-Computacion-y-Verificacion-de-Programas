@@ -514,6 +514,187 @@
 
 <h1 align="center">Clase 4 - 31 de marzo, 2026</h1>
 
-## ...
+## Resumen de lenguajes vistos hasta ahora
+
+- $L = \lbrace a^n b^n \mid n \geq 1 \rbrace$ pertenece a $R$, y se demostró por construcción.
+- $HP$: pertenece a $RE - R$, y se demostró por construcción.
+- $HP^C$: pertenece a $\text{CO-RE} - R$, y se demostró por diagonalización.
+- $D$: pertenece a $RE - R$, y se demostró por construcción.
+- $D^C$: pertenece a $\text{CO-RE} - R$, y se demostró por diagonalización.
+- **Para probar pertenencia a $R$ o a $RE$ se construyen MTs**.
+- **Para probar no pertenencia a $R$ o a $RE$ se usa diagonalización**.
+- Otra forma de hacer lo anterior es usando el método de la reducción.
+
+## Reducción
+
+### Definición
+
+- Dados dos lenguajes $L_1$ y $L_2$, una reducción de $L_1$ a $L_2$ es una función total computable $f: \Sigma^* \to \Sigma^*$ definida para todas las cadenas de $\Sigma^*$ y computable por una MT $M_f$, tal que para toda cadena $w$:
+  - Si $w \in L_1$, entonces $f(w) \in L_2$.
+  - Si $w \notin L_1$, entonces $f(w) \notin L_2$.
+- El objetivo es reducir o relacionar el lenguaje $L_1$ al lenguaje $L_2$ con la idea de construir una MT $M_1$ que acepte $L_1$ utilizando una MT $M_2$ ya conocida que acepta $L_2$, en lugar de construir a $M_1$ desde cero.
+- Las reducciones se asemejan a las invocaciones a subrutinas en la programación.
+- Si $L_1$ se reduce a $L_2$ se denota $L_1 \leq L_2$.
+- **Intuitivamente, si $L_1 \leq L_2$, entonces $L_2$ es tan o más difícil que $L_1$**.
+
+### Propiedad sobre los lenguajes recursivos
+
+- Sean $L_1$ y $L_2$ lenguajes tales que $L_1 \leq L_2$:
+  - Si $L_2 \in R$, entonces $L_1 \in R$.
+  - Equivalentemente: Si $L_1 \notin R$, entonces $L_2 \notin R$.
+- Encontrando una reducción de un lenguaje $L_1$ que no está en $R$ a un lenguaje $L_2$, se prueba que $L_2$ tampoco está en $R$.
+
+### Propiedad sobre los lenguajes recursivamente enumerables
+
+- Sean $L_1$ y $L_2$ lenguajes tales que $L_1 \leq L_2$:
+  - Si $L_2 \in RE$, entonces $L_1 \in RE$.
+  - Equivalentemente: Si $L_1 \notin RE$, entonces $L_2 \notin RE$.
+- Encontrando una reducción de un lenguaje $L_1$ que no está en $RE$ a un lenguaje $L_2$, se prueba que $L_2$ tampoco está en $RE$.
+
+### Ejemplo 1: Reducción de $HP$ a $L_U$
+
+- $HP = \lbrace (\langle M \rangle, w) \mid M \text{ es una MT que se detiene a partir de } w \rbrace$
+- $L_U = \lbrace (\langle M \rangle, w) \mid M \text{ es una MT que acepta } w \rbrace$
+- El objetivo de esta reducción es probar que $L_U \notin R$, apoyándonos en dos cosas:
+  1. Sabemos que $HP \notin R$
+  2. La propiedad de los lenguajes recursivos que dice que si $L_1 \leq L_2$ y $L_1 \notin R$, entonces $L_2 \notin R$.
+- Algo clave a notar es la relación que hay entre los dos lenguajes. Los pares $(\langle M \rangle, w)$ que pertenecen a $HP$ son MTs que se detienen tanto en $q_A$ como en $q_R$, mientras que los pares $(\langle M \rangle, w)$ que pertenecen a $L_U$ son MTs que se detienen en $q_A$ pero no en $q_R$. Es decir, $L_U \subset HP$.
+- Reducción:
+  - Se define $f(\langle M \rangle, w) = (\langle M' \rangle, w)$ donde $M'$ es una MT igual a $M$ pero todas las transiciones a $q_R$ se cambian por transiciones a $q_A$.
+  - Luego tenemos varios casos:
+    - Si $(\langle M \rangle, w) \in HP$, entonces $M$ se detiene a partir de $w$, lo que implica que $M'$ también se detiene a partir de $w$, en particular aceptando, lo que implica que $(\langle M' \rangle, w) \in L_U$.
+    - Si $(\langle M \rangle, w) \notin HP$, entonces $M$ no se detiene a partir de $w$, lo que implica que $M'$ tampoco se detiene a partir de $w$, porque haber cambiado todos los $q_R$ por $q_A$ no evita que $M'$ loopee, lo que implica que $(\langle M' \rangle, w) \notin L_U$.
+    - Si $(\langle M \rangle, w)$ es basura, es decir contiene una MT malformada, no pertenece a $HP$, y luego de la modificación tampoco pertenece a $L_U$.
+  - La función $f$ es **computable** porque transformar la descripción de $M$ reemplazando estados es un procedimiento mecánico que siempre termina.
+  - Por lo tanto se cumple que $f$ es una reducción de $HP$ a $L_U$, es decir, $HP \leq L_U$.
+  - Luego, como $HP \notin R$ y $HP \leq L_U$, entonces $L_U \notin R$.
+
+### Ejemplo 2: Reducción de $L_{\Sigma^*}$ a $L_{EQ}$
+
+- $L_{\Sigma^*} = \lbrace \langle M \rangle \mid L(M) = \Sigma^* \rbrace$
+- $L_{EQ} = \lbrace (\langle M_1 \rangle, \langle M_2 \rangle) \mid L(M_1) = L(M_2) \rbrace$
+- El objetivo de esta reducción es probar que $L_{EQ} \notin RE$, apoyándonos en dos cosas:
+  1. Sabemos que $L_{\Sigma^*} \notin RE$
+  2. La propiedad de los lenguajes recursivos que dice que si $L_1 \leq L_2$ y $L_1 \notin RE$, entonces $L_2 \notin RE$.
+- Reducción:
+  - Se define $f(\langle M \rangle) = (\langle M \rangle, \langle T \rangle)$ donde $M$ es una MT igual a $M$ y $T$ es una MT que acepta $\Sigma^*$.
+  - Luego tenemos varios casos:
+    - Si $(\langle M \rangle) \in L_{\Sigma^*}$, entonces $M$ acepta $\Sigma^*$, lo que implica que $M$ y $T$ aceptan el mismo lenguaje, lo que implica que $(\langle M \rangle, \langle T \rangle) \in L_{EQ}$.
+    - Si $(\langle M \rangle) \notin L_{\Sigma^*}$, entonces $M$ no acepta $\Sigma^*$, lo que implica que $M$ y $T$ no aceptan el mismo lenguaje, lo que implica que $(\langle M \rangle, \langle T \rangle) \notin L_{EQ}$.
+    - Si $(\langle M \rangle)$ es basura, es decir contiene una MT malformada, no pertenece a $L_{\Sigma^*}$, y luego de la modificación tampoco pertenece a $L_{EQ}$.
+  - La función $f$ es **computable** porque simplemente se le concatena a la descripción de $M$ la descripción de $T$, lo cual es un procedimiento mecánico que siempre termina.
+  - Por lo tanto se cumple que $f$ es una reducción de $L_{\Sigma^*}$ a $L_{EQ}$, es decir, $L_{\Sigma^*} \leq L_{EQ}$.
+  - Luego, como $L_{\Sigma^*} \notin RE$ y $L_{\Sigma^*} \leq L_{EQ}$, entonces $L_{EQ} \notin RE$.
+
+### Propiedades de las reducciones
+
+- **Reflexividad**: Para todo lenguaje $L$ se cumple $L \leq L$. Se prueba trivialmente usando la función identidad $f(w) = w$.
+- **Transitividad**: Si $L_1 \leq L_2$ y $L_2 \leq L_3$, entonces $L_1 \leq L_3$. Se prueba usando la composición de las dos reducciones, haciendo uso del concepto de composición de funciones.
+- No se cumple la **simetría**, es decir, $L_1 \leq L_2$ no implica $L_2 \leq L_1$.
+- $L_1 \leq L_2$ si y solo si $L_1^C \leq L_2^C$. La reducción es la misma.
+
+### Probando que $HP$ está entre los lenguajes más difíciles de $RE$
+
+- Se puede probar que todo lenguaje $L \in RE$ cumple $L \leq HP$, es decir, que $HP$ es tan o más difícil que cualquier lenguaje de $RE$.
+- Decidiendo $HP$ se decide cualquier lenguaje $L_i$. Así, si $HP$ fuera decidible, que no lo es, se cumpliría $R = RE$.
+- Se prueba:
+  - Dada $M$, una MT que acepta $L$.
+  - Se construye $M'$ que es igual a $M$ pero cambiando todas las transiciones que iban a $q_R$ por **loops**.
+  - Si $w \in L$, entonces $M$ acepta $w$, lo que implica que $M'$ se detiene a partir de $w$.
+  - Si $w \notin L$, entonces $M$ rechaza $w$, lo que implica que $M'$ no se detiene a partir de $w$.
+
+## Autómatas finitos
+
+- Se tiene una cinta de solo lectura.
+- Solo se puede mover hacia la derecha.
+- El conjunto $F$ contiene a los estados finales.
+- Cuando el autómata llega al símbolo blanco $(B)$ se detiene y acepta si y solo si el estado alcanzado es un estado final, es decir, si $q \in F$.
+- Este tipo de autómatas son muy usados en la práctica, por ejemplo, para el análisis sintáctico de los compiladores, o para las inspecciones de código en QA.
+- Se suelen representar mediante diagramas de transición de estados.
+- Una de las grandes utilidades de estos autómatas es que **siempre se detienen**, es decir, todo AF pertenece a $R$.
+- Aceptan un tipo limitado de cadenas, ya que no tienen memoria. No pueden calcular cosas en general.
+- Los lenguajes aceptados por AF se llaman **lenguajes regulares** o de tipo 3.
+
+## Autómatas con pila
+
+- Se tiene una primera cinta de solo lectura.
+- Se tiene una segunda cinta de lectura/escritura que se comporta como una pila (stack).
+- En un mismo paso se pueden procesar las dos cintas.
+- En la primer cinta siempre se va hacia la derecha.
+- Cuando el autómata llega al símbolo blanco $(B)$ en la primer cinta, se detiene y acepta si y solo si la pila está vacía.
+- Algunos problemas típicos que este tipo de autómatas resuelven es el análisis sintáctico de los lenguajes de programación, o la evaluación de expresiones en la ejecución de programas.
+- Al igual que los AF, los AP siempre se detienen, es decir, todo AP pertenece a $R$.
+- - Los lenguajes aceptados por AP se llaman **lenguajes libres de contexto** o de tipo 2.
+
+## Jerarquía de Chomsky
+
+![Jerarquía de Chomsky](https://i.imgur.com/y04ek3K.png)
+
+## Enumeración de los lenguajes recursivamente enumerables
+
+- Todo lenguaje $L \in RE$ se puede enumerar. Sea $M_1$ una MT que acepta $L$. Se construye una MT $M_2$ que genera $L$:
+  1. $n = 1$
+  2. Generar todas las cadenas de longitud a lo sumo $n$ en el orden canónico.
+  3. Por cada cadena generada, ejecutar a lo sumo $n$ pasos de la MT $M_1$. Si $M_1$ acepta, imprimir la cadena.
+  4. $n = n + 1$ y volver al paso 2.
+- Todo lenguaje $L \in R$ se puede enumerar en el orden canónico. Sea $M_1$ una MT que decide $L$. Se construye una MT $M_2$ que genera $L$ en el orden canónico:
+  1. Generar la primer cadena en el orden canónico.
+  2. Ejecutar $M_1$ a partir de la cadena generada. Si $M_1$ acepta, imprimir la cadena.
+  3. Generar la siguiente cadena en el orden canónico y volver al paso 2.
+- Por último, dada una MT que enumera un lenguaje, se puede construir una MT que lo acepta.
+
+---
+
+<h1 align="center">Clase 5 - 7 de abril, 2026</h1>
+
+## ???
+
+---
+
+<h1 align="center">Clase 6 - 14 de abril, 2026</h1>
+
+## ???
+
+---
+
+<h1 align="center">Clase 7 - 21 de abril, 2026</h1>
+
+## ???
+
+---
+
+<h1 align="center">Clase 8 - 28 de abril, 2026</h1>
+
+## ???
+
+---
+
+<h1 align="center">Clase 9 - 5 de mayo, 2026</h1>
+
+## ???
+
+---
+
+<h1 align="center">Clase 10 - 12 de mayo, 2026</h1>
+
+## ???
+
+---
+
+<h1 align="center">Clase 11 - 19 de mayo, 2026</h1>
+
+## ???
+
+---
+
+<h1 align="center">Clase 12 - 26 de mayo, 2026</h1>
+
+## ???
+
+---
+
+<h1 align="center">Clase 13 - 2 de junio, 2026</h1>
+
+## ???
 
 ---
