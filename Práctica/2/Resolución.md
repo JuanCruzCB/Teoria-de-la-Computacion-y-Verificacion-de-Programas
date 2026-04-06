@@ -2,9 +2,26 @@
 
 ## 1. Probar que el lenguaje $L_U = \lbrace (\langle M \rangle, w) \mid \text{M acepta w} \rbrace$ pertenece a la clase $RE$. Comentario: probarlo construyendo una MT.
 
+Para probar que el lenguaje $L_U$ descripto pertenece a la clase $RE$, se debe construir una MT que lo acepte pero no necesariamente se detenga siempre para las cadenas que no son parte del lenguaje. Sea la MT construida $M$:
+
+1. $M$ recibe una cadena de la forma $(\langle M' \rangle, w)$, donde $M'$ es una MT y $w$ es una cadena.
+2. Si $M'$ no es una MT válida, $M$ rechaza.
+3. Si $M'$ es una MT válida, $M$ simula la ejecución de $M'$ sobre la cadena $w$.
+4. Si durante la simulación, $M'$ acepta $w$, entonces $M$ acepta la cadena de entrada $(\langle M' \rangle, w)$.
+5. Si durante la simulación, $M'$ rechaza $w$, entonces $M$ rechaza la cadena de entrada $(\langle M' \rangle, w)$.
+6. Si durante la simulación, $M'$ entra en un loop (es decir, no acepta ni rechaza $w$), entonces $M$ también entra en un loop y no se detiene.
+
+De esta forma se cumple que si $(\langle M' \rangle, w) \in L_U$, entonces $M$ acepta, y si $(\langle M' \rangle, w) \notin L_U$, entonces $M$ no acepta, ya sea rechazando o loopeando. Por lo tanto, $L_U \in RE$.
+
 ## 2. Responder breve y claramente cada uno de los siguientes incisos (en todos los casos, las MT mencionadas tienen una sola cinta):
 
 ### a. Probar que se puede decidir si una MT $M$, a partir de la cadena vacía $\lambda$, escribe alguna vez un símbolo no blanco. Ayuda: ¿Cuántos pasos puede hacer $M$ antes de entrar en un loop?
+
+Se tiene una MT $M$ que recibe como cadena de entrada $w$ la cadena vacía. Es decir, $w = \lambda$.
+
+Se quiere probar que se puede decidir si $M$ escribe alguna vez un símbolo distinto de blanco en la cinta o si siempre escribe símbolos blancos, lo que implica que loopea.
+
+Se sabe que $Q$, el conjunto de estados de $M$, es **finito**, así como también es finito el alfabeto de la cinta $\Gamma$. Lo importante a notar es que las únicas transiciones para cada estado que podrán ser ejecutadas son aquellas que tengan como símbolo leído $B$, ya que la cadena de entrada es vacía. 
 
 ### b. Probar que se puede decidir si una MT $M$ que sólo se mueve a la derecha, a partir de una cadena $w$, para, Ayuda: ¿Cuántos pasos puede hacer $M$ antes de entrar en un loop?
 
