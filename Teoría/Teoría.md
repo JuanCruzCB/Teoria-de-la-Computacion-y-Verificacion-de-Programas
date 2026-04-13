@@ -647,7 +647,97 @@
 
 <h1 align="center">Clase 5 - 7 de abril, 2026</h1>
 
-## ???
+## Introducción
+
+- Dentro de la clase $R$ se pueden identificar dos tipos de problemas, tratables e intratables.
+- Los problemas intratables no poseen algoritmos eficientes para resolverlos.
+- Los problemas tratables sí poseen algoritmos eficientes para resolverlos.
+- Las dos métricas de complejidad computacional más usadas son:
+  - Tiempo: cantidad de pasos que ejecuta la MT para resolver el problema.
+  - Espacio: cantidad de celdas de la cinta que utiliza la MT para resolver el problema.
+- En la práctica los problemas indecidibles se "igualan" a los problemas intratables por más que estos últimos sí sean decidibles, ya que tardan demasiado tiempo en ser resueltos como para ser útiles en el mundo real.
+- Ejemplos de problemas tratables:
+  - Operaciones aritméticas básicas.
+  - Búsqueda de un camino en un grafo.
+  - Ordenamiento de un arreglo.
+  - Máximo común divisor.
+  - Búsqueda del máximo flujo en una red.
+  - Multiplicación de matrices.
+
+## Complejidad temporal
+
+### Concepto
+
+- Una MT $M$ tarda más (hace más pasos) a medida que sus cadenas de entrada $w$ son más grandes.
+- Es por esto que el tiempo de ejecución de $M$ no se mide en términos absolutos sino con funciones temporales $T(n)$ que se definen en términos del tamaño de la cadena de entrada $n = |w|$.
+
+### Ejemplos de funciones temporales
+
+- Funciones polinomiales o $poly(n)$ con $n$ como **factor**:
+  - $T(n) = 5n + 8$
+  - $T(n) = 3n^2$
+  - $T(n) = 3n^3 + n^2 + 25n$
+- Funciones exponenciales o $exp(n)$ con $n$ como **exponente**:
+  - $T(n) = 20^{log_2 n}$
+  - $T(n) = 12^n + 10n + 5$
+  - $T(n) = 6^{n^5}$
+
+### Definición de orden $O$
+
+- Una función $T_1(n)$ es del orden de una función $T_2(n)$, denotado como $T_1(n) = O(T_2(n))$, si y solo si para todo $n \geq n_0$, existe una constante $c > 0$ tal que $T_1(n) \leq c \cdot T_2(n)$.
+- Ejemplos:
+  - $5n^3 + 8n + 25 = O(n^3)$
+  - $n^2 = O(n^3)$
+  - $n^3 = O(2^n)$
+  - $n \cdot \log_2 n = O(n^2)$
+
+### $TIME(T(n))$
+
+- Una MT $M$ tarda tiempo $T(n)$ si y solo si para toda cadena de entrada $w$ con $n = |w|$, $M$ hace a lo sumo $T(n)$ pasos.
+- Un lenguaje $L \in TIME(T(n))$ si y solo si existe una MT $M$ que lo decide en tiempo $O(T(n))$.
+- Se considera el tiempo máximo (procesar cualquier cadena $w$ consume a lo sumo $T(|w|)$ pasos).
+- Otros criterios son el tiempo promedio y el tiempo mínimo, en general muy difíciles de calcular.
+
+## Tesis Fuerte de Church-Turing
+
+- Si $L$ es decidible en tiempo $poly(n)$ por un modelo computacional físicamente realizable entonces también es decidible en tiempo $poly(n)$ por una MT, al menos hasta que las máquinas cuánticas sean una realidad.
+
+## Codificación de las cadenas
+
+- Todo símbolo se codifica con un número.
+- Se utiliza cualquier codificación que NO SEA la **unaria**, ya que codificar números grandes en unario no es físicamente realizable y además genera inconsistencias.
+- Para uniformar usaremos siempre la codificación binaria, es decir, cada símbolo se codifica con una cadena de bits.
+- El tamaño $n$ de un número $X$ en binario es $O(\log_2 X)$. Por ejemplo:
+  - $X = 29$ se codifica como $11101$. $n = 5 \approx \log_2 29$.
+
+## La clase $P$
+
+- Todo lenguaje que es aceptado por una MT en tiempo polinomial pertenece a la clase $P$.
+- Coloquialmente, $P$ es la clase de los problemas tratables, es decir, aquellos que poseen algoritmos eficientes para ser resueltos.
+- Si un problema está en $P$ podemos asegurar que sus soluciones se **encuentran** eficientemente.
+
+## La clase $NP$
+
+- Todo lenguaje $L$ de $NP$ cuenta con una MT $M$ que en tiempo polinomial puede verificar si $w \in L$ con la ayuda de otra cadena de entrada $c$ llamada **certificado**.
+- Si un problema está en $NP$ podemos asegurar que sus soluciones se **verifican** eficientemente.
+
+## $P$ vs $NP$
+
+- Este problema fue planteado hace más de 50 años y es uno de los siete problemas del milenio, es decir, uno de los problemas más importantes de la matemática sin resolver. Quien lo resuelva se llevará un premio de un millón de dólares.
+- No parece posible resolverlo usando las matemáticas actuales.
+- Miles de lenguajes útiles e interesantes se encuentran en $NP - P$: lenguajes relacionados con problemas de la lógica, grafos, aritmética, teoría de conjuntos, álgebra, combinatoria, redes, etc.
+- Pareciera que la única forma de decidir los lenguajes de $NP - P$ hoy por hoy es por medio de la **fuerza bruta**, es decir, probando todas las posibles soluciones hasta encontrar una que funcione, lo cual no es eficiente.
+- Por el contrario, los algoritmos que deciden los lenguajes de $P$ son **analíticos**, parten del conocimiento profundo del problema y fueron elaborados a partir del ingenio, creatividad, experiencia, etc.
+- Se sabe que $P \subseteq NP$, pero no se sabe si $P = NP$ o $P \neq NP$.
+- Intuitivamente se suele asumir que $P \neq NP$ ya que encontrar una solución suele ser más difícil que verificarla, pero no hay una demostración formal.
+- La mayoría de los investigadores opina que $P \neq NP$. Una minoría opina lo contrario, argumentando que queda mucho por aprender de la algoritmia, cosa que es razonable ya que a lo largo de los años han habido importantes descubrimientos en el campo, como la primalidad en $P$, mejora en los tiempos de multiplicación de matrices, camino en grafos no dirigidos en espacio logarítmico, etc.
+- En la práctica se asume sin demostración que $P \neq NP$ y por eso a los lenguajes de interés de $NP - P$ se los procesa con remediaciones específicas como cadenas de determinada longitud/forma, aproximaciones polinomiales, etc.
+
+## Complementos
+
+- $P$ es cerrada bajo complementos, es decir, si $L \in P$, entonces $L^C \in P$. Por lo tanto $P = \text{CO-}P$.
+- $NP$ se **cree** que no es cerrada bajo complementos, es decir, si $L \in NP$, entonces $L^C$ no necesariamente pertenece a $NP$. Por lo tanto la conjetura es que $NP \neq \text{CO-}NP$.
+- Esta diferencia refuerza la intuición de que $P \neq NP$.
 
 ---
 
