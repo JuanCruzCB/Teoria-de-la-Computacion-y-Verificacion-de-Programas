@@ -743,7 +743,74 @@
 
 <h1 align="center">Clase 6 - 14 de abril, 2026</h1>
 
-## ???
+## Reducción polinomial
+
+- Una reducción polinomial de un lenguaje $L_1$ a un lenguaje $L_2$ es una reducción de $L_1$ a $L_2$ que trabaja en tiempo polinomial. Se denota $L_1 \leq_p L_2$.
+- **Teorema**: Si $L_1 \leq_p L_2$ y $L_2 \in P$, entonces $L_1 \in P$.
+
+## Clase $NPC$
+
+### Concepto
+
+- Un lenguaje $L$ es $NPC$ (NP-completo) si y solo si:
+  1. $L \in NP$
+  2. Para todo lenguaje $L_i \in NP$, se cumple que $L_i \leq_p L$. Se dice que $L$ es $NPH$, o NP-difícil.
+- Una forma de reforzar la sospecha de que un lenguaje de $NP$ no está en $P$ es probando que es $NPC$.
+- Si se prueba que un lenguaje $NPC$ está en $P$, entonces se prueba que $P = NP$.
+- Si se cumple $P \neq NP$, entonces ningún lenguaje $NPC$ está en $P$.
+
+### El lenguaje $SAT$
+
+- $SAT$ es el lenguaje de las fórmulas booleanas satisfactibles, es decir, aquellas fórmulas que pueden ser evaluadas como verdaderas para alguna asignación de valores a sus variables.
+- Formalmente, $SAT = \lbrace \phi \mid \phi \text{ es una fórmula booleana sin cuantificadores y satisfactible} \rbrace$.
+- Este lenguaje está en $NPC$, lo que implica que todos los lenguajes de $NP$ se reducen polinomialmente a $SAT$.
+- La demostración de que $SAT$ es $NPC$ es similar a la que usó Turing en 1936 para probar que la lógica de predicados no es decidible: Dado cualquier $L \in NP$ la MT $M_f$ asigna a toda cadena $w$ en tiempo polinomial una fórmula booleana $\phi$ tal que:
+  - Si $w \in L$, entonces $\phi$ es satisfactible, es decir, $\phi \in SAT$.
+  - Si $w \notin L$, entonces $\phi$ no es satisfactible, es decir, $\phi \notin SAT$.
+
+### Cómo encontrar más lenguajes $NPC$
+
+1. Probar que $L \in NP$.
+2. Construir una reducción polinomial de $SAT$ a $L$, es decir, $SAT \leq_p L$.
+
+### Propiedades importantes de los problemas $NPC$
+
+- Hay varias heurísticas para poblar la clase $NPC$ con reducciones polinomiales. Un compendio insuperable es el libro de Garey y Johnson de 1979.
+- Levin llamó a los problemas $NPC$ **problemas universales**. La idea es que los miles de problemas de $NPC$ son en realidad pocos problemas pero que se repiten y se expresan de distintas formas (por medio de grafos, fórmulas booleanas, números, conjuntos, etc).
+- Concepto de **p-isomorfismo**:
+  - Todo par de lenguajes $L_1$ y $L_2$ de $NPC$ son p-isomorfos, lo que significa que la función $f$ y la función inversa $f^{-1}$ son ambas reducciones polinomiales. Es decir, $f$ es una reducción polinomial de $L_1$ a $L_2$ y $f^{-1}$ es una reducción polinomial de $L_2$ a $L_1$.
+  - A partir de esto se concluye que si se puede probar que todos los lenguajes $NPC$ son p-isomorfos, entonces se cumple $P \neq NP$.
+- Todos los lenguajes $NPC$ son **densos**, es decir que tienen muchas cadenas. Formalmente, para todo $n$ tienen $exp(n)$ cadenas de longitud a lo sumo $n$.
+  - Se concluye que si existe un lenguaje $NPC$ que no es denso (se le dice disperso), entonces se cumple $P = NP$.
+
+## Computabilidad vs complejidad
+
+- A diferencia de la computabilidad, en la complejidad computacional el tamaño de un lenguaje SÍ tiene mucho que ver con su dificultad.
+- Los lenguajes completos de una clase identifican la dificultad de toda la clase.
+  - En la computabilidad todo lenguaje de $RE$ se reduce a $HP$, lo que implica que $HP$ es tan o más difícil que todos los lenguajes de $RE$. **$HP$ identifica la dificultad de la clase $RE$**.
+  - En la complejidad temporal todo lenguaje de $NP$ se reduce polinomialmente a $SAT$, lo que implica que $SAT$ es tan o más difícil que todos los lenguajes de $NP$. **$SAT$ identifica la dificultad de la clase $NP$**.
+
+## Clase $NPI$
+
+- Asumiendo $P \neq NP$, entre las clases $P$ y $NPC$ se encuentra la clase $NPI$ (NP-intermedio), llamada así porque identifica a los lenguajes de $NP$ de dificultad intermedia.
+- En esta clase se ubican los lenguajes que no cuentan con una MT de tiempo polinomial que los decida y además no cuentan con una reducción polinomial de un lenguaje $NPC$ hacia ellos.
+- Ejemplo:
+  - Problema de los grafos isomorfos "ISO".
+  - ISO está en $NP$, pero se asume que no está en $P$ ni en $NPC$, por lo que caería en $NPI$.
+
+## Jerarquía de complejidad temporal
+
+![Jerarquía de complejidad temporal](https://i.imgur.com/JGiYQH3.png)
+
+- Se cumple que $NP \neq \text{CO-NP}$ implica que $P \neq NP$.
+- Se cumple que $NPC$ y $NP \cap \text{CO-NP}$ son disjuntos, es decir, no hay ningún lenguaje que sea a la vez $NPC$ y $NP \cap \text{CO-NP}$.
+- Regiones ordenadas por su dificultad, de la más fácil a la más difícil:
+  - $P$
+  - $(NP \cap \text{CO-NP}) - P$
+  - $NPI - (NP \cap \text{CO-NP})$
+  - $NPC$
+  - $\text{CO-NPI} - (NP \cap \text{CO-NP})$
+  - $\text{CO-NPC}$
 
 ---
 
