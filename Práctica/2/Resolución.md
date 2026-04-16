@@ -96,6 +96,27 @@ Nuevamente analizando los dos casos:
 
 ## 6. Sea el lenguaje $D_{HP} = \lbrace w_i \mid M_i \text{ para a partir de } w_i \rbrace$ (considerar el orden canónico}. Encontrar una reducción de $D_{HP}$ a $HP$. Comentario: hay que definir la función de reducción y probar su total computabilidad y correctitud.
 
+$D_{HP} = \lbrace w_i \mid M_i \text{ para a partir de } w_i \rbrace$
+$HP = \lbrace (\langle M \rangle, w) \mid M \text{ se detiene a partir de } w \rbrace$
+
+Se quiere encontrar una reducción $D_{HP} \leq HP$.
+
+1. Definición de reducción: para toda cadena $w_i \in D_{HP}$, se debe cumplir:
+   1. Si $w_i \in D_{HP}$, entonces $f(w_i) \in HP$.
+   2. Si $w_i \notin D_{HP}$, entonces $f(w_i) \notin HP$.
+2. Se define una MT $M_f$ que computa la función de reducción $f$, simbólicamente $f(w_i) = (\langle M_i \rangle, w_i)$.
+3. La función $f$ hace lo siguiente:
+   1. Recibe una cadena $w_i$.
+   2. Genera cadenas $v_1, v_2, \ldots, v_j$ en el orden canónico hasta que $v_j = w_i$. De esta forma hallamos el índice $i$ de la cadena original, que no lo sabíamos de antemano.
+   3. Genera MTs $M_1, M_2, \ldots, M_i$ en el orden canónico hasta llegar a $M_i$.
+   4. Devuelve la cadena $(\langle M_i \rangle, w_i)$.
+4. Total computabilidad: la función $f$ es total computable porque para toda cadena $w_i$ se puede hallar su índice $i$ generando cadenas en el orden canónico, y luego se puede generar la MT $M_i$ también en el orden canónico. Por lo tanto, para toda cadena de entrada $w_i$, la función $f$ devuelve una salida válida en tiempo finito, ya que sea cual sea $w_i$, se sabe que está en el orden canónico (porque éste contiene TODAS las cadenas), y por lo tanto se llegará a ella en tiempo finito.
+5. Correctitud:
+   1. Si $w_i \in D_{HP}$, entonces $M_i$ se detiene a partir de $w_i$, lo cual implica que $(\langle M_i \rangle, w_i) \in HP$, y por lo tanto $f(w_i) \in HP$.
+   2. Si $w_i \notin D_{HP}$, entonces $M_i$ no se detiene a partir de $w_i$, lo cual implica que $(\langle M_i \rangle, w_i) \notin HP$, y por lo tanto $f(w_i) \notin HP$.
+
+**Por lo tanto, $D_{HP} \leq HP$**.
+
 ## 7. Sean $TAUT$ y $NOSAT$ los lenguajes de las fórmulas booleanas sin cuantificadores tautológicas (satisfactibles por todas las asignaciones de valores de verdad) e insatisfactibles (ninguna asignación de valores de verdad las satisface), respectivamente. Encontrar una reducción de $TAUT$ a $NOSAT$. Comentario: hay que definir la función de reducción y probar su total computabilidad y correctitud.
 
 ## 8. Se prueba que existe una reducción de $L_U^C$ a $L_{\Sigma^*}$ (y así, como $L_U^C \notin RE$, entonces se cumple que $L_{\Sigma^*} \notin RE$). La reducción es la siguiente. Para toda $w: f(( \langle M_1 \rangle, w)) = \langle M_2 \rangle$, tal que $M_2$, a partir de su entrada $v$, ejecuta $|v|$ pasos de $M_1$ a partir de $w$, y acepta sii $M_1$ no acepta. Probar que la función definida es efectivamente una reducción de $L_U^C$ a $L_{\Sigma^*}$ (es total computable y correcta).
