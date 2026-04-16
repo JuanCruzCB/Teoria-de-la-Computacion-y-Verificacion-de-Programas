@@ -101,7 +101,7 @@ $HP = \lbrace (\langle M \rangle, w) \mid M \text{ se detiene a partir de } w \r
 
 Se quiere encontrar una reducción $D_{HP} \leq HP$.
 
-1. Definición de reducción: para toda cadena $w_i \in D_{HP}$, se debe cumplir:
+1. Definición de reducción:
    1. Si $w_i \in D_{HP}$, entonces $f(w_i) \in HP$.
    2. Si $w_i \notin D_{HP}$, entonces $f(w_i) \notin HP$.
 2. Se define una MT $M_f$ que computa la función de reducción $f$, simbólicamente $f(w_i) = (\langle M_i \rangle, w_i)$.
@@ -118,5 +118,24 @@ Se quiere encontrar una reducción $D_{HP} \leq HP$.
 **Por lo tanto, $D_{HP} \leq HP$**.
 
 ## 7. Sean $TAUT$ y $NOSAT$ los lenguajes de las fórmulas booleanas sin cuantificadores tautológicas (satisfactibles por todas las asignaciones de valores de verdad) e insatisfactibles (ninguna asignación de valores de verdad las satisface), respectivamente. Encontrar una reducción de $TAUT$ a $NOSAT$. Comentario: hay que definir la función de reducción y probar su total computabilidad y correctitud.
+
+$TAUT = \lbrace \phi \mid \phi \text{ es una fórmula booleana sin cuantificadores que es tautología} \rbrace$
+$NOSAT = \lbrace \phi \mid \phi \text{ es una fórmula booleana sin cuantificadores que es insatisfactible} \rbrace$
+
+Se quiere encontrar una reducción $TAUT \leq NOSAT$.
+
+1. Definición de reducción:
+   1. Si $\phi \in TAUT$, entonces $f(\phi) \in NOSAT$.
+   2. Si $\phi \notin TAUT$, entonces $f(\phi) \notin NOSAT$.
+2. Se define una MT $M_f$ que computa la función de reducción $f$, simbólicamente $f(\phi) = \lnot \phi$.
+3. La función $f$ hace lo siguiente:
+   1. Recibe una fórmula booleana sin cuantificadores $\phi$.
+   2. Devuelve la fórmula $\lnot \phi$, es decir, la negación de la expresión entera de $\phi$, sin importar que tan compleja sea. Esto es porque se sabe que la negación de una tautología siempre es una contradicción, y toda contradicción es insatisfactible.
+4. Total computabilidad: la función $f$ es total computable porque para toda fórmula booleana sin cuantificadores $\phi$ se puede generar su negación $\lnot \phi$ en tiempo finito, ya que se puede recorrer la expresión de $\phi$ y generar la expresión de $\lnot \phi$ aplicando las reglas de la lógica proposicional.
+5. Correctitud: la función $f$ es correcta porque:
+   1. Si $\phi \in TAUT$, entonces $\phi$ es una tautología, lo cual implica que $\lnot \phi$ es una contradicción, y por lo tanto $\lnot \phi \in NOSAT$, y $f(\phi) \in NOSAT$.
+   2. Si $\phi \notin TAUT$, entonces $\phi$ no es una tautología, lo cual implica que $\lnot \phi$ no es una contradicción, y por lo tanto $\lnot \phi \notin NOSAT$, y $f(\phi) \notin NOSAT$.
+
+**Por lo tanto, $TAUT \leq NOSAT$**.
 
 ## 8. Se prueba que existe una reducción de $L_U^C$ a $L_{\Sigma^*}$ (y así, como $L_U^C \notin RE$, entonces se cumple que $L_{\Sigma^*} \notin RE$). La reducción es la siguiente. Para toda $w: f(( \langle M_1 \rangle, w)) = \langle M_2 \rangle$, tal que $M_2$, a partir de su entrada $v$, ejecuta $|v|$ pasos de $M_1$ a partir de $w$, y acepta sii $M_1$ no acepta. Probar que la función definida es efectivamente una reducción de $L_U^C$ a $L_{\Sigma^*}$ (es total computable y correcta).
