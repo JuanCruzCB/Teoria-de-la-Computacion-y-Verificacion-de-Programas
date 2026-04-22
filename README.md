@@ -15,6 +15,8 @@
   - Se puede entregar, opcionalmente. Si se decide entregar, se debe hacerlo a través de un mensaje por IDEAS a Leandro Mendoza + todos los ayudantes con el formato:
     - Nombre, apellido y número de legajo de cada integrante del grupo.
     - Link a un documento de Google Docs que tenga (1) lo anterior (2) la resolución de la práctica (3) rol de comentarista para cualquier persona que tenga el link.
+- [Link doc TP1](https://docs.google.com/document/d/11mW7oTSDaXCsBo6Lp_NH6Akas9XoyP5159bmdHo46vs/edit?usp=sharing)
+- [Link doc TP2](https://docs.google.com/document/d/1D34gTyrOeymwraTMcXcccrjirIaMI5xetQl4lvVGFWI/edit?usp=sharing)
 
 ## Teoría
 
