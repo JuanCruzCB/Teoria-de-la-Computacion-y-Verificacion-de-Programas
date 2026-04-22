@@ -816,7 +816,63 @@
 
 <h1 align="center">Clase 7 - 21 de abril, 2026</h1>
 
-## ???
+## Complejidad espacial
+
+### Concepto
+
+- Una MT $M$ ocupa espacio $S(n)$ si y solo si al ejecutarse desde toda entrada $w$ con $n = |w|$, $M$ ocupa a lo sumo $S(n)$ celdas en cualquier cinta que no sea la cinta de entrada.
+- La cinta de entrada es de sólo lectura y no se considera en la medición del espacio. Esto permite un espacio menor que lineal (menor que $O(n))$ porque la cadena de entrada mide $n$.
+- En el caso más general con una cinta de salida, ésta tampoco se considera en la medición del espacio.
+
+### Clase $SPACE(S(n))$
+
+- $L \in SPACE(S(n))$ si y solo si existe una MT $M$ que decide $L$ en espacio $O(S(n))$.
+- Una MT $M$ de tiempo $T(n)$ ocupa a lo sumo $T(n)$ celdas. Esto se debe a que la MT recorre no más de $T(n)$ celdas en una dirección.
+- En cambio, una MT $M$ que ocupa espacio $S(n)$ puede tardar mucho más que tiempo $S(n)$, ya que puede loopear en las mismas celdas durante mucho tiempo.
+
+### Clase $PSPACE$
+
+- $L \in PSPACE$ si y solo si existe una MT $M$ que decide $L$ en espacio polinomial, es decir, en espacio $O(n^k)$ para alguna constante $k > 0$.
+
+### Clase $LOGSPACE$
+
+- $L \in LOGSPACE$ si y solo si existe una MT $M$ que decide $L$ en espacio logarítmico, es decir, en espacio $O(\log_2 n)$.
+
+### Clase $EXPSPACE$
+
+- $L \in EXPSPACE$ si y solo si existe una MT $M$ que decide $L$ en espacio exponencial, es decir, en espacio $O(2^{n^k})$ para alguna constante $k > 0$.
+
+### Relación entre $LOGSPACE$ y $P$
+
+- Espacio $S(n)$ implica tiempo $c^{S(n)}$ para alguna constante $c > 0$.
+- Si $S(n) = log_2 n$, entonces tenemos tiempo $c^{log_2 n} = n^{\log_2 c} = n^k$ (definición de polinomio)
+- Por lo tanto $LOGSPACE \subseteq P$, es decir, si una MT decide un lenguaje en **espacio** logarítmico, entonces también lo decide en **tiempo** polinomial.
+- Dicho de otra forma, los lenguajes de $LOGSPACE$ son tratables.
+
+### Versión 1 de la jerarquía espacio-temporal
+
+![Jerarquía espacio-temporal v1](https://i.imgur.com/jqArKmb.png)
+
+### Clase $NLOGSPACE$
+
+- $L \in NLOGSPACE$ si y solo si existe una MT $M$ que lo verifica en espacio logarítmico, es decir, en espacio $O(\log_2 |w|)$ con la ayuda de un certificado sucinto $c$, es decir, $|c| \leq poly(|w|)$. El certificado está en una cinta auxiliar de sólo lectura y se procesa símbolo a símbolo, yendo solo hacia la derecha.
+
+### Versión 2 de la jerarquía espacio-temporal
+
+![Jerarquía espacio-temporal v2](https://i.imgur.com/zXuCFGq.png)
+
+### Completitud
+
+- Un lenguaje es $\text{PSPACE-completo}$ si y solo si todo lenguaje $L$ de $PSPACE$ se reduce a él en **tiempo polinomial**.
+  - $QSAT = \lbrace \phi \mid \phi \text{ es una fórmula booleana con cuantificadores y satisfactible} \rbrace$.
+  - $QSAT$ es $PSPACE-completo$.
+- Un lenguaje es $\text{NLOGSPACE-completo}$ si y solo si todo lenguaje $L$ de $NLOGSPACE$ se reduce a él en **espacio logarítmico**.
+  - $\text{D-ACC} = \lbrace G \mid G \text{ es un grafo dirigido con un camino del primero al último vértice} \rbrace$.
+  - $\text{D-ACC}$ es $NLOGSPACE-completo$.
+
+### Versión 3 de la jerarquía espacio-temporal
+
+![Jerarquía espacio-temporal v3](https://i.imgur.com/ivxO9Rw.png)
 
 ---
 
