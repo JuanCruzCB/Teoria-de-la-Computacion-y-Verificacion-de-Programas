@@ -76,7 +76,20 @@ Por lo tanto, los certificados de un lenguaje en $NP$ deben medir un tamaño pol
 
 La clase $NPI$ (NP-Intermedio) se refiere a los lenguajes que están en $NP$ pero no son NP-completos y además no están en $P$. Se sospecha que un lenguaje de $NP$ está en $NPI$ cuando no se ha hallado una reducción polinomial desde ningún lenguaje NP-completo hacia él, y tampoco se ha encontrado un algoritmo de tiempo polinomial para decidirlo.
 
-## 2. Sea $SMALL-SAT = \lbrace \phi \mid \phi \text{ es una fórmula booleana tal que...} \rbrace$. No tiene cuantificadores, está en la forma normal conjuntiva (o FNC), y existe una asignación de valores de verdad que la satisface en la que hay a lo sumo 3 variables con valor de verdad V. Probar que $\text{SMALL-SAT} \in P$. Comentario: una fórmula booleana sin cuantificadores está en la forma FNC si es una conjunción de disyunciones de variables o variables negadas, como es el caso, por ejemplo, de la fórmula $(x_1 \lor x_2) ∧ x_4 ∧ (\lnot x_3 \lor x_5 \lor x_6).$ Ayuda: Una MT que decida $\text{SMALL-SAT}$ debe contemplar asignaciones con cero, uno, dos y hasta tres valores de verdad verdadero.
+## 2. Sea $SMALL-SAT = \lbrace \phi \mid \phi \text{ es una fórmula booleana tal que...} \rbrace$. No tiene cuantificadores, está en la forma normal conjuntiva (o FNC), y existe una asignación de valores de verdad que la satisface en la que hay a lo sumo 3 variables con valor de verdad V. Probar que $\text{SMALL-SAT} \in P$. Comentario: una fórmula booleana sin cuantificadores está en la forma FNC si es una conjunción de disyunciones de variables o variables negadas, como es el caso, por ejemplo, de la fórmula $(x_1 \lor x_2) \land x_4 \land (\lnot x_3 \lor x_5 \lor x_6).$ Ayuda: Una MT que decida $\text{SMALL-SAT}$ debe contemplar asignaciones con cero, uno, dos y hasta tres valores de verdad verdadero.
+
+Para probar que un lenguaje está en $P$, se debe construir una MT $M$ que decida el lenguaje en tiempo polinomial. $M$ puede funcionar de la siguiente manera:
+
+1. Recibe una fórmula booleana $\phi$ como cadena de entrada, donde $k$ es la cantidad de variables distintas que aparecen en $\phi$.
+2. Chequea que la fórmula $\phi$ sea válida, es decir, que esté en la forma normal conjuntiva (FNC) y que no tenga cuantificadores. Esto se puede hacer en tiempo polinomial con respecto al tamaño de $\phi$ porque es un chequeo sintáctico sencillo que se realiza símbolo a símbolo y cláusula a cláusula, teniendo en cuenta la longitud de la fórmula $|\phi| = n$.
+3. Si la fórmula es válida, se tienen que chequear los 4 casos:
+   1. Le asigna el valor de verdad falso a **todas** las variables de $\phi$ y verifica si $\phi$ se satisface. En el peor caso tenemos que recorrer toda la fórmula para verificar que se satisface, lo cual se hace en tiempo $O(n)$. Si se satisface, entonces $M$ acepta. Si no se satisface, entonces $M$ continúa con el siguiente caso.
+   2. Ahora tenemos que asignar el valor de verdad verdadero a una sola variable de $\phi$ y falso a las demás, y verificar si $\phi$ se satisface. Pero tenemos que hacerlo con cada una de las variables de $\phi$ que es $k$, para lo cual podemos usar la fórmula matemática de combinatoria $\binom{k}{1} = k$. Como cada chequeo toma tiempo $O(n)$, el tiempo total para este caso es $O(k \cdot n)$.
+   3. Ahora tenemos que asignar el valor de verdad verdadero a dos variables de $\phi$ y falso a las demás, y verificar si $\phi$ se satisface. Por lo tanto tenemos $\binom{k}{2} = \frac{k!}{2!(k-2)!} = \frac{k(k-1)}{2} = O(k^2)$. Como cada chequeo toma tiempo $O(n)$, el tiempo total para este caso es $O(k^2 \cdot n)$.
+   4. Finalmente tenemos que asignar verdadero a tres variables de $\phi$ y falso a las demás, y verificar si $\phi$ se satisface. Por lo tanto tenemos $\binom{k}{3} = \frac{k!}{3!(k-3)!} = \frac{k(k-1)(k-2)}{6} = O(k^3)$. El tiempo total es $O(k^3 \cdot n)$.
+4. Por lo tanto la complejidad total es $O(n) + O(k \cdot n) + O(k^2 \cdot n) + O(k^3 \cdot n) = O(k^3 \cdot n)$, que es polinomial con respecto al tamaño de la fórmula $\phi$.
+
+En conclusión, $M$ decide $\text{SMALL-SAT}$ en tiempo polinomial, por lo que $\text{SMALL-SAT} \in P$.
 
 ## 3. Dados los dos lenguajes siguientes, (1) justificar por qué no estarían en $P$, (2) probar que están en $NP$, (3) justificar por qué sus complementos no estarían en $NP$:
 
