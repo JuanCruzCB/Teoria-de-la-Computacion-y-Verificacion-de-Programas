@@ -4,23 +4,77 @@
 
 ### a. Probar que $n^3 = O(2^n)$.
 
+1. Por definición, $n^3 = O(2^n)$ si y solo si para todo $n \geq n_0$, existe una constante $c > 0$ tal que $n^3 \leq c \cdot 2^n$.
+2. Planteamos la desigualdad: $n^3 \leq c \cdot 2^n$.
+3. Asumimos $c = 1$ para simplificar, entonces necesitamos demostrar que $n^3 \leq 2^n$ para todo $n \geq n_0$.
+4. Si $n = 10$, entonces $n^3 = 1000$ y $2^n = 1024$, por lo que $n^3 \leq 2^n$.
+5. Si $n = 11$, entonces $n^3 = 1331$ y $2^n = 2048$, por lo que $n^3 \leq 2^n$.
+6. ...
+7. Para $n \geq 10$, la función $2^n$ crece mucho más rápido que $n^3$, por lo que la desigualdad se mantiene.
+8. Por lo tanto, podemos concluir que $n^3 = O(2^n)$ con $n_0 = 10$ y $c = 1$.
+
 ### b. Probar que si $T_1(n) = O(T_2(n))$, entonces $TIME(T_1(n)) ⊆ TIME(T_2(n))$.
+
+1. Sea $L \in TIME(T_1(n))$. Por definición, existe una MT $M$ que decide $L$ en tiempo $O(T_1(n))$.
+2. Como se sabe por hipótesis que $T_1(n) = O(T_2(n))$, se tiene que $O(T_1(n)) \subseteq O(T_2(n))$.
+3. Por lo tanto $M$ también decide $L$ en tiempo $O(T_2(n))$, lo que implica que $L \in TIME(T_2(n))$.
+
+Intuitivamente, si un algoritmo puede resolver un problema en tiempo $T_1(n)$, y $T_1(n)$ es asintóticamente menor o igual a $T_2(n)$, entonces ese mismo algoritmo también puede resolver el problema en tiempo $T_2(n)$, ya que $T_2(n)$ es una cota superior para el tiempo de ejecución del algoritmo.
 
 ### c. ¿Qué formulan la Tesis de Church-Turing y la Tesis Fuerte de Church-Turing?
 
+1. La Tesis de Church-Turing formula que cualquier función computable por un algoritmo puede ser computada por una Máquina de Turing.
+2. La Tesis Fuerte de Church-Turing formula que si un lenguaje $L$ es decidible en tiempo polinomial por un modelo computacional físicamente realizable, entonces también es decidible en tiempo polinomial por una MT.
+
 ### d. ¿Por qué si un lenguaje pertenece a $P$ también su complemento pertenece a $P$?
+
+1. Sea $L \in P$. Por definición, existe una MT $M$ que decide $L$ en tiempo polinomial.
+2. Se puede construir una MT $M'$ que simula a $M$ y acepta la cadena de entrada $w$ si $M$ la rechaza, y rechaza $w$ si $M$ la acepta. Por lo tanto $M'$ decide a $L^C$ en tiempo polinomial.
+3. Por lo tanto, $L^C \in P$.
 
 ### e. Sea $L$ un lenguaje de $NP$. Explicar por qué los certificados de $L$ miden un tamaño polinomial con respecto al tamaño de las cadenas de entrada.
 
+1. Por definición, un lenguaje $L \in NP$ si existe una MT que lo **verifica** en tiempo polinomial con la ayuda de un certificado.
+2. Esto implica que para cada cadena de entrada $w$, el certificado $x$ que se utiliza para verificar si $w \in L$ debe tener un tamaño que es a lo sumo polinomial en relación al tamaño de $w$.
+3. Si el certificado tuviera un tamaño mayor que polinomial, entonces la verificación no podría hacerse en tiempo polinomial y tendríamos una contradicción, porque se viola la definición de $NP$.
+
+Por lo tanto, los certificados de un lenguaje en $NP$ deben medir un tamaño polinomial con respecto al tamaño de las cadenas de entrada.
+
 ### f. Probar que $NP \neq \text{CO-NP}$ implica $P \neq NP$.
+
+1. Por contrarrecíproco $(p \rightarrow q \equiv \neg q \rightarrow \neg p)$, reescribimos la expresión: $P = NP$ implica $NP = \text{CO-NP}$.
+2. Si $P = NP$, entonces todos los lenguajes en $NP$ también están en $P$.
+3. Se sabe que $P$ es cerrado bajo complemento, lo que significa que si un lenguaje está en $P$, su complemento también está en $P$.
+4. Por lo tanto, si $P = NP$, entonces $NP$ también es cerrado bajo complemento, lo que implica que $NP = \text{CO-NP}$.
 
 ### g. Mostrar un esquema de prueba de la transitividad de las reducciones polinomiales.
 
-### h. Probar que si $L_1 \leq_P L_2$ y $L_2 \in P (NP)$, entonces $L_1 \in P (NP)$. En otras palabras, $L_2$ es tan o más difícil que $L_1$, en el marco de la complejidad temporal.
+1. Definición de reducción polinomial: $L_1 \leq_p L_2$ si existe una función total computable en tiempo polinomial $f$ tal que para toda cadena $w$, $w \in L_1$ si y solo si $f(w) \in L_2$.
+2. Definición de transitividad: Si $L_1 \leq_p L_2$ y $L_2 \leq_p L_3$, entonces $L_1 \leq_p L_3$.
+3. Como se sabe que $L_1 \leq_p L_2$ (por hipótesis), existe una función $f$ que reduce $L_1$ a $L_2$.
+4. Como se sabe que $L_2 \leq_p L_3$ (por hipótesis), existe una función $g$ que reduce $L_2$ a $L_3$.
+5. Se puede construir una función $h$ que reduzca $L_1$ a $L_3$ definiendo $h(w) = g(f(w))$, es decir, usando composición de funciones.
+6. Como la composición de funciones computables en tiempo polinomial también es computable en tiempo polinomial, $h$ es una función total computable en tiempo polinomial.
+7. Por lo tanto, $L_1 \leq_p L_3$, lo que demuestra la transitividad de las reducciones polinomiales.
+
+### h. Probar que si $L_1 \leq_p L_2$ y $L_2 \in P (NP)$, entonces $L_1 \in P (NP)$. En otras palabras, $L_2$ es tan o más difícil que $L_1$, en el marco de la complejidad temporal.
+
+1. Hipótesis: $L_1 \leq_p L_2$ y $L_2 \in P$.
+2. Por definición de reducción polinomial, existe una función total computable en tiempo polinomial $f$ tal que para toda cadena $w$, $w \in L_1$ si y solo si $f(w) \in L_2$.
+3. Dado que $L_2 \in P$, existe una MT $M$ que decide $L_2$ en tiempo polinomial.
+4. Se puede construir una MT $M'$ que dada una cadena de entrada $w$ primero calcula $f(w)$, lo cual se hace en tiempo polinomial, y luego simula a $M$ con la entrada $f(w)$. El tiempo total de $M'$ es la suma del tiempo para calcular $f(w)$ y el tiempo para simular a $M$, ambos de los cuales son polinomiales. Como la suma de dos funciones polinomiales es también una función polinomial, $M'$ decide $L_1$ en tiempo polinomial.
+5. Por lo tanto, $L_1 \in P$.
 
 ### i. ¿Por qué si $P \neq NP$, un lenguaje NP-completo no pertenece a $P$?
 
+1. Por definición, un lenguaje $L$ es NP-completo si $L \in NP$ y además para todo lenguaje $L' \in NP$, $L' \leq_p L$.
+2. Si $P \neq NP$, entonces existen lenguajes que están en $NP$ pero no están en $P$.
+3. Si un lenguaje NP-completo $L$ estuviera en $P$, entonces por la definición de NP-completo, todos los lenguajes en $NP$ se reducirían polinomialmente a $L$, lo que implicaría que todos los lenguajes en $NP$ estarían en $P$.
+4. Esto contradice la hipótesis de que $P \neq NP$.
+
 ### j. ¿Cuándo se sospecha que un lenguaje de $NP$ está en $NPI$?
+
+La clase $NPI$ (NP-Intermedio) se refiere a los lenguajes que están en $NP$ pero no son NP-completos y además no están en $P$. Se sospecha que un lenguaje de $NP$ está en $NPI$ cuando no se ha hallado una reducción polinomial desde ningún lenguaje NP-completo hacia él, y tampoco se ha encontrado un algoritmo de tiempo polinomial para decidirlo.
 
 ## 2. Sea $SMALL-SAT = \lbrace \phi \mid \phi \text{ es una fórmula booleana tal que...} \rbrace$. No tiene cuantificadores, está en la forma normal conjuntiva (o FNC), y existe una asignación de valores de verdad que la satisface en la que hay a lo sumo 3 variables con valor de verdad V. Probar que $\text{SMALL-SAT} \in P$. Comentario: una fórmula booleana sin cuantificadores está en la forma FNC si es una conjunción de disyunciones de variables o variables negadas, como es el caso, por ejemplo, de la fórmula $(x_1 \lor x_2) ∧ x_4 ∧ (\lnot x_3 \lor x_5 \lor x_6).$ Ayuda: Una MT que decida $\text{SMALL-SAT}$ debe contemplar asignaciones con cero, uno, dos y hasta tres valores de verdad verdadero.
 
