@@ -119,12 +119,44 @@ Como se sabe que $p(|w|)$ es un polinomio, entonces $k^{p(|w|)}$ es una función
 
 ### a. Si los lenguajes $A$ y $B$ son tales que $A \neq \emptyset$, $A \neq \Sigma^*$ y $B \in P$, entonces $(A \cap B) \leq_p A$.
 
+1. Hipótesis:
+   1. $A \neq \emptyset$
+   2. $A \neq \Sigma^*$
+   3. De lo anterior se deduce que existen como mínimo dos cadenas de entrada $w_1$ y $w_2$ tales que $w_1 \in A$ y $w_2 \notin A$.
+   4. $B \in P$, por lo cual existe una MT $M_B$ que decide $B$ en tiempo polinomial.
+2. Se debe construir una MT $M_f$ que compute una función de reducción polinomial $f$ tal que:
+   1. Si $w \in A \cap B$, entonces $f(w) \in A$.
+   2. Si $w \notin A \cap B$, entonces $f(w) \notin A$.
+3. Dada una cadena de entrada $w$, primero se chequea si $w \in B$ usando $M_B$. Esto se hace en tiempo polinomial por hipótesis.
+4. Si $w \notin B$, entonces se devuelve $f(w) = w_2$, con $w_2 \notin A$. Esto tarda tiempo polinomial porque es simplemente devolver una cadena de entrada fija.
+5. Si $w \in B$, entonces se devuelve $f(w) = w$. Esto tarda tiempo polinomial porque es simplemente devolver la misma cadena de entrada.
+   1. Si $w$ pertenece a $B$ pero no a la intersección $A \cap B$, entonces necesariamente $w$ no pertenece a $A$.
+   2. Si $w$ pertenece a $B$ y además a la intersección $A \cap B$, entonces pertenece a $A$.
+6. Por lo tanto se cumple que $w \in A \cap B$ si y solo si $f(w) \in A$, lo que implica que $f$ es una función de reducción polinomial de $A \cap B$ a $A$. Por lo tanto, $(A \cap B) \leq_p A$.
+
 ### b) Si $L_1 \in NPC$ y $L_2 \in NPC$, entonces $L_1 \leq_p L_2$ y $L_2 \leq_p L_1$.
+
+1. Hipótesis:
+   1. $L_1 \in NPC$, por lo cual $L_1 \in NP$ y para todo lenguaje $L' \in NP$, $L' \leq_p L_1$.
+   2. $L_2 \in NPC$, por lo cual $L_2 \in NP$ y para todo lenguaje $L'' \in NP$, $L'' \leq_p L_2$.
+2. Como $L_1 \in NPC$ y $L_2 \in NP$, entonces por definición $L_2 \leq_p L_1$.
+3. Como $L_2 \in NPC$ y $L_1 \in NP$, entonces por definición $L_1 \leq_p L_2$.
+4. Por lo tanto, se cumple que $L_1 \leq_p L_2$ y $L_2 \leq_p L_1$.
 
 ### c) Si $L_1 \leq_p L_2$, $L_2 \leq_p L_1$, y $L_1 \in NPC$, entonces $L_2 \in NPC$.
 
+1. Hipótesis:
+   1. $L_1 \leq_p L_2$
+   2. $L_2 \leq_p L_1$
+   3. $L_1 \in NPC$, por lo cual $L_1 \in NP$ y para todo lenguaje $L' \in NP$, $L' \leq_p L_1$.
+2. Como $L_1 \leq_p L_2$ y $L_1 \in NP$, entonces por definición $L_2 \in NP$.
+3. Por hipótesis 1 y 3, para todo lenguaje $L' \in NP$, $L' \leq_p L_1$ y como $L_1 \leq_p L_2$, entonces por transitividad de las reducciones polinomiales, $L' \leq_p L_2$.
+4. Lo anterior cumple con la definición de $NPC$, por lo que $L_2 \in NPC$.
+
 ### d) Si un lenguaje es $NPC$, entonces su complemento es $\text{CO-NPC}$, es decir, está en $\text{CO-NP}$ y todos los lenguajes de $\text{CO-NPC}$ se reducen polinomialmente a él. Ayuda: $L_1 \leq_p L_2$ sii $L_1^C \leq_p L_2^C$.
+
+1. Hipótesis: $L \in NPC$, por lo cual $L \in NP$ y para todo lenguaje $L' \in NP$, $L' \leq_p L$.
 
 ## 6. Sea el lenguaje $\text{SH-s-t} = \lbrace (G, s, t) \mid \text{ G es un grafo que tiene un camino de Hamilton del vértice s al vértice t} \rbrace$. Un grafo $G = (V, E)$ tiene un camino de Hamilton del vértice $s$ al vértice $t$ sii $G$ tiene un camino entre $s$ y $t$ que recorre todos los vértices restantes una sola vez. Probar que $\text{SH-s-t} \in NPC$. Ayuda: se sabe que $CH$, el lenguaje correspondiente al problema del circuito hamiltoniano, es $NPC$.
 
-## 7. Probar que el lenguaje $FACT = \lbrace (N, M_1, M_2) \mid N \text{ tiene un divisor primo en el intervalo } [M_1, M_2] \rbrace$ está tanto en $NP$ como en $\text{CO-NP}$. Ayuda: Todo número natural $N$ se descompone de una única manera en factores primos, los cuales concatenados no ocupan más de $poly(|N|)$ símbolos.
+## 7. Probar que el lenguaje $FACT = \lbrace (N, M_1, M_2) \mid N \text{ tiene un divisor primo en el intervalo } [M_1, M_2] \rbrace$ está tanto en $NP$ como en $\text{CO-NP}$. Ayuda: Todo número natural $N$ se descompone de una única manera en factores primos, los cuales concatenados no ocupan más de $poly(|N|)$ símbolos.d
