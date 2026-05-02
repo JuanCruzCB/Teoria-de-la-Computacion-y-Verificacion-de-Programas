@@ -153,9 +153,16 @@ Como se sabe que $p(|w|)$ es un polinomio, entonces $k^{p(|w|)}$ es una función
 3. Por hipótesis 1 y 3, para todo lenguaje $L' \in NP$, $L' \leq_p L_1$ y como $L_1 \leq_p L_2$, entonces por transitividad de las reducciones polinomiales, $L' \leq_p L_2$.
 4. Lo anterior cumple con la definición de $NPC$, por lo que $L_2 \in NPC$.
 
-### d) Si un lenguaje es $NPC$, entonces su complemento es $\text{CO-NPC}$, es decir, está en $\text{CO-NP}$ y todos los lenguajes de $\text{CO-NPC}$ se reducen polinomialmente a él. Ayuda: $L_1 \leq_p L_2$ sii $L_1^C \leq_p L_2^C$.
+### d) Si un lenguaje es $NPC$, entonces su complemento es $\text{CO-NPC}$, es decir, está en $\text{CO-NP}$ y todos los lenguajes de $\text{CO-NP}$ se reducen polinomialmente a él. Ayuda: $L_1 \leq_p L_2$ sii $L_1^C \leq_p L_2^C$.
 
 1. Hipótesis: $L \in NPC$, por lo cual $L \in NP$ y para todo lenguaje $L' \in NP$, $L' \leq_p L$.
+2. Como $L \in NP$, entonces $L^C \in \text{CO-NP}$.
+3. Ahora se debe demostrar que para todo lenguaje $A \in \text{CO-NP}$, $A \leq_p L^C$.
+   1. Sea $A \in \text{CO-NP}$. Por definición de $\text{CO-NP}$, $A^C \in NP$.
+   2. Como $L \in NPC$, todo lenguaje en $NP$ se reduce polinomialmente a $L$, por lo que $A^C \leq_p L$.
+   3. Como se sabe que $L_1 \leq_p L_2$ sii $L_1^C \leq_p L_2^C$, entonces $A \leq_p L^C$.
+   4. Por lo tanto todo lenguaje en $\text{CO-NP}$ se reduce polinomialmente a $L^C$.
+4. Por lo tanto, $L^C$ está en $\text{CO-NP}$ y todos los lenguajes de $\text{CO-NP}$ se reducen polinomialmente a él, lo que implica que $L^C \in \text{CO-NPC}$.
 
 ## 6. Sea el lenguaje $\text{SH-s-t} = \lbrace (G, s, t) \mid \text{ G es un grafo que tiene un camino de Hamilton del vértice s al vértice t} \rbrace$. Un grafo $G = (V, E)$ tiene un camino de Hamilton del vértice $s$ al vértice $t$ sii $G$ tiene un camino entre $s$ y $t$ que recorre todos los vértices restantes una sola vez. Probar que $\text{SH-s-t} \in NPC$. Ayuda: se sabe que $CH$, el lenguaje correspondiente al problema del circuito hamiltoniano, es $NPC$.
 
