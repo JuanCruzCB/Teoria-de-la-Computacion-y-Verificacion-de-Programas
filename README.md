@@ -17,6 +17,7 @@
     - Link a un documento de Google Docs que tenga (1) lo anterior (2) la resolución de la práctica (3) rol de comentarista para cualquier persona que tenga el link.
 - [Link doc TP1](https://docs.google.com/document/d/11mW7oTSDaXCsBo6Lp_NH6Akas9XoyP5159bmdHo46vs/edit?usp=sharing)
 - [Link doc TP2](https://docs.google.com/document/d/1D34gTyrOeymwraTMcXcccrjirIaMI5xetQl4lvVGFWI/edit?usp=sharing)
+- [Link doc TP3](https://docs.google.com/document/d/1126dxk2pnKY4KON7R9O0UBRU4VEVdbqR7iMUOMgeJq0/edit?usp=sharing)
 
 ## Teoría
 
