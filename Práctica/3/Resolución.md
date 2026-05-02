@@ -166,4 +166,16 @@ Como se sabe que $p(|w|)$ es un polinomio, entonces $k^{p(|w|)}$ es una función
 
 ## 6. Sea el lenguaje $\text{SH-s-t} = \lbrace (G, s, t) \mid \text{ G es un grafo que tiene un camino de Hamilton del vértice s al vértice t} \rbrace$. Un grafo $G = (V, E)$ tiene un camino de Hamilton del vértice $s$ al vértice $t$ sii $G$ tiene un camino entre $s$ y $t$ que recorre todos los vértices restantes una sola vez. Probar que $\text{SH-s-t} \in NPC$. Ayuda: se sabe que $CH$, el lenguaje correspondiente al problema del circuito hamiltoniano, es $NPC$.
 
-## 7. Probar que el lenguaje $FACT = \lbrace (N, M_1, M_2) \mid N \text{ tiene un divisor primo en el intervalo } [M_1, M_2] \rbrace$ está tanto en $NP$ como en $\text{CO-NP}$. Ayuda: Todo número natural $N$ se descompone de una única manera en factores primos, los cuales concatenados no ocupan más de $poly(|N|)$ símbolos.d
+Para probar que $\text{SH-s-t} \in NPC$, se deben probar dos cosas: 1) $\text{SH-s-t} \in NP$ y 2) $CH \leq_p \text{SH-s-t}$.
+
+1. **$\text{SH-s-t} \in NP$**:
+   ...
+2. **$CH \leq_p \text{SH-s-t}$**:
+   ...
+
+## 7. Probar que el lenguaje $FACT = \lbrace (N, M_1, M_2) \mid N \text{ tiene un divisor primo en el intervalo } [M_1, M_2] \rbrace$ está tanto en $NP$ como en $\text{CO-NP}$. Ayuda: Todo número natural $N$ se descompone de una única manera en factores primos, los cuales concatenados no ocupan más de $poly(|N|)$ símbolos.
+
+1. **$FACT \in NP$**:
+   ...
+2. **$FACT \in \text{CO-NP} = FACT^C \in NP$**:
+   ...
