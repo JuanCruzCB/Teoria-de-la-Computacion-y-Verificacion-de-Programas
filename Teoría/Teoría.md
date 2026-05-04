@@ -876,38 +876,24 @@
 
 ---
 
-<h1 align="center">Clase 8 - 28 de abril, 2026</h1>
+<h1 align="center">Clase 8 - 19 de mayo, 2026</h1>
 
 ## ???
 
 ---
 
-<h1 align="center">Clase 9 - 5 de mayo, 2026</h1>
+<h1 align="center">Clase 9 - 26 de mayo, 2026</h1>
 
 ## ???
 
 ---
 
-<h1 align="center">Clase 10 - 12 de mayo, 2026</h1>
+<h1 align="center">Clase 10 - 2 de junio, 2026</h1>
 
 ## ???
 
 ---
 
-<h1 align="center">Clase 11 - 19 de mayo, 2026</h1>
+<h1 align="center">Clase 11 - 9 de junio, 2026</h1>
 
 ## ???
-
----
-
-<h1 align="center">Clase 12 - 26 de mayo, 2026</h1>
-
-## ???
-
----
-
-<h1 align="center">Clase 13 - 2 de junio, 2026</h1>
-
-## ???
-
----
