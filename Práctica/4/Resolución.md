@@ -29,6 +29,27 @@ Espacio $S(n)$ implica tiempo $O(c^{S(n)})$ para alguna constante $c$. Si una MT
 
 ### a. Decida el lenguaje $L = \lbrace a^n b^n \mid n \geq 1 \rbrace$ en espacio logarítmico. Ayuda: basarse en el ejemplo mostrado en la clase 7.
 
+Primeras cadenas del lenguaje: $ab$, $aabb$, $aaabbb$, $aaaabbbb, \dots$
+
+Se construye una MT $M$ con una cinta de entrada de sólo lectura y cuatro cintas de trabajo:
+
+1. Hace $i = 1$ en la cinta de trabajo 1.
+2. Hace $j = n$ en la cinta de trabajo 2, con $n = |w|$. Si $n$ es impar, $M$ rechaza.
+3. Copia el símbolo $i$ de $w$ a la cinta de trabajo 3.
+4. Copia el símbolo $j$ de $w$ a la cinta de trabajo 4.
+5. Si no se cumple que el símbolo de la cinta de trabajo 3 es $a$ y el símbolo de la cinta de trabajo 4 es $b$, entonces $M$ rechaza.
+6. Hace $i = i + 1$ en la cinta de trabajo 1.
+7. Hace $j = j - 1$ en la cinta de trabajo 2.
+8. Una vez $i > j$, $M$ acepta.
+9. Vuelve al paso 3.
+
+$L$ pertenece a $LOGSPACE$ porque:
+
+1. Las cintas de trabajo 1 y 2 almacenan un número hasta $n$ en binario, lo cual requiere $O(log(n))$ celdas.
+2. Las cintas de trabajo 3 y 4 almacenan un símbolo, lo cual es espacio constante $O(1)$.
+3. Total: $O(log(n)) + O(log(n)) + O(1) + O(1) = O(log(n))$.
+4. Por lo tanto $L \in LOGSPACE$.
+
 ### b. Decida el lenguaje $SAT$ en espacio polinomial. Ayuda: la generación y la evaluación de una asignación de valores de verdad se pueden efectuar en tiempo polinomial.
 
 ## 3. Probar que $NP \subseteq PSPACE$ de dos maneras:
