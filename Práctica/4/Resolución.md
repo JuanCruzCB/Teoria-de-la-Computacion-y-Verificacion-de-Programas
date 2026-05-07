@@ -33,15 +33,16 @@ Primeras cadenas del lenguaje: $ab$, $aabb$, $aaabbb$, $aaaabbbb, \dots$
 
 Se construye una MT $M$ con una cinta de entrada de sólo lectura y cuatro cintas de trabajo:
 
-1. Hace $i = 1$ en la cinta de trabajo 1.
-2. Hace $j = n$ en la cinta de trabajo 2, con $n = |w|$. Si $n$ es impar, $M$ rechaza.
-3. Copia el símbolo $i$ de $w$ a la cinta de trabajo 3.
-4. Copia el símbolo $j$ de $w$ a la cinta de trabajo 4.
-5. Si no se cumple que el símbolo de la cinta de trabajo 3 es $a$ y el símbolo de la cinta de trabajo 4 es $b$, entonces $M$ rechaza.
-6. Hace $i = i + 1$ en la cinta de trabajo 1.
-7. Hace $j = j - 1$ en la cinta de trabajo 2.
-8. Una vez $i > j$, $M$ acepta.
-9. Vuelve al paso 3.
+1. Recibe una cadena $w$ en la cinta de entrada.
+2. Hace $i = 1$ en la cinta de trabajo 1.
+3. Hace $j = n$ en la cinta de trabajo 2, con $n = |w|$. Si $n$ es impar, $M$ rechaza.
+4. Copia el símbolo $i$ de $w$ a la cinta de trabajo 3.
+5. Copia el símbolo $j$ de $w$ a la cinta de trabajo 4.
+6. Si no se cumple que el símbolo de la cinta de trabajo 3 es $a$ y el símbolo de la cinta de trabajo 4 es $b$, entonces $M$ rechaza.
+7. Hace $i = i + 1$ en la cinta de trabajo 1.
+8. Hace $j = j - 1$ en la cinta de trabajo 2.
+9. Una vez $i > j$, $M$ acepta.
+10. Vuelve al paso 3.
 
 $L$ pertenece a $LOGSPACE$ porque:
 
@@ -52,11 +53,46 @@ $L$ pertenece a $LOGSPACE$ porque:
 
 ### b. Decida el lenguaje $SAT$ en espacio polinomial. Ayuda: la generación y la evaluación de una asignación de valores de verdad se pueden efectuar en tiempo polinomial.
 
+Se construye una MT $M$ con una cinta de entrada de sólo lectura y dos cintas de trabajo:
+
+1. Recibe una fórmula booleana $\phi$ en la cinta de entrada tal que $n$ es la cantidad de variables de $\phi$ ($x_1, x_2, \dots, x_n$).
+2. Escribe $n$ ceros en la cinta de trabajo 1, representando la asignación de valores de verdad $x_1 = 0, x_2 = 0, \dots, x_n = 0$, donde el número cero representa el valor de verdad **falso**.
+3. Evalúa $\phi$ en la cinta de trabajo 2 usando la asignación de valores de verdad representada en la cinta de trabajo 1 junto con los operadores lógicos presentes en $\phi$.
+4. Si el resultado de la evaluación es un 1 (V), entonces $M$ acepta porque la fórmula es satisfactible. Si el resultado es un 0 (F), pasa al paso 5.
+5. Genera la siguiente asignación de valores de verdad posible en la cinta de trabajo 1, lo que implica sumar 1 en binario a la asignación actual. Si hay overflow, $M$ rechaza. Si no, limpia la cinta de trabajo 2 y vuelve al paso 3.
+
+$SAT$ pertenece a $PSPACE$ porque:
+
+1. La cinta de trabajo 1 almacena $n$ bits por lo cual el espacio es $O(n)$.
+2. La cinta de trabajo 2 realiza la evaluación de una fórmula booleana, lo cual se puede hacer en espacio proporcional al tamaño de la misma, es decir $O(|\phi|)$.
+3. Total: $O(n) + O(|\phi|) = O(poly(n))$.
+4. Por lo tanto $SAT \in PSPACE$.
+
 ## 3. Probar que $NP \subseteq PSPACE$ de dos maneras:
 
-### a. Usando que todos los lenguajes de $NP$ se reducen polinomialmente a $SAT$. Ayuda: tener en cuenta el resultado del ejercicio 1.2.b.
+### a. Usando que todos los lenguajes de $NP$ se reducen polinomialmente a $SAT$. Ayuda: tener en cuenta el resultado del ejercicio 2.b.
+
+1. Hipótesis:
+   1. Se sabe que $SAT \in NPC$, por lo cual $SAT \in NP$ y todos los lenguajes de $NP$ se reducen polinomialmente a $SAT$.
+   2. Se sabe que $SAT \in PSPACE$.
+2. Como todos los lenguajes de $NP$ se reducen polinomialmente a $SAT$, entonces para cada lenguaje $L \in NP$ existe una función de reducción polinomial $f$ tal que para toda cadena $w$:
+   1. Si $w \in L$, entonces $f(w) \in SAT$.
+   2. Si $w \notin L$, entonces $f(w) \notin SAT$.
+3. Para decidir si una cadena $w$ pertenece a $L$, se construye una MT $M$ que hace lo siguiente:
+   1. Dada una cadena $w$, calcula $f(w)$ en tiempo polinomial.
+   2. Luego, decide si $f(w) \in SAT$ usando la MT que decide $SAT$ en espacio polinomial.
+   3. Si $f(w) \in SAT$, entonces $M$ acepta porque $w \in L$. Si $f(w) \notin SAT$, entonces $M$ rechaza porque $w \notin L$.
+4. Por lo tanto, $M$ decide $L$ en espacio polinomial, lo cual implica que $L \in PSPACE$.
 
 ### b. Usando que si un lenguaje $L$ pertenece a $NP$, entonces existe una MT $M_1$ capaz de verificar en tiempo $poly(|w|)$ si una cadena $w$ pertenece a $L$, con la ayuda de un certificado $x$ de tamaño $poly(|w|)$. Ayuda: con dicha hipótesis, probar que existe una MT $M_2$ que decide $L$ en espacio $poly(|w|)$ sin la ayuda de ningún certificado.
+
+1. Hipótesis:
+   1. Se sabe que si un lenguaje $L$ pertenece a $NP$, entonces existe una MT $M_1$ capaz de verificar en tiempo $poly(|w|)$ si $w \in L$, con la ayuda de un certificado $x$ de tamaño $poly(|w|)$.
+2. Para decidir si una cadena $w$ pertenece a $L$, se construye una MT $M_2$ que hace lo siguiente:
+   1. Dada una cadena $w$, $M_2$ genera todas las posibles cadenas $x$ de tamaño $poly(|w|)$, lo cual se puede hacer en espacio polinomial porque se reusa el espacio de trabajo en cada generación.
+   2. Para cada cadena $x$ generada, $M_2$ simula la MT $M_1$ con la entrada $w$ y el certificado $x$.
+   3. Si para alguna cadena $x$, la MT $M_1$ acepta, entonces $M_2$ acepta porque $w \in L$. Si para todas las cadenas $x$, la MT $M_1$ rechaza, entonces $M_2$ rechaza porque $w \notin L$.
+3. Por lo tanto, $M_2$ decide $L$ en espacio polinomial, lo cual implica que $L \in PSPACE$.
 
 ## 4. Supongamos que existe una MT $M$ de tiempo polinomial que, dado un grafo $G$, devuelve un circuito de Hamilton de $G$ si existe o responde no si no existe. Describir la idea general de una MT $M'$ que, utilizando $M$, decida en tiempo polinomial si un grafo $G$ tiene un circuito de Hamilton. Ayuda: basarse en el ejemplo mostrado en la clase 7 con $FSAT$ y $SAT$.
 
