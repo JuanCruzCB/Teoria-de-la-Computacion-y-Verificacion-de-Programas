@@ -96,4 +96,8 @@ $SAT$ pertenece a $PSPACE$ porque:
 
 ## 4. Supongamos que existe una MT $M$ de tiempo polinomial que, dado un grafo $G$, devuelve un circuito de Hamilton de $G$ si existe o responde no si no existe. Describir la idea general de una MT $M'$ que, utilizando $M$, decida en tiempo polinomial si un grafo $G$ tiene un circuito de Hamilton. Ayuda: basarse en el ejemplo mostrado en la clase 7 con $FSAT$ y $SAT$.
 
+$\dots$
+
 ## 5. Probar que si se puede encontrar en tiempo $poly(n)$ un circuito de Hamilton mínimo de un grafo completo ponderado $G$, entonces también se puede decidir en tiempo $poly(n)$ si $G$ tiene un circuito de Hamilton cuyos arcos suman $\leq B$.
+
+$\dots$
