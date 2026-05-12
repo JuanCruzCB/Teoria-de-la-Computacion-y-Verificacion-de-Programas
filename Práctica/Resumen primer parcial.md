@@ -238,3 +238,199 @@
    4. Por lo tanto, $L_1 \leq L_3$.
 3. **Simetría**: No se cumple. Si $L_1 \leq L_2$ no implica que $L_2 \leq L_1$.
 4. **Complemento**: $L_1 \leq L_2$ si y solo si $L_1^C \leq L_2^C$. Se usa exactamente la misma función de reducción $f$ para ambas reducciones.
+
+### Autómatas finitos (AF)
+
+- Una cinta readonly.
+- Sólo se mueven hacia la derecha.
+- Conjunto $F$ de estados finales.
+- Una vez se llega al símbolo blanco el AF para y acepta si y solo si el estado alcanzado es un estado final $q \in F$.
+- Siempre se detienen.
+- Aceptan un tipo limitado de cadenas ya que no tienen memoria.
+- Los lenguajes que aceptan se denominan **lenguajes regulares**.
+- Se usan para:
+  - Análisis sintáctico a nivel palabra de compiladores.
+  - Inspecciones de código para QA.
+
+### Autómatas con pila (AP)
+
+- Una cinta de input readonly.
+- Una cinta read/write que se comporta como una pila (LIFO).
+- En un mismo paso se pueden procesar ambas cintas.
+- En la cinta de input el cabezal siempre se mueve hacia la derecha.
+- Cuando se alcanza el símbolo blanco en la cinta de input, el AP para, y acepta si y solo si la pila está vacía.
+- Siempre se detienen.
+- Los lenguajes que aceptan se denominan **lenguajes libres de contexto**.
+- Se usan para:
+  - Análisis sintáctico a nivel instrucción de compiladores.
+  - Evaluación de expresiones en la ejecución de programas.
+
+---
+
+## Complejidad temporal
+
+### Definiciones
+
+- Una MT tarda más tiempo en terminar (llegar a un estado de aceptación o rechazo) a medida que la longitud de la cadena de entrada, denotada $|w|$, aumenta.
+- Por esto se usan funciones temporales $T(n)$ que se definen en términos de la longitud de la cadena de entrada $n = |w|$.
+- Funciones temporales típicas: $5n$, $3n^3$, $2^n$, $n^{log_2 n}$, $7^{\sqrt{n}}$, $n!$, $6^{n^5}$
+- Hay dos grandes grupos de funciones de acuerdo al nivel de abstracción pretendido:
+  - Polinomiales o $poly(n)$: $T(n) = c \cdot n^k$
+  - Exponenciales o $exp(n)$: $T(n) = c \cdot k^n$
+- La convención respaldada por las matemáticas y la experiencia es que el **tiempo tratable** es el tiempo polinomial, mientras que el tiempo exponencial es **intratable**.
+
+### Orden $O$
+
+- Una MT tarda tiempo $T(n)$ si y solo si a partir de toda cadena de entrada $w$ con $|w| = n$, la MT se detiene en a lo sumo $T(n)$ pasos.
+- Una función $T_1(n)$ es del orden de una función $T_2(n)$, denotado $T_1(n) = O(T_2(n))$, si y solo si para todo $n \geq n_0$ se cumple que $T_1(n) \leq c \cdot T_2(n)$, con $c > 0$.
+- Ejemplos:
+  - $5n^3 + 8n + 25 = O(n^3)$
+  - $n^2 = O(n^3)$
+  - $n^3 = O(2^n)$
+
+### Clase $TIME$
+
+- Un lenguaje $L$ pertenece a la clase $TIME(T(n))$ si y solo si existe una MT $M$ que lo decide en tiempo $O(T(n))$.
+- Para todo lenguaje $L_i \in TIME(T(n))$ existe una MT $M_i$ que lo decide en tiempo $O(T(n))$.
+- Se considera siempre el peor caso (cota superior). Por ejemplo, si a partir de casi todas las cadenas de un lenguaje el tiempo de ejecución es $O(n)$ pero a partir de algunas pocas cadenas es de $O(n^3)$, entonces se dice que el lenguaje pertenece a $TIME(n^3)$. Es decir, el tiempo queda "castigado" por las cadenas más difíciles.
+- Naturalmente, sería mejor considerar el tiempo promedio o mínimo (cota inferior), pero son mucho más dificiles de calcular y no se usan tanto.
+
+### Clase $P$
+
+- En particular, $TIME(n^k)$ denota la clase de lenguajes decidibles por una MT en tiempo polinomial de grado $k$. También se conoce como la clase $P$.
+- Todo lenguaje de $P$ es aceptado por una MT en tiempo $O(n^k)$.
+- **Robustez**: Si una MT $M_1$ con $k$ cintas tarda tiempo $O(n^k)$, entonces existe una MT $M_2$ equivalente con $c$ cintas que tarda también tiempo $O(n^k)$. El retardo es a lo sumo cuadrático.
+- Ejemplo de lenguaje en $P$:
+  - $L_{pal} = \lbrace w \in \Sigma^* \mid w \text{ es un palíndromo con símbolos a y b} \rbrace$
+  - MT que lo decide, usando 2 cintas:
+    - Copia $w$ de la cinta 1 a la cinta 2. Tiempo: $O(n)$.
+    - Posiciona el cabezal de la cinta 1 al principio. Tiempo: $O(n)$.
+    - Compara en direcciones contrarias uno a uno los símbolos de ambas cintas hasta llegar a un blanco en ambas. Tiempo: $O(n)$.
+    - Tiempo total: $O(n) + O(n) + O(n) = 3 \cdot O(n) = O(n)$.
+- Ejemplo de lenguaje que no está en $P$: $SAT$, porque la única solución que se conoce es vía la tabla de verdad, la cual se chequea de forma exponencial.
+
+### Clase $EXP$
+
+- $EXP$ es la clase de los lenguajes decidibles en tiempo $O(c^{poly(n)})$.
+
+### Tesis fuerte de Church-Turing
+
+- Si un lenguaje es decidible en tiempo $poly(n)$ por un modelo computacional realizable, también es decidible en tiempo $poly(n)$ por una MT.
+- Ejemplos de modelos computacionales realizables:
+  - Máquinas RAM.
+  - Programas Java.
+  - Circuitos booleanos.
+  - etc.
+- Para la codificación de números cualquier base es válida excepto la unaria, porque la codificación unaria no es eficiente. Por ejemplo, el número 1000 se codifica como 1000 en base decimal, pero se codificaría como 1111111111... (mil veces) en base unaria, lo cual no es eficiente.
+
+### Clase $NP$
+
+- Un lenguaje $L$ pertenece a la clase $NP$ si existe una MT $M$ tal que:
+  - $w \in L$ si y solo si existe un certificado $x$ tal que $M$ acepta la tupla $(w, x)$ en tiempo polinomial.
+- En otras palabras, toda cadena $w$ de $L$ tiene un certificado $x$ que permite **verificar de forma eficiente (polinomial)** que $w$ pertenece a $L$.
+- Si lo anterior se cumple, se dice que **$M$ es un verificador eficiente** de $L$ y que **$x$ es un certificado sucinto** de $w$.
+
+### Ejemplos de lenguajes que están en $NP$
+
+- $SAT = \lbrace \phi \mid \phi \text{ es una fórmula booleana sin cuantificadores, con m variables y satisfactible} \rbrace$
+  - $SAT$ **no estaría** en $P$ porque si $\phi$ tiene $m$ variables, entonces se deben chequear $2^m$ posibles asignaciones de valores de verdad a las variables para encontrar una que satisfaga $\phi$.
+  - $SAT \in NP$ porque dada una fórmula booleana $\phi$ y una asignación de valores de verdad a sus variables $A$, se puede verificar en tiempo polinomial si $A$ satisface $\phi$.
+  - $SAT^C$ **no estaría** en $NP$ porque para ver si $\phi$ NO es satisfactible se debe hacer lo mismo que en el primer caso, es decir, chequear $2^m$ posibles asignaciones de valores de verdad para asegurarnos de que no existe ninguna en absoluto que satisfaga $\phi$.
+  - Por lo anterior se deduciría que $SAT \notin \text{CO-NP}$.
+- Se cree que $NP \neq \text{CO-NP}$, pero no se ha podido demostrar, así como tampoco se ha podido demostrar que $P \neq NP$.
+
+---
+
+## Lenguajes $NPC$ y la clase $NPI$
+
+### Introducción a $NPC$
+
+- Asumiendo la conjetura $P \neq NP$, hay una forma de establecer que un lenguaje $L \in NP$ no está en $P$.
+- Lo anterior ocurre cuando se prueba que $L$ es $NPC$ (NP-completo).
+- Los lenguajes $NPC$ son los más dificiles de $NP$.
+
+### Reducciones polinomiales
+
+- Son igual que las reducciones generales, solo que la función de reducción $f$ debe ser computada por una MT que trabaja en tiempo polinomial.
+- Cumplen las mismas propiedades: son reflexivas, transitivas y no simétricas.
+- Sirven para relacionar lenguajes.
+- **Teorema 1**: Si $L_1 \leq_p L_2$ y $L_2 \in P$, entonces $L_1 \in P$.
+  - También, por contrarrecíproco, si $L_1 \leq_p L_2$ y $L_1 \notin P$, entonces $L_2 \notin P$.
+- **Teorema 2**: Si $L_1 \leq_p L_2$ y $L_2 \in NP$, entonces $L_1 \in NP$.
+  - También, por contrarrecíproco, si $L_1 \leq_p L_2$ y $L_1 \notin NP$, entonces $L_2 \notin NP$.
+
+### Definición de $NPC$
+
+- $L \in NPC$ si y solo si:
+  - $L \in NP$.
+  - Para todo $L' \in NP$, $L' \leq_p L$. Es decir, todos los lenguajes de $NP$ se reducen polinomialmente a $L$. Se dice que $L$ es $\text{NP-dificil}$.
+- Si $L$ estuviera en $P$, entonces todos los lenguajes de $NP$ estarían en $P$, y de esta manera se probaría que $P = NP$. Por ende, los lenguajes $NPC$ no están en $P$ a no ser que $P = NP$.
+- $SAT$ es el problema más famoso que se sabe que está en $NPC$.
+
+### Cómo poblar la clase $NPC$
+
+1. Sea $L \in NP$.
+2. Sea $f$ una función de reducción polinomial de $SAT$ a $L$.
+3. Sea $g$ la función de reducción polinomial obtenida componiendo la reducción polinomial $f_i$ de cada $L_i \in NP$ con la reducción $f$ de $SAT$ a $L$.
+4. Lo anterior vale para todos los lenguajes de $NP$, por lo tanto $L$ es $NPC$.
+5. En resumen:
+   1. $L_1 \in NPC$
+   2. $L_2 \in NP$
+   3. $L_1 \leq_p L_2$
+   4. $L_2 \in NPC$
+
+### Dos características clave de los lenguajes $NPC$
+
+1. Por definición, par todo par de lenguajes $L_1, L_2 \in NPC$ se cumple que $L_1 \leq_p L_2$ y $L_2 \leq_p L_1$.
+   1. Sin embargo, la función de reducción de la segunda reducción no necesariamente es la función inversa de la $f$ de la primera reducción.
+   2. A pesar de esto, se conjetura que todos los lenguajes $NPC$ cumplen esta propiedad llamada p-isomorfismo, es decir, para todo par de lenguajes $L_1, L_2 \in NPC$ existe una función de reducción polinomial $f$ de $L_1$ a $L_2$ tal que su inversa $f^{-1}$ es también una función de reducción polinomial de $L_2$ a $L_1$.
+   3. Si esta conjetura logra probarse, entonces se prueba $P \neq NP$.
+2. Todos los lenguajes $NPC$ conocidos son **densos**.
+   1. Un lenguaje es **denso** si para todo $n$ tiene $exp(n)$ cadenas de longitud a lo sumo $n$.
+   2. Un lenguaje es **disperso** en caso contrario: para todo $n$ tiene $poly(n)$ cadenas de longitud a lo sumo $n$.
+   3. Se conjetura que todos los lenguajes $NPC$ son densos.
+   4. Si existe un lenguaje $NPC$ que es disperso, entonces se prueba $P = NP$.
+
+### Clase $NPI$
+
+- Los lenguajes de $NPI$ no son ni tan fáciles como los de $P$ ni tan difíciles como los de $NPC$. Están en el medio.
+- Un lenguaje que podría estar en $NPI$ es el lenguaje de los grafos isomorfos. Dos grafos son isomorfos si son idénticos salvo por el nombre de sus nodos. Se define como:
+  - $ISO = \lbrace (G_1, G_2) \mid G_1 \text{ y } G_2 \text{ son grafos isomorfos} \rbrace$
+  - Está en $NP$ porque los certificados sucintos son permutaciones de $V$, el conjunto de nodos de $G_1$, que permiten verificar de forma eficiente si $G_1$ y $G_2$ son isomorfos.
+  - No estaría en $P$ porque en el peor caso hay que probar todas las permutaciones de $V$.
+  - No estaría en $NPC$ porque no se ha encontrado un lenguaje $NPC$ tal que se reduzca polinomialmente a $ISO$.
+  - Su complemento no estaría en $NP$ porque no se ha encontrado ningún certificado sucinto que permita verificar de forma eficiente que dos grafos no son isomorfos.
+
+### Diagrama de Venn de la jerarquía temporal
+
+![Regiones de la jerarquía temporal](https://i.imgur.com/ZegyuPG.png)
+
+---
+
+## Complejidad espacial
+
+### Introducción
+
+- Se consideran MT tales que la cinta de entrada es readonly. Las demás son cintas de trabajo read/write.
+- Una MT ocupa espacio $S(n)$ si y solo si, en todas sus cintas de trabajo (no la de entrada) ocupa a lo sumo $S(n)$ celdas, siendo $n = |w|$ la longitud de la cadena de entrada.
+- La cinta de entrada readonly permite espacios menores que $O(n)$.
+- Una MT $M$ que ocupa espacio $S(n)$ puede no detenerse, pero dada $M$, siempre existe una MT $M'$ equivalente que ocupa espacio $S(n)$ y siempre se detiene.
+  - Por ejemplo, una MT con 1 cinta de entrada readonly y 1 cinta de trabajo read/write entra en loop si hizo más de $n \cdot S(n) \cdot |Q| \cdot |\Gamma|^{S(n)} = O(c^{S(n)})$ pasos.
+  - Por lo tanto, tiempo $T(n)$ implica espacio $S(n)$, y espacio $S(n)$ implica tiempo $O(c^{S(n)})$.
+
+### Clase $SPACE(S(n))$
+
+- Un lenguaje $L$ pertenece a la clase $SPACE(S(n))$ si y solo si existe una MT $M$ que decide $L$ ocupando espacio $O(S(n))$.
+
+### Jerarquía espacial
+
+- $LOGSPACE$ es la clase de los lenguajes aceptados en espacio $O(log_2(n))$.
+- $PSPACE$ es la clase de los lenguajes aceptados en espacio $poly(n)$.
+- $EXPSPACE$ es la clase de los lenguajes aceptados en espacio $exp(n)$.
+- Espacio $S(n)$ implica tiempo $O(c^{S(n)})$, con $c$ constante. Así, si en particular una MT $M$ ocupa espacio $log_2(n)$, entonces $M$ tarda tiempo $O(c^{log_2(n)}) = O(n^{log_2(c)}) = O(n^k)$, con $k$ constante. Por lo tanto, $LOGSPACE \subseteq P$.
+- Los problemas tratables en espacio son los que pertenecen a la clase $LOGSPACE$.
+- Existe una clase $NLOGSPACE$ homóloga a la clase $NP$ pero con espacio en lugar de tiempo. También se cumple $NLOGSPACE \subseteq P$.
+
+### Diagrama de Venn de la jerarquía espacio-temporal
+
+![Regiones de la jerarquía espacio-temporal](https://i.imgur.com/UNkkH3v.png)
