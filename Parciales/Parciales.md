@@ -4,9 +4,17 @@
 
 ### a. ¿Cuándo un lenguaje es recursivamente enumerable y cuándo un lenguaje es recursivo?
 
+Un lenguaje es recursivamente enumerable cuando existe una MT que acepta todas las cadenas del lenguaje pero puede no detenerse para cadenas que no pertenecen al lenguaje.
+
+Un lenguaje es recursivo cuando existe una MT que acepta todas las cadenas del lenguaje y siempre se detiene.
+
 ### b. ¿Existen lenguajes recursivamente enumerables no recursivos? Dar un ejemplo.
 
+Sí, existen lenguajes que están en $RE - R$, es decir son recursivamente enumerables no recursivos. El ejemplo típico es $HP$.
+
 ### c. ¿Existen lenguajes no recursivamente enumerables? Dar un ejemplo.
+
+Sí, existen lenguajes que no poseen ninguna MT que siempre se detenga ni siquiera para todas las cadenas que sí pertenecen al lenguaje. Ejemplo: $HP_{total} = \lbrace \langle M \rangle \mid \text{M se detiene para todas las cadenas} \rbrace$
 
 ## 2. Construir (dar sólo la idea general) una MT que acepte los pares de códigos de MT $(\langle M_1 \rangle, \langle M_2 \rangle)$ tales que la MT $M_1$ o la MT $M_2$ acepten la cadena vacía.
 
@@ -55,6 +63,33 @@
 <h1 align="center">2025 - Ejemplo de examen</h1>
 
 ## 1. Probar que el conjunto $RE$ es cerrado con respecto a la operación de intersección $\cap$, es decir que para todo par de lenguajes $L_1, L_2 \in RE$, se cumple que $L_1 \cap L_2 \in RE$.
+
+Para probar esto podemos construir una MT $M$ que reconozca $L_1 \cap L_2$ a partir de las MT $M_1$ y $M_2$ que reconocen $L_1$ y $L_2$, respectivamente.
+
+$M$ hace lo siguiente:
+
+1. Recibe una cadena de entrada $w$.
+2. Simula a $M_1$ a partir de $w$:
+   1. Si $M_1$ acepta, se pasa al paso 3.
+   2. Si $M_1$ rechaza, $M$ rechaza.
+   3. Si $M_1$ loopea, $M$ loopea.
+3. Simula a $M_2$ a partir de $w$:
+   1. Si $M_2$ acepta, $M$ acepta.
+   2. Si $M_2$ rechaza, $M$ rechaza.
+   3. Si $M_2$ loopea, $M$ loopea.
+
+Verificando el funcionamiento de $M$:
+
+1. Si $w \in L_1 \cap L_2$:
+   1. $M_1$ acepta $w$, entonces se pasa al paso 3.
+   2. $M_2$ acepta $w$, entonces $M$ acepta $w$.
+   3. Por lo tanto, $M$ acepta $w$.
+2. Si $w \notin L_1 \cap L_2$:
+   1. $M_1$ rechaza o loopea
+   2. O $M_1$ acepta pero $M_2$ rechaza o loopea.
+   3. En ambos casos, $M$ no acepta $w$.
+
+Por lo tanto $M$ reconoce $L_1 \cap L_2$, y por lo tanto $L_1 \cap L_2 \in RE$.
 
 ## 2. Sea $L_1$ un lenguaje generado con los símbolos del alfabeto $\Sigma_1$. Sea $f: \Sigma_1 \rightarrow \Sigma_2^*$ una función total computable, consistente en asignar a cada símbolo de $\Sigma_1$ una cadena de $\Sigma_2^*$. Y sea $L_2$ el lenguaje formado por las cadenas obtenidas de la aplicación de $f$ sobre las cadenas de $L_1$. Es decir que dado $L_1 = \lbrace w_1, w_2, \ldots \rbrace$, el lenguaje $L_2$ es $\lbrace f(w_1), f(w_2), \ldots \rbrace$, entendiendo que $f(w)$, con $w = w_1 w_2 \ldots w_n$ significa $f(w_1) f(w_2) \ldots f(w_n)$. Por ejemplo, si $abc \in L_1$, entonces $f(a) = 1$, $f(b) = 00$ y $f(c) = 101$, entonces $f(abc) = 100101 \in L_2$. Probar que si $L_1 \in R$, entonces $L_2 \in RE$. Ayuda: Construir una MT que reconozca $L_2$.
 
@@ -240,22 +275,44 @@ $\ldots$
 
 <h1 align="center">Desconocido</h1>
 
-## 1.
+## 1. Sean $L_1 \in RE$ y $L_2 \in R$.
 
-## 2.
+### a. Probar, construyendo una MT, que $L_1 \cap L_2 \in RE$. Comentario: sólo se pide presentar la idea general de la MT.
 
-## 3.
+### b. Encontrar un lenguaje $L_1 \in RE$ y un lenguaje $L_2 \in R$ tales que $L_1 \cap L_2 \notin R$.
 
-## 4.
+## 2. Construir una MT que acepte el lenguaje $L = \lbrace (\langle M \rangle, w_1, w_2) \mid \text{la MT M acepta al menos una de las cadenas } w_i \rbrace$. Comentario: sólo se pide presentar la idea general de la MT.
 
-## 5.
+## 3. La siguiente es una prueba de que $L_U \notin R$
 
-## 6.
+### a. Existe un lenguaje $L$ tal que $L^C \notin RE$ y además $L \leq L_U$.
 
-## 7.
+### b. Como $L^C \notin RE$, entonces $L \notin R$.
 
-## 8.
+### c. Y como $L \notin R$ y $L \leq L_U$, entonces $L_U \notin R$.
 
-## 9.
+### Se pide justificar los incisos b y c. Ayuda: tener en cuenta las propiedades estudiadas en clase sobre las clases $R$ y $RE$ y sobre las reducciones de lenguajes.
 
-## 10.
+## 4. Probar que si $A$ es Turing-reducible a $B$, entonces $A^C$ es Turing-reducible a $B^C$. Ayuda: teniendo en cuenta la hipótesis, hay que probar que existe una MT con oráculo $B^C$ que acepta $A^C$ y siempre se detiene.
+
+## 5. Probar que cualquier lenguaje $L_1 \in P$ se puede reducir polinomialmente a cualquier lenguaje $L_2 \in P$, siempre y cuando $L_1$ y $L_2$ no sean ni $\Sigma^*$ ni $\emptyset$. Comentario: describir la función de reducción de $L_1$ a $L_2$ y probar que la función se computa en tiempo polinomial.
+
+## 6. Construir una MT que acepte todos los pares $(\langle M \rangle, n)$ siendo $n$ un número natural, que cumplen que $M$, a partir del input vacío, se detiene en a lo sumo $n^2$ pasos. Ayuda: la función $n^2$ es tiempo-construible. Comentario: sólo presentar la idea general de la MT.
+
+## 7. Probar que el siguiente lenguaje está en $NP$: $\text{TRUE-SAT} = \lbrace \phi \mid \phi \text{ es una fórmula booleana sin cuantificadores y satisfactible con al menos dos asignaciones de valores de verdad, en una de las cuales todos los valores de verdad son true} \rbrace$. Ayuda: la evaluación de una asignación sobre una fórmula booleana tarda tiempo polinomial.
+
+## 8. Indicar si las siguientes fórmulas de correctitud son verdaderas o falsas. Justificar la respuesta en cada caso. Comentario: no hay que utilizar los métodos $H$ y $H^*$, sólo aplicar las definiciones de correctitud parcial y total, y recordar que las variables son de tipo entero:
+
+### a. $\lbrace true \rbrace x := x + y \lbrace x \geq y \rbrace$
+
+### b. $\lbrace x = 0 \rbrace \text{while } y = 0 \text{ do } z := z + 1 \text{ od} \lbrace x = 0 \rbrace$
+
+### c. $\lbrace x > 0 \land y > 0 \rbrace \text{while } y > x \text{ do } y := y-x \text{ od} \lbrace true \rbrace$
+
+## 9. Dado un programa $S$ del lenguaje $PLW$ estudiado en clase, justificar en cada caso por qué son verdaderos los siguientes enunciados:
+
+### a. Que exista algún estado $\sigma$ tal que $\sigma \vDash p$ y $val(\pi(S, \sigma)) \vDash q$ no implica que $\vDash \lbrace p \rbrace S \lbrace q \rbrace$
+
+### b. Que exista algún estado $\sigma$ tal que $\sigma \nvDash p$ y $val(\pi(S, \sigma)) \nvDash q$ no implica que $\nvDash \langle p \rangle S \langle q \rangle$
+
+## 10. Probar con el método $H$ la fórmula $\lbrace p \rbrace \text{while } p \text{ do } S \text{ od} \lbrace q \rbrace$, asumiendo que en $H$ se prueba la fórmula $\lbrace p \rbrace S \lbrace p \rbrace$. Ayuda: Hay que probar con $H$ la formula $\lbrace p \rbrace \text{while } p \text{ do } S \text{ od} \lbrace a \rbrace$ partiendo de $\lbrace p \rbrace S \lbrace p \rbrace$. Tener en cuenta: (a) a partir de $\lbrace p \rbrace S \lbrace p \rbrace$ se puede probar $\lbrace p \land p \rbrace S \lbrace p \rbrace$ (por la regla de consecuencia CONS), desde donde entonces luego se puede aplicar la regla de la repetición REP. (b) La aserción false implica cualquier otra.
