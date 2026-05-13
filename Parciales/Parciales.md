@@ -74,73 +74,173 @@
 
 ### a. $R$
 
+Un lenguaje pertenece a $R$ si existe una MT que lo decide y siempre se detiene.
+
+Ejemplo: $\Sigma^*$
+
 ### b. $RE - R$
+
+Un lenguaje pertenece a $RE - R$ si existe una MT que lo acepta pero puede loopear para cadenas que no pertenecen al lenguaje.
+
+Ejemplo: $HP$
 
 ### c. $\text{CO-RE} - R$
 
+Un lenguaje pertenece a $\text{CO-RE} - R$ si su complemento está en $RE$ pero no es un lenguaje decidible.
+
+Ejemplo: $HP^C$
+
 ### d. $\mathcal{L} - (RE \cup \text{CO-RE})$
 
-## 2. Sea $L_1$ un lenguaje de $R$ y $L_2$ un lenguaje de $RE$.
+Un lenguaje pertenece a $\mathcal{L} - (RE \cup \text{CO-RE})$ si no existe ninguna MT que lo acepte ni tampoco a su complemento.
+
+Ejemplo: $HP_{total} = \lbrace \langle M \rangle \mid M \text{ se detiene para toda entrada} \rbrace$
+
+## 2. Sea $L_1 \in R$ y $L_2 \in RE$.
 
 ### a. Probar, construyendo una MT $M$ que $L_1 \cup L_2 \in RE$. Solo dar, claramente, la idea general de $M$.
 
+1. Sean $M_1$ y $M_2$ las MT que aceptan a $L_1$ y a $L_2$ respectivamente.
+2. $M$ recibe una cadena de entrada $w$.
+3. $M$ simula a $M_1$ a partir de $w$. Como $L_1 \in R$, $M_1$ nunca loopea.
+   1. Si $M_1$ acepta, $M$ acepta.
+   2. Si $M_1$ rechaza, se pasa al paso 4.
+4. $M$ simula a $M_2$ a partir de $w$:
+   1. Si $M_2$ acepta, $M$ acepta.
+   2. Si $M_2$ rechaza, $M$ rechaza.
+   3. Si $M_2$ loopea, $M$ loopea.
+
 ### b. Dar un ejemplo de lenguaje $L_1$ de $R$ y un lenguaje $L_2$ de $RE$ tal que $L_1 \cup L_2 \notin R$.
+
+$L_1 = \lbrace 0, 00, 11 \rbrace$
+
+$L_2 = HP$
+
+$L_1 \cup L_2 \notin R$
 
 ## 3. En el marco de la computabilidad:
 
 ### a. ¿Qué significa que una prueba sea constructiva?
 
+En la computabilidad, una prueba es constructiva cuando se prueba vía la construcción de una máquina de Turing que cumple un determinado objetivo.
+
 ### b. ¿Por qué las pruebas de no pertenencia a $R$ o a $RE$ no pueden ser constructivas?
 
+Para probar que un lenguaje no está en $R$ o en $RE$ se debe probar que no existe **ninguna** MT que lo decida o que lo reconozca, respectivamente. Justamente, como queremos probar que no hay ninguna MT no podemos construir una MT que lo pruebe. No se puede construir una MT que pruebe que ninguna MT (que son infinitas) puede hacer determinada cosa.
+
 ### c. ¿Qué técnicas existen para probar la no pertenencia a $R$ o a $RE$?
+
+Existen dos técnicas principales, la diagonalización y la reducción.
 
 ## 4. Indicar, justificando la respuesta, si se cumplen los siguientes enunciados, todos referidos al lenguaje $HP$:
 
 ### a. Si $L \notin RE$, entonces no existe una reducción de $L$ a $HP$.
 
+**Verdadero**.
+
+Por teorema se sabe que si $L_1 \leq L_2$ y $L_2 \in RE$, entonces $L_1 \in RE$. Como se sabe que $HP \in RE$, $L$ debe ser $RE$ pero no lo es. Contradicción. Por lo tanto no existe reducción de $L$ a $HP$.
+
 ### b. Si existe una reducción de $HP$ a un lenguaje $L$, entonces $L \in RE$.
 
+**Falso**.
+
+Es posible reducir $HP$ a un lenguaje que no está en $RE$, como por ejemplo $HP_{total} = \lbrace \langle M \rangle \mid M \text{ se detiene para toda entrada} \rbrace$
+
 ### c. Si todos los lenguajes de $R$ se reducen a $HP$, entonces $R = RE$.
+
+**Falso**.
+
+Ya de por sí es verdad que todos los lenguajes de $R$ se pueden reducir a $HP$, y sin embargo se sabe que $R \neq RE$.
 
 ## 5. Definir cuándo un lenguaje (además, dar un ejemplo de lenguaje de cada clase):
 
 ### a. Pertenece a la clase $P$.
 
+Un lenguaje pertenece a la clase $P$ cuando existe una MT que lo decide en tiempo polinomial.
+
+Ejemplo: $\lbrace 00, 01, 11 \rbrace$
+
 ### b. Pertenece a la clase $NP$.
+
+Un lenguaje pertenece a la clase $NP$ cuando existe una MT y un certificado tal que la MT decide al lenguaje en tiempo polinomial usando ese certificado como atajo.
+
+Ejemplo: $SAT$
 
 ### c. Pertenecería a la clase $NPI$.
 
+Un lenguaje pertenece a la clase $NPI$ cuando está en $NP$, no está en $P$, y no es $NPC$.
+
+Ejemplo: $ISO$, el problema de los grafos isomorfos.
+
 ## 6. Probar la pertenencia a la clase $NP$ del lenguaje $PARTICIÓN$, definido como el conjunto $C$ de números naturales que se puede particionar en dos subconjuntos $C_1$ y $C_2$ tales que la suma de los elementos de $C_1$ coincide con la suma de los elementos de $C_2$. Comentario: se sabe que la suma de $k$ números se puede realizar en tiempo polinomial.
+
+Ejemplo: $C = \lbrace 1, 2, 3, 4 \rbrace$ se puede particionar en $C_1 = \lbrace 1, 4 \rbrace$ y $C_2 = \lbrace 2, 3 \rbrace$, ya que $1 + 4 = 2 + 3$.
+
+Para esto, se debe construir una MT $M$ que, a partir de un certificado $x$, decida $PARTICIÓN$ en tiempo polinomial.
+
+$M$ recibe como cadena de entrada a un conjunto de números naturales $C$ y a un certificado $x$ que es una lista de ceros y unos donde un cero significa que el número correspondiente de $C$ pertenece a $C_1$ y un uno significa que el número correspondiente de $C$ pertenece a $C_2$.
+
+Por ejemplo, si $C = \lbrace 1, 2, 3, 4 \rbrace$ y $x = 0110$, entonces $C_1 = \lbrace 1, 4 \rbrace$ y $C_2 = \lbrace 2, 3 \rbrace$.
+
+$M$ recorre de forma lineal tanto el certificado como el conjunto $C$ y va sumando los números de $C_1$ y los números de $C_2$, cosa que se sabe por enunciado que es polinomial. Al finalizar, $M$ compara ambas sumas. Si son iguales, acepta. Si no, rechaza.
+
+El tiempo de $M$ es $O(n) + O(n) + O(1) = O(n)$, donde $n$ es el tamaño de la entrada, es decir el tamaño del conjunto $C$.
+
+$M$ decide $PARTICIÓN$ en tiempo polinomial usando un certificado, y por lo tanto $PARTICIÓN \in NP$.
 
 ## 7. Indicar, justificando la respuesta, si se cumplen los siguientes enunciados, todos referidos al lenguaje $SAT$ (el lenguaje del problema de satisfactibilidad):
 
 ### a. Todos los lenguajes de $P$ se reducen polinomialmente a $SAT$.
 
+**Verdadero**.
+
+Se sabe que $SAT$ es un lenguaje $NPC$, y por definición de $NPC$ se sabe que todos los lenguajes de $NP$ se reducen polinomialmente a $SAT$. Como $P$ está contenido en $NP$, entonces todos los lenguajes de $P$ se reducen polinomialmente a $SAT$.
+
 ### b. Si existe una reducción polinomial de $SAT$ a un lenguaje $L$, entonces $L \in NPC$.
 
+**Falso**.
+
+Puede pasar que $L$ sea $NPH$ pero no $NPC$, como por ejemplo $HP$.
+
 ### c. Si existe una reducción polinomial de $SAT$ a un lenguaje de $P$, entonces $P = NP$.
+
+**Verdadero**.
+
+Por teorema, se sabe que si $L_1 \leq L_2$ y $L_2 \in P$, entonces $L_1 \in P$. Como $SAT \leq_p L$ y $L \in P$, entonces $SAT \in P$. Como $SAT$ es $NPC$, todo lenguaje de $NP$ se reduce polinomialmente a $SAT$, y como $SAT \in P$, todo lenguaje de $NP$ se reduce polinomialmente a un lenguaje de $P$. Por lo tanto no solo se cumple $P \subseteq NP$, sino que también se cumple $NP \subseteq P$. Por lo tanto $P = NP$.
 
 ## 8. Responder:
 
 ### a. ¿Cuándo un programa es correcto parcialmente con respecto a una especificación?
 
+$\ldots$
+
 ### b. ¿Cuándo un programa es correcto totalmente con respecto a una especificación?
+
+$\ldots$
 
 ### c. ¿Por qué se hace la distinción entre correctitud parcial y correctitud total?
 
+$\ldots$
+
 ## 9. Especificar un programa que calcule la raíz cuadrada de un número $x$ que sea entero y mayor estricto que cero, y tal que al final, $x$ tenga el mismo valor que al inicio del programa.
+
+$\ldots$
 
 ## 10. Probar con el método $H$:
 
 ### a. $\lbrace x = X \land X > 0 \rbrace y := 2x \lbrace x = X \land y \geq 2 \rbrace$.
 
+$\ldots$
+
 ### b. $\lbrace true \rbrace \text{while true do skip od} \lbrace false \rbrace$
+
+$\ldots$
 
 ---
 
 <h1 align="center">Desconocido</h1>
 
-## 1. 
+## 1.
 
 ## 2.
 
