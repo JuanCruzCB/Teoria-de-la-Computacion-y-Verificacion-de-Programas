@@ -878,7 +878,7 @@
 
 <h1 align="center">Clase 8 - 19 de mayo, 2026</h1>
 
-## ???
+## Verificación axiomática de programas
 
 ---
 
