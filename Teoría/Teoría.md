@@ -880,6 +880,175 @@
 
 ## Verificación axiomática de programas
 
+### Introducción
+
+- La **verificación** es una actividad formal. La **validación** es una actividad informal, fundamentalmente el testing.
+- Dijkstra decía "El testing asegura la presencia de errores pero no su ausencia". Es decir, el testing es útil para encontrar errores pero no puede nunca asegurar que un programa esté totalmente libre de errores.
+- Hoare decía "Todas las propiedades de un programa pueden probarse en principio a partir de su propio texto por medio del puro razonamiento deductivo"
+- Dijkstra fue uno de los pioneros de lo que hoy se conoce como TDD (Test Driven Development), ya que decía "Pensar cómo sería la prueba de un programa, y luego construirlo siguiendo la estructura de la prueba, para así construirlo y probarlo al mismo tiempo y obtener un programa que es correcto por construcción".
+
+### Especificación vs Programa
+
+- La **especificación** tiene mucho que ver con la lógica de predicados, la lógica temporal, etc.
+- El **programa** es el código, que puede ser imperativo, funcional, etc.
+
+### Formas de verificación
+
+- **Semántica**: se usa la semántica de las instrucciones del lenguaje. Se complica mucho cuando los programas son complejos (sobre todo los concurrentes).
+- **Sintáctica**: se usan axiomas y reglas de un método deductivo. Se le llama Lógica de Hoare, y es el método más usado en la práctica.
+
+### Lógica de Hoare
+
+- **Terna de hoare**: $\lbrace p \rbrace C \lbrace q \rbrace$
+  - $p$ es la precondición.
+  - $C$ es el programa o fragmento de código a verificar.
+  - $q$ es la postcondición.
+- **Precondición**: $p$
+  - Es un predicado que se asume verdadero antes de ejecutar el programa.
+- **Postcondición**: $q$
+  - Es un predicado que se asume verdadero después de ejecutar el programa.
+- **Especificación**: $(p, q)$
+  - Es el par de precondición y postcondición.
+- **Estado**: $\sigma$
+  - Es una función que asigna a toda variable un valor. Por ejemplo, $\sigma(x) = 1$, $\sigma(y) = 2$, etc.
+- **Satisfacción**:
+  - Un estado $\sigma$ satisface a un predicado $p$, denotado $\sigma \models p$, si y solo si $p$ es verdadero cuando se evalúa con los valores asignados por $\sigma$ a sus variables.
+  - Por ejemplo, si $p$ es $x < y$ y $\sigma(x) = 1$, $\sigma(y) = 2$, entonces $\sigma \models p$ porque $1 < 2$ es verdadero.
+- **Correctitud**:
+  - Un programa $S$ es correcto con respecto a una especificación $(p, q)$, denotado $\lbrace p \rbrace S \lbrace q \rbrace$, si y solo si para todo estado $\sigma$, si $\sigma \models p$ entonces $S$ ejecutado a partir de $\sigma$ se detiene en un estado $\sigma'$ tal que $\sigma' \models q$.
+  - Si desde $\sigma_0$ se ejecuta $S$ y no alcanza un estado $\sigma_0'$ dentro de $q$ entonces se cumple $\lbrace p \rbrace S \lbrace q \rbrace$ porque si $\sigma \nvDash q$, $\lbrace p \rbrace S \lbrace q \rbrace$ es trivialmente verdadero.
+
+### Ejemplo de verificación axiomática de un programa
+
+- Sea $S_{fac}$ el programa que calcula el factorial de un número.
+- El factorial $x!$ de un número $x > 0$ es $x! = 1 \cdot 2 \cdot 3 \cdot ... \cdot x$. Por ejemplo, $4! = 1 \cdot 2 \cdot 3 \cdot 4 = 24$.
+- El programa $S_{fac}$ es el siguiente:
+
+```
+S_fac::
+
+a := 1;
+y := 1;
+while a < x do
+  a := a + 1;
+  y := y * a;
+od
+```
+
+- Ejemplo de ejecución:
+
+```
+{x = 4}
+a = 1
+y = 1
+
+1 < 4: a = 2, y = 1 * 2 = 2
+2 < 4: a = 3, y = 2 * 3 = 6
+3 < 4: a = 4, y = 6 * 4 = 24
+```
+
+- Se quiere verificar $\lbrace x > 0 \rbrace S_{fac} \lbrace y = x! \rbrace$. Es decir, hay que probar que desde todo estado $\sigma \models x > 0$, $S_{fac}$ termina en un estado $\sigma'$ tal que $\sigma' \models y = x!$:
+  - Si $x = 1$, luego de ejecutar $S_{fac}$ debe valer $y = 1$.
+  - Si $x = 2$, luego de ejecutar $S_{fac}$ debe valer $y = 2$.
+  - Si $x = 3$, luego de ejecutar $S_{fac}$ debe valer $y = 6$.
+  - Si $x = 4$, luego de ejecutar $S_{fac}$ debe valer $y = 24$.
+  - $\ldots$
+- Notar que si $x \leq 0$ queda $y = 1 \neq x!$, cosa que no es correcta. Sin embargo, como la precondición es $x > 0$, el programa es correcto con respecto a la especificación dada.
+
+### Componentes del método de verificación axiomática (Lógica de Hoare)
+
+1. **Lenguaje de programación (programas con while)**:
+   - Instrucciones:
+     - $S :: x := e$
+     - $S_1; S_2$
+     - $\text{if b then } S_1 \text{ else } S_2 \text{ fi}$
+     - $\text{while B do } S_1 \text{ od}$
+   - Expresiones de tipo entero:
+     - $e :: n$
+     - $x$
+     - $(e_1 + e_2)$
+     - $(e_1 - e_2)$
+     - $(e_1 \cdot e_2)$
+     - Donde $n$ es una constante entera y $x$ es una variable entera.
+   - Expresiones de tipo booleano:
+     - $B :: true$
+     - $false$
+     - $(e_1 = e_2)$
+     - $(e_1 < e_2)$
+     - $\ldots$
+     - $\lnot B_1$
+     - $(B_1 \lor B_2)$
+     - $(B_1 \land B_2)$
+     - $\ldots$
+2. **Lenguaje de especificación (lógica de predicados)**:
+   - $p :: true$
+   - $false$
+   - $(e_1 = e_2)$
+   - $(e_1 < e_2)$
+   - $\ldots$
+   - $\lnot p$
+   - $(p_1 \lor p_2)$
+   - $(p_1 \land p_2)$
+   - $\ldots$
+   - $\exists x: p$
+   - $\forall x: p$
+
+### Axiomática de la lógica de Hoare
+
+#### Axioma de la asignación (ASI)
+
+- $\lbrace p(e) \rbrace x := e \lbrace p(x) \rbrace$
+- Si luego de ejecutar $x := e$ vale $p$ para $x$, entonces antes de ejecutar $x := e$ valía $p$ para $e$.
+- Por ejemplo, $\lbrace y > 0 \rbrace x := y \lbrace x > 0 \rbrace$.
+
+#### Regla de la secuencia (SEC)
+
+- $\frac{\lbrace p \rbrace S_1 \lbrace r \rbrace, \lbrace r \rbrace S_2 \lbrace q \rbrace}{\lbrace p \rbrace S_1; S_2 \lbrace q \rbrace}$
+
+#### Regla del condicional (COND)
+
+- $\frac{\lbrace p \land B \rbrace S_1 \lbrace q \rbrace, \lbrace p \land \lnot B \rbrace S_2 \lbrace q \rbrace}{\lbrace p \rbrace \text{ if B then } S_1 \text{ else } S_2 \text{ fi} \lbrace q \rbrace}$
+
+#### Regla de la repetición (REP)
+
+- $\frac{\lbrace p \land B \rbrace S \lbrace p \rbrace, \lbrace p \land B \land t = Z \rbrace S \lbrace t < Z \rbrace, p \rightarrow t \geq 0}{\lbrace p \rbrace \text{ while B do } S \text{ od} \lbrace p \land \lnot B \rbrace}$
+- $p$ y $t$ se definen en términos de las variables del programa $S$.
+- $p$ es un predicado que vale antes y después de toda iteración, es decir, es un **invariante**.
+- $t$ es una función entera que decrece después de toda iteración, es decir, es una **variante**.
+- La condición $p \rightarrow t \geq 0$ se incluye porque si $t$ se pasa a los números negativos entonces hay infinitud y por lo tanto el programa no se detiene.
+
+### Composicionalidad
+
+- El método de prueba presentado es **composicional**: dado un programa $S$, compuesto por subprogramas $S_1, S_2, \ldots, S_n$, que valga la fórmula $\lbrace p \rbrace S \lbrace q \rbrace$, depende únicamente de que valgan las fórmulas $\lbrace p_1 \rbrace S_1 \lbrace q_1 \rbrace$, $\lbrace p_2 \rbrace S_2 \lbrace q_2 \rbrace$, $\ldots$, $\lbrace p_n \rbrace S_n \lbrace q_n \rbrace$, sin importar el contenido de los subprogramas $S_i$ (noción de **caja negra**).
+- Por ejemplo, dado el programa $S :: S_1; S_2$, si se cumplen las fórmulas $\lbrace p \rbrace S_1 \lbrace r \rbrace$ y $\lbrace r \rbrace S_2 \lbrace q \rbrace$, entonces también se cumple la fórmula $\lbrace p \rbrace S_1; S_2 \lbrace q \rbrace$, **independientemente del contenido de $S_1$ y $S_2$**.
+- Si en vez de $S_2$ usamos un subprograma $S_3$ que también satisface $\lbrace r \rbrace S_3 \lbrace q \rbrace$, entonces también se cumple la fórmula $\lbrace p \rbrace S_1; S_3 \lbrace q \rbrace$, lo que implica que $S_2$ y $S_3$ son **intercambiables** (son funcionalmente equivalentes respecto de la tupla $(r, q)$).
+
+### Pérdida de la composicionalidad en los programas concurrentes
+
+- En los programas concurrentes, la composicionalidad se pierde porque el orden de ejecución de los subprogramas no es fijo, sino que varía en cada ejecución. Por lo tanto, el resultado de ejecutar un subprograma puede depender del orden de ejecución de los subprogramas, lo que hace que no se puedan intercambiar subprogramas sin afectar el resultado final.
+- Por ejemplo, si $\lbrace x = 0 \rbrace S_1 :: x := x + 2 \lbrace x = 2 \rbrace$ y $\lbrace x = 0 \rbrace S_2 :: z := x \lbrace z = 0 \rbrace$, y se ejecutan de forma concurrente, entonces no siempre se cumple que $\lbrace x = 0 \land x = 0 \rbrace [S_1 \parallel S_2] \lbrace x = 2 \land z = 0 \rbrace$, porque si en el programa $S_1 \parallel S_2$ se ejecuta primero $S_1$ y luego $S_2$, al final se cumple que $z = 2$ en vez de $z = 0$.
+  - Lo que SÍ vale es $\lbrace x = 0 \land x = 0 \rbrace [S_1 \parallel S_2] \lbrace x = 2 \land (z = 0 \lor z = 2) \rbrace$
+  - Además, cambiar $S_1$ por un proceso equivalente $S_3 :: x := x + 1; x := x + 1$ no vale porque si $S_2$ se ejecuta entre medio de las dos asignaciones de $S_3$, entonces al final se cumple que $z = 1$ en vez de $z = 0$ o $z = 2$. Así, **en la concurrencia dos procesos funcionalmente equivalentes NO son intercambiables**.
+  - Se pierde la noción de caja negra.
+
+### Especificaciones
+
+- La especificación de un programa para calcular el factorial: $\lbrace x > 0 \rbrace S_{fac} \lbrace y = x! \rbrace$ no es correcta, por que si bien el programa $S :: x := 1; y := 1$ satisface $(x > 0, y = x!)$, no es el programa pedido. Por ejemplo, si al empezar $x = 5$, entonces al final debe ser $y = 5! = 120$ pero se tiene $y = 1$.
+- El problema central es que las variables de la precondición pueden ser modificadas a lo largo del programa, efectivamente rompiendo la conexión entre la precondición y la postcondición. Para solucionar esto se introduce el concepto de **variable lógica**.
+- Una variable lógica es una variable que aparece en la precondición pero no en el programa, es decir, no es modificada por el programa. Se usan para congelar valores.
+- En el ejemplo dado, haríamos $(x = X \land X > 0, y = X!)$ con $X$ la variable lógica.
+- No es posible agregar a la especificación que la variable común $x$ no se modifique nunca, ya que la lógica de predicados no lo permite. Una lógica que sí lo permite es la lógica temporal.
+
+### Sensatez, completitud y automatización de la verificación
+
+- La **sensatez** es la propiedad obligatoria de que si una fórmula $\lbrace p \rbrace S \lbrace q \rbrace$ se cumple sintácticamente (con axiomas y reglas) entonces también se cumple semánticamente (considerando estados y computaciones).
+- La **completitud** es la propiedad deseable de que si una fórmula $\lbrace p \rbrace S \lbrace q \rbrace$ se cumple semánticamente entonces se puede probar sintácticamente.
+  - Su cumplimiento o no depende de la expresividad del lenguaje de especificación.
+- La **automatización** no es posible porque la verificación de programas es indecidible en general y por lo tanto no automatizable. Sin embargo, existen muchas herramientas que asisten interactivamente al programador en la verificación de programas. En particular, si los programas son de estados finitos, existen sistemas de verificación automática denominados sistemas de model checking, que usan la lógica temporal y no son sintácticamente orientados como la Lógica de Hoare.
+  - Herramientas de verificación axiomática: Dafny, COQ, Isabelle.
+  - Herramientas de model checking: EMC, CAESAR, SMV, SPIN.
+  - Herramientas de síntesis de programas: búsqueda estocástica, IA.
+
 ---
 
 <h1 align="center">Clase 9 - 26 de mayo, 2026</h1>
