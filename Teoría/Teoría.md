@@ -960,54 +960,61 @@ y = 1
 1. **Lenguaje de programación (programas con while)**:
    - Instrucciones:
      - $S :: x := e$
-     - $S_1; S_2$
-     - $\text{if b then } S_1 \text{ else } S_2 \text{ fi}$
-     - $\text{while B do } S_1 \text{ od}$
+     - $S :: S_1; S_2$
+     - $S :: \text{if b then } S_1 \text{ else } S_2 \text{ fi}$
+     - $S :: \text{while B do } S_1 \text{ od}$
    - Expresiones de tipo entero:
      - $e :: n$
-     - $x$
-     - $(e_1 + e_2)$
-     - $(e_1 - e_2)$
-     - $(e_1 \cdot e_2)$
+     - $e :: x$
+     - $e :: (e_1 + e_2)$
+     - $e :: (e_1 - e_2)$
+     - $e :: (e_1 \cdot e_2)$
      - Donde $n$ es una constante entera y $x$ es una variable entera.
    - Expresiones de tipo booleano:
      - $B :: true$
-     - $false$
-     - $(e_1 = e_2)$
-     - $(e_1 < e_2)$
+     - $B :: false$
+     - $B :: (e_1 = e_2)$
+     - $B :: (e_1 < e_2)$
      - $\ldots$
-     - $\lnot B_1$
-     - $(B_1 \lor B_2)$
-     - $(B_1 \land B_2)$
+     - $B :: \lnot B_1$
+     - $B :: (B_1 \lor B_2)$
+     - $B :: (B_1 \land B_2)$
      - $\ldots$
 2. **Lenguaje de especificación (lógica de predicados)**:
    - $p :: true$
-   - $false$
-   - $(e_1 = e_2)$
-   - $(e_1 < e_2)$
+   - $p :: false$
+   - $p :: (e_1 = e_2)$
+   - $p :: (e_1 < e_2)$
    - $\ldots$
-   - $\lnot p$
-   - $(p_1 \lor p_2)$
-   - $(p_1 \land p_2)$
+   - $p :: \lnot p$
+   - $p :: (p_1 \lor p_2)$
+   - $p :: (p_1 \land p_2)$
    - $\ldots$
-   - $\exists x: p$
-   - $\forall x: p$
+   - $p :: \exists x: p$
+   - $p :: \forall x: p$
 
 ### Axiomática de la lógica de Hoare
 
 #### Axioma de la asignación (ASI)
 
-- $\lbrace p(e) \rbrace x := e \lbrace p(x) \rbrace$
-- Si luego de ejecutar $x := e$ vale $p$ para $x$, entonces antes de ejecutar $x := e$ valía $p$ para $e$.
-- Por ejemplo, $\lbrace y > 0 \rbrace x := y \lbrace x > 0 \rbrace$.
+- $\lbrace p[x | e] \rbrace x := e \lbrace p \rbrace$
+- Se lee de derecha a izquierda: si luego de ejecutar $x := e$ vale $p$ en términos de $x$, entonces antes de ejecutar $x := e$ valía $p$ en términos de $e$.
+- Por ejemplo:
+  - $\lbrace ? \rbrace x := x + 1 \lbrace x \geq 0 \rbrace$
+  - $\lbrace x \geq 0[x | x + 1] \rbrace x := x + 1 \lbrace x \geq 0 \rbrace$
+  - $\lbrace x + 1 \geq 0 \rbrace x := x + 1 \lbrace x \geq 0 \rbrace$
+  - Es decir, si luego de $x := x + 1$ vale $x \geq 0$, entonces antes de $x := x + 1$ valía $x + 1 \geq 0$.
 
 #### Regla de la secuencia (SEC)
 
 - $\frac{\lbrace p \rbrace S_1 \lbrace r \rbrace, \lbrace r \rbrace S_2 \lbrace q \rbrace}{\lbrace p \rbrace S_1; S_2 \lbrace q \rbrace}$
+- El predicado $r$ actúa como un nexo entre $S_1$ y $S_2$ y luego se descarta, no se propaga.
+- Se puede generalizar a $n$ instrucciones.
 
 #### Regla del condicional (COND)
 
 - $\frac{\lbrace p \land B \rbrace S_1 \lbrace q \rbrace, \lbrace p \land \lnot B \rbrace S_2 \lbrace q \rbrace}{\lbrace p \rbrace \text{ if B then } S_1 \text{ else } S_2 \text{ fi} \lbrace q \rbrace}$
+- Formula un modo de verificar una selección condicional fijando un único punto de entrada y un único punto de salida, correspondientes a $p$ y $q$ respectivamente.
 
 #### Regla de la repetición (REP)
 
@@ -1015,7 +1022,20 @@ y = 1
 - $p$ y $t$ se definen en términos de las variables del programa $S$.
 - $p$ es un predicado que vale antes y después de toda iteración, es decir, es un **invariante**.
 - $t$ es una función entera que decrece después de toda iteración, es decir, es una **variante**.
+- La regla NO asegura que el while termine.
 - La condición $p \rightarrow t \geq 0$ se incluye porque si $t$ se pasa a los números negativos entonces hay infinitud y por lo tanto el programa no se detiene.
+- Si $p$ vale al comienzo del bucle y mientras vale $B$ el cuerpo $S$ preserva $p$, entonces por razonamiento inductivo $p$ vale al terminar el bucle.
+
+#### Regla de la consecuencia (CONS)
+
+- $\frac{p \rightarrow p_1, \lbrace p_1 \rbrace S \lbrace q_1 \rbrace, q_1 \rightarrow q}{\lbrace p \rbrace S \lbrace q \rbrace}$
+- Se puede reemplazar $p_1$ por un predicado $p$ que lo implique.
+- Se puede reemplazar $q_1$ por un predicado $q$ al que implique.
+- Permite reforzar precondiciones y debilitar postcondiciones:
+  - De $\lbrace x > 0 \rbrace S \lbrace x = 0 \rbrace$ y $x > 5 \rightarrow x > 0$ se deduce $\lbrace x > 5 \rbrace S \lbrace x = 0 \rbrace$.
+  - De $\lbrace true \rbrace S \lbrace x = y + 1 \rbrace$ y $x = y + 1 \rightarrow x > y$ se deduce $\lbrace true \rbrace S \lbrace x > y \rbrace$.
+- La regla no depende del lenguaje de programación si no del dominio semántico. Es una regla semántica más que sintáctica.
+- Permite usar todos los axiomas del dominio semántico, como pueden ser los números enteros.
 
 ### Composicionalidad
 
@@ -1053,7 +1073,58 @@ y = 1
 
 <h1 align="center">Clase 9 - 26 de mayo, 2026</h1>
 
-## ???
+## Lógica de Hoare
+
+### Ejemplo de prueba 1
+
+- Se tiene un programa que intercambia los valores de dos variables.
+- Dado $S_{swap} :: z := x; x := y; y := z$, se va a probar sintácticamente $\lbrace x = X \land y = Y \rbrace S_{swap} \lbrace y = X \land x = Y \rbrace$ con $X$ e $Y$ variables lógicas.
+- Pasos:
+  1. $\lbrace z = X \land x = Y \rbrace y := z \lbrace y = X \land x = Y \rbrace$ (ASI)
+  2. $\lbrace z = X \land y = Y \rbrace x := y \lbrace z = X \land x = Y \rbrace$ (ASI)
+  3. $\lbrace x = X \land y = Y \rbrace z := x \lbrace z = X \land y = Y \rbrace$ (ASI)
+  4. $\lbrace x = X \land y = Y \rbrace z := x; x := y; y := z \lbrace y = X \land x = Y \rbrace$ (1, 2, 3, SEC)
+- Por la sensatez del método, como se probó sintácticamente $\lbrace x = X \land y = Y \rbrace S_{swap} \lbrace y = X \land x = Y \rbrace$, entonces también se cumple semánticamente.
+- Para probar la fórmula similar $\lbrace y = Y \land x = X \rbrace S_{swap} \lbrace y = X \land x = Y  \rbrace$ sintácticamente se agregan dos pasos luego del paso 4:
+  1. $(y = Y \land x = X) \rightarrow (x = X \land y = Y)$ (MAT)
+  2. $\lbrace y = Y \land x = X \rbrace S_{swap} \lbrace y = X \land x = Y \rbrace$ (4, 5, CONS)
+
+### Ejemplo de prueba 2
+
+- Se tiene un programa que calcula el valor absoluto de una variable.
+- Dado $S_{abs} :: \text{if } x > 0 \text{ then } y := x \text{ else } y := -x \text{ fi}$, se va a probar sintácticamente $\lbrace true \rbrace S_{abs} \lbrace y \geq 0 \rbrace$
+- Como tenemos un if, hay que usar la regla COND.
+- Para llegar a $\lbrace true \rbrace S_{abs} \lbrace y \geq 0 \rbrace$ por COND, hay que obtener $\lbrace true \land x > 0 \rbrace y := x \lbrace y \geq 0 \rbrace$ y $\lbrace true \land \lnot (x > 0) \rbrace y := -x \lbrace y \geq 0 \rbrace$.
+- Considerando las dos asignaciones del programa, los primeros pasos de la prueba podrían ser:
+  1. $\lbrace x \geq 0 \rbrace y := x \lbrace y \geq 0 \rbrace$ (ASI)
+  2. $\lbrace -x \geq 0 \rbrace y := -x \lbrace y \geq 0 \rbrace$ (ASI)
+- Luego podemos combinar el axioma ASI con la regla COND para continuar:
+  1. $(true \land x > 0) \rightarrow (x \geq 0)$ (MAT)
+  2. $\lbrace true \land x > 0 \rbrace y := x \lbrace y \geq 0 \rbrace$ (1, 3, CONS)
+  3. $(true \land \lnot (x > 0)) \rightarrow (-x \geq 0)$ (MAT)
+  4. $\lbrace true \land \lnot (x > 0) \rbrace y := -x \lbrace y \geq 0 \rbrace$ (2, 5, CONS)
+  5. $\lbrace true \rbrace \text{if } x > 0 \text{ then } y := x \text{ else } y := -x \text{ fi} \lbrace y \geq 0 \rbrace$ (4, 6, COND)
+
+### Axiomática para la correctitud total
+
+- La regla REP solo permite probar la invariancia de un predicado $p$.
+- La regla nueva REP\* que se introducirá a continuación permite probar además la terminación del while. Se basa en un predicado invariante $p$ y una función variante $t$ que es entera y está definida, como el invariante, en términos de las variables del programa.
+- Regla REP\*: $\frac{\langle p \land B \rangle S \langle p \rangle, \langle p \land B \land t = Z \rangle S \langle t < Z \rangle, p \rightarrow t \geq 0}{\langle p \rangle \text{ while B do } S \text{ od} \langle p \land \lnot B \rangle}$
+- Se le agregan dos premisas a REP y se reemplazan las llaves por corchetes angulares.
+- En la segunda premisa, $t$ se decrementa en cada iteración.
+- $Z$ es una variable lógica, no aparece en $p$, $B$, $t$ ni en $S$.
+- El objetivo de $Z$ es fijar el valor de $t$ antes de ejecutar $S$.
+- En la tercera premisa, $t$ se mantiene menor o igual a cero a lo largo de todo el bucle.
+- Así, el bucle debe necesariamente terminar, porque en los números naturales no hay cadenas descendentes infinitas.
+
+### Separación de la prueba del while en dos
+
+- Si bien la regla REP\* permite probar tanto la correctitud parcial como la terminación de un while, es recomendable separar la prueba en dos partes:
+  - Primero se prueba $\lbrace p \rbrace S \lbrace q \rbrace$ con REP para asegurar la invariancia de $p$.
+  - Luego se prueba $\langle p \rangle S \langle true \rangle$ con REP\* para asegurar la terminación del bucle.
+  - La primer prueba se lee: "Si $S$ termina a partir de $p$, lo hace en $q$".
+  - La segunda prueba se lee: "$S$ termina a partir de $p$".
+  - Las dos pruebas puestas juntas se leen: "$S$ termina a partir de $p$ y lo hace en $q$".
 
 ---
 
