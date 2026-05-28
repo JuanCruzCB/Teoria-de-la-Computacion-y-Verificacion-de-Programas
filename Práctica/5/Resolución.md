@@ -4,9 +4,30 @@
 
 ### a. Justificar por qué esta especificación no es correcta.
 
+La especificación no es correcta porque si bien se puede cumplir que $x > 0$ antes de iniciar el programa, éste mismo puede modificar el valor de $x$ durante su ejecución, lo que podría llevar a que $y \neq x!$ al final del programa.
+
+El punto principal es que la $x$ de la postcondición se refiere al ÚLTIMO valor que tomó $x$ durante la ejecución del programa, y no al valor inicial que tenía.
+
+Podría darse este caso, por ejemplo:
+
+- Valor inicial: $x = 3$ y $3 > 0$ (la precondición es verdadera).
+- Durante la ejecución, el programa podría modificar $x$ a $2$, luego a $1$, y finalmente a $0$.
+- Al finalizar, $y$ podría ser igual a $6$, siendo $6 = 3!$, lo cual sería válido, pero como el valor final de $x$ es $0$, la postcondición $y = x!$ no se cumple, ya que $0! = 1$.
+
 ### b. Proponer una que sí lo sea y que además establezca que el valor de $x$ al final sea el mismo que al comienzo.
 
+Propongo la especificación $(x = X \land X > 0, y = X! \land x = X)$, donde:
+
+- $X$ es una variable lógica que representa el valor inicial de $x$.
+- Por más que $x$ cambie de valor durante la ejecución del programa, el valor de la variable lógica $X$ se mantiene fijo.
+- Al finalizar el programa se chequea que a) $y$ sea igual al factorial del valor inicial de $x$ (es decir, $X!$) y b) que $x$ no haya cambiado de valor en absoluto, ya que se chequea que $x$ sea igual a $X$ que como dijimos es el valor inicial de $x$.
+- Por lo tanto, bajo esta especificación, si el programa factorial modifica la variable $x$ durante su ejecución de forma tal que al terminar la ejecución $x$ es distinto a su valor inicial, la postcondición no se cumple. Sin embargo, si modifica $x$ pero antes de terminar lo vuelve a modificar dandole el valor inicial, entonces la postcondición sí se cumple.
+
 ### c. ¿Podría agregarse a la especificación que el valor de $x$ no se altere a lo largo de todo el programa? Justificar.
+
+No es posible agregar ni una precondición ni una postcondición que asegure que el valor de cualquier variable **nunca** se modifique en absoluto en toda la ejecución.
+
+Esto se debe a que la Lógica de Hoare solo puede analizar el estado del programa **antes** de ejecutarlo y **después** de ejecutarlo, pero no puede garantizar nada de lo que pasa en el medio (durante la ejecución).
 
 ## 2. Asumiendo $\lbrace p \rbrace S \lbrace q \rbrace$, indicar en cada caso si vale lo afirmado. Justificar las respuestas:
 
