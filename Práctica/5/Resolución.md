@@ -31,13 +31,44 @@ Esto se debe a que la Lógica de Hoare solo puede analizar el estado del program
 
 ## 2. Asumiendo $\lbrace p \rbrace S \lbrace q \rbrace$, indicar en cada caso si vale lo afirmado. Justificar las respuestas:
 
+Para este ejercicio es crucial recordar la tabla de verdad del condicional lógico, ya que la semántica de $\lbrace p \rbrace S \lbrace q \rbrace$ se basa en la implicación lógica $p \rightarrow q$:
+
+| $p$ | $q$ | $p \rightarrow q$ |
+| --- | --- | ----------------- |
+| $V$ | $V$ | $V$               |
+| $V$ | $F$ | $F$               |
+| $F$ | $V$ | $V$               |
+| $F$ | $F$ | $V$               |
+
 ### a. Si $S$ termina en un estado que satisface $q$, entonces su estado inicial satisface $p$.
+
+Tenemos $q = V$ y queremos ver si siempre se cumple que cuando el consecuente $q$ es verdadero y la implicación $p \rightarrow q$ es verdadera, entonces el antecedente $p$ también es verdadero.
+
+Esto no siempre se cumple, ya que cuando $q$ es verdadero, la implicación $p \rightarrow q$ es verdadera tanto si $p$ es verdadero como si $p$ es falso. Por lo tanto, no se puede concluir que $p$ sea necesariamente verdadero solo porque $q$ lo sea.
+
+**No vale lo afirmado**.
 
 ### b. Si $S$ termina en un estado que no satisface $q$, entonces su estado inicial no satisface $p$.
 
+Tenemos $q = F$ y queremos ver si siempre se cumple que cuando el consecuente $q$ es falso y la implicación $p \rightarrow q$ es verdadera, entonces el antecedente $p$ también es falso.
+
+Esto se cumple siempre, ya que cuando $q$ es falso, la única forma de que la implicación $p \rightarrow q$ sea verdadera es que $p$ también sea falso. Por lo tanto, si $S$ termina en un estado que no satisface $q$, entonces su estado inicial no satisface $p$.
+
+**Vale lo afirmado**.
+
 ### c. Si $S$ no termina, entonces su estado inicial no satisface $p$.
 
+Esto es falso ya que la precondición $p$ se puede cumplir o no independientemente de que el programa $S$ termine. La terminación de un programa no necesariamente está relacionada con el cumplimiento de su precondición.
+
+**No vale lo afirmado**.
+
 ### d. ¿Las respuestas en (a), (b) y (c) son las mismas considerando $\langle p \rangle S \langle q \rangle$?
+
+$\langle p \rangle S \langle q \rangle$ se refiere a la correctitud total, que dice "Si el estado inicial satisface $p$, entonces el programa $S$ termina y el estado final satisface $q$".
+
+1. (a) sigue sin valer. Que el programa termine en un estado con $q$ verdadero no implica que $p$ valiera inicialmente.
+2. (b) sigue valiendo. Si el programa termina en un estado que no satisface $q$, entonces su estado inicial no satisface $p$.
+3. (c) acá cambia la respuesta: ahora sí vale. En el caso de la correctitud total, si el estado inicial satisface $p$, entonces el programa $S$ necesariamente termina. Por la contrapositiva lógica $(p \rightarrow q \equiv \lnot q \rightarrow \lnot p)$, si $S$ no termina, entonces su estado inicial no satisface $p$.
 
 ## 3. Indicar en cada caso si vale lo afirmado. Justificar las respuestas:
 
