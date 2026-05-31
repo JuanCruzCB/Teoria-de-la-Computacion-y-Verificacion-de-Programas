@@ -31,34 +31,38 @@ Esto se debe a que la Lógica de Hoare solo puede analizar el estado del program
 
 ## 2. Asumiendo $\lbrace p \rbrace S \lbrace q \rbrace$, indicar en cada caso si vale lo afirmado. Justificar las respuestas:
 
-Para este ejercicio es crucial recordar la tabla de verdad del condicional lógico, ya que la semántica de $\lbrace p \rbrace S \lbrace q \rbrace$ se basa en la implicación lógica $p \rightarrow q$:
+Para este ejercicio es útil representar al significado de la correctitud parcial $\lbrace p \rbrace S \lbrace q \rbrace$ con una tabla de verdad que relacione el valor de $p$, el de $q$, y la terminación o no del programa $S$, que denoto $r$.
 
-| $p$ | $q$ | $p \rightarrow q$ |
-| --- | --- | ----------------- |
-| $V$ | $V$ | $V$               |
-| $V$ | $F$ | $F$               |
-| $F$ | $V$ | $V$               |
-| $F$ | $F$ | $V$               |
+La correctitud parcial dice: "Si el estado inicial satisface $p$ y el programa $S$ termina, entonces el estado final satisface $q$". Esto se puede expresar como la implicación lógica $(p \land r) \rightarrow q$.
+
+| $p$ | $q$ | $r$ | $(p \land r)$ | $(p \land r) \rightarrow q$ |
+| --- | --- | --- | ------------- | --------------------------- |
+| $V$ | $V$ | $V$ | $V$           | $V$                         |
+| $V$ | $V$ | $F$ | $F$           | $V$                         |
+| $V$ | $F$ | $V$ | $V$           | $F$                         |
+| $V$ | $F$ | $F$ | $F$           | $V$                         |
+| $F$ | $V$ | $V$ | $F$           | $V$                         |
+| $F$ | $V$ | $F$ | $F$           | $V$                         |
+| $F$ | $F$ | $V$ | $F$           | $V$                         |
+| $F$ | $F$ | $F$ | $F$           | $V$                         |
+
+El único caso donde la correctitud parcial no se cumple es cuando $p = V$, $q = F$, y $r = V$, es decir, cuando el estado inicial satisface $p$, el programa termina, pero el estado final no satisface $q$.
 
 ### a. Si $S$ termina en un estado que satisface $q$, entonces su estado inicial satisface $p$.
 
-Tenemos $q = V$ y queremos ver si siempre se cumple que cuando el consecuente $q$ es verdadero y la implicación $p \rightarrow q$ es verdadera, entonces el antecedente $p$ también es verdadero.
-
-Esto no siempre se cumple, ya que cuando $q$ es verdadero, la implicación $p \rightarrow q$ es verdadera tanto si $p$ es verdadero como si $p$ es falso. Por lo tanto, no se puede concluir que $p$ sea necesariamente verdadero solo porque $q$ lo sea.
+Tenemos $q = V$, $r = V$. Las filas de la tabla que cumplen esto son la primera y la quinta. En la primera fila, $p = V$ y la implicación es verdadera, pero en la quinta fila, $p = F$ y la implicación también es verdadera. Por lo tanto, no es cierto que si $S$ termina en un estado que satisface $q$, entonces su estado inicial satisface $p$, ya que puede pasar que $S$ termine en un estado que satisface $q$ pero el estado inicial no satisfaga $p$.
 
 **No vale lo afirmado**.
 
 ### b. Si $S$ termina en un estado que no satisface $q$, entonces su estado inicial no satisface $p$.
 
-Tenemos $q = F$ y queremos ver si siempre se cumple que cuando el consecuente $q$ es falso y la implicación $p \rightarrow q$ es verdadera, entonces el antecedente $p$ también es falso.
-
-Esto se cumple siempre, ya que cuando $q$ es falso, la única forma de que la implicación $p \rightarrow q$ sea verdadera es que $p$ también sea falso. Por lo tanto, si $S$ termina en un estado que no satisface $q$, entonces su estado inicial no satisface $p$.
+Tenemos $q = F$, $r = V$. Las filas de la tabla que cumplen esto son la tercera y la séptima. En la tercera fila, $p = V$ y la implicación es falsa, pero en la séptima fila, $p = F$ y la implicación es verdadera. Por lo tanto sí es cierto si $S$ termina en un estado que no satisface $q$, entonces su estado inicial no satisface $p$.
 
 **Vale lo afirmado**.
 
 ### c. Si $S$ no termina, entonces su estado inicial no satisface $p$.
 
-Esto es falso ya que la precondición $p$ se puede cumplir o no independientemente de que el programa $S$ termine. La terminación de un programa no necesariamente está relacionada con el cumplimiento de su precondición.
+Tenemos $r = F$. Mirando las filas 2, 4, 6 y 8, vemos que en la fila 2, $p = V$ y la implicación es verdadera, por lo tanto no es cierto que si $S$ no termina, entonces su estado inicial no satisface $p$, ya que puede pasar que $S$ no termine pero el estado inicial satisfaga $p$.
 
 **No vale lo afirmado**.
 
@@ -66,17 +70,62 @@ Esto es falso ya que la precondición $p$ se puede cumplir o no independientemen
 
 $\langle p \rangle S \langle q \rangle$ se refiere a la correctitud total, que dice "Si el estado inicial satisface $p$, entonces el programa $S$ termina y el estado final satisface $q$".
 
-1. (a) sigue sin valer. Que el programa termine en un estado con $q$ verdadero no implica que $p$ valiera inicialmente.
-2. (b) sigue valiendo. Si el programa termina en un estado que no satisface $q$, entonces su estado inicial no satisface $p$.
-3. (c) acá cambia la respuesta: ahora sí vale. En el caso de la correctitud total, si el estado inicial satisface $p$, entonces el programa $S$ necesariamente termina. Por la contrapositiva lógica $(p \rightarrow q \equiv \lnot q \rightarrow \lnot p)$, si $S$ no termina, entonces su estado inicial no satisface $p$.
+Simbólicamente: $p \rightarrow (r \land q)$.
+
+Reescribiendo la tabla de verdad:
+
+| $p$ | $q$ | $r$ | $(r \land q)$ | $p \rightarrow (r \land q)$ |
+| --- | --- | --- | ------------- | --------------------------- |
+| $V$ | $V$ | $V$ | $V$           | $V$                         |
+| $V$ | $V$ | $F$ | $F$           | $F$                         |
+| $V$ | $F$ | $V$ | $F$           | $F$                         |
+| $V$ | $F$ | $F$ | $F$           | $F$                         |
+| $F$ | $V$ | $V$ | $V$           | $V$                         |
+| $F$ | $V$ | $F$ | $F$           | $V$                         |
+| $F$ | $F$ | $V$ | $F$           | $V$                         |
+| $F$ | $F$ | $F$ | $F$           | $V$                         |
+
+1. (a) Si $S$ termina en un estado que satisface $q$, entonces su estado inicial satisface $p$.
+   1. Tenemos $q = V$, $r = V$. Filas 1 y 5. Lo afirmado no se cumple porque puede pasar que $S$ termine en un estado que satisface $q$ pero el estado inicial no satisfaga $p$ (fila 5).
+   2. **No vale lo afirmado**.
+2. (b) Si $S$ termina en un estado que no satisface $q$, entonces su estado inicial no satisface $p$.
+   1. Tenemos $q = F$, $r = V$. Filas 3 y 7. Lo afirmado se cumple porque si $S$ termina en un estado que no satisface $q$, entonces el estado inicial no satisface $p$ (fila 7).
+   2. **Vale lo afirmado**.
+3. (c) Si $S$ no termina, entonces su estado inicial no satisface $p$.
+   1. Tenemos $r = F$. Filas 2, 4, 6 y 8. Viendo las filas 6 y 8 que son las que cumplen la implicación, vemos que en ambos casos el estado inicial no satisface $p$, por lo tanto lo afirmado se cumple, a diferencia de la correctitud parcial, donde no se cumple.
+   2. **Vale lo afirmado**.
 
 ## 3. Indicar en cada caso si vale lo afirmado. Justificar las respuestas:
 
 ### a. Se cumple $\lbrace x = 0 \rbrace \text{while } z = 0 \text{ do } z := 0 \text{ od} \lbrace x = 0 \rbrace$.
 
+1. Si al iniciar el programa se cumple $x = 0$ y $z = 0$ se entra en loop infinito. Tenemos $p = V$ y $r = F$. Filas 2 y 4 de la tabla de correctitud parcial. En ambas filas la implicación es verdadera ya sea que $q$ sea $V$ o $F$.
+2. Si al inciar el programa se cumple $x = 0$ y $z \neq 0$ no se entra en loop infinito. Como el programa termina, se puede evaluar $q$ al finalizar el programa, y como el programa no modifica $x$, entonces $q$ se cumple. Tenemos $p = V$, $r = V$, y $q = V$. Fila 1 de la tabla de correctitud parcial, donde la implicación es verdadera.
+3. Si al iniciar el programa se cumple $x \neq 0$ y $z = 0$ se entra en loop infinito. Tenemos $p = F$ y $r = F$. Filas 6 y 8 de la tabla de correctitud parcial. En ambas filas la implicación es verdadera ya sea que $q$ sea $V$ o $F$.
+4. Si al iniciar el programa se cumple $x \neq 0$ y $z \neq 0$ no se entra en loop infinito. Como el programa termina, se puede evaluar $q$ al finalizar el programa, y como el programa no modifica $x$, entonces $q$ no se cumple. Tenemos $p = F$, $r = V$, y $q = F$. Fila 7 de la tabla de correctitud parcial, donde la implicación es verdadera.
+
+Como es imposible que la implicación de la C.P sea falsa, vale lo afirmado.
+
 ### b. Se cumple $\langle x = 0 \rangle \text{while } z = 0 \text{ do } z := 0 \text{ od} \langle x = 0 \rangle$.
 
+1. Si al iniciar el programa se cumple $x = 0$ y $z = 0$ se entra en loop infinito. Tenemos $p = V$ y $r = F$. Filas 2 y 4 de la tabla de correctitud total. En ambas filas la implicación es falsa ya sea que $q$ sea $V$ o $F$.
+
+Como se encontró un caso donde la implicación de la C.T es falsa, no vale lo afirmado.
+
 ### c. Si se cumple $\lbrace p_1 \land p_2 \rbrace S \lbrace q_1 \land q_2 \rbrace$, entonces $\lbrace p_1 \rbrace S \lbrace q_1 \rbrace$ o bien $\lbrace p_2 \rbrace S \lbrace q_2 \rbrace$.
+
+Contraejemplo:
+
+1. Sea $S$ el programa que no hace nada (es solo una sentencia `skip`).
+2. Sea $p_1$ la precondición $x = 0$, y $p_2$ la precondición $x = 1$.
+3. Sean $q_1 = F$ y $q_2 = F$.
+4. Claramente $(p_1 \land p_2) = F$ porque $x$ no puede valer $0$ y $1$ al mismo tiempo.
+5. Obviamente $(q_1 \land q_2) = F$ porque ambos son falsos.
+6. Entonces tenemos $\lbrace F \rbrace S \lbrace F \rbrace$, lo cual es válido porque si la precondición de una implicación es falsa, la implicación es verdadera.
+7. Sin embargo, si $p_1$ es $x = 0$, entonces $\lbrace p_1 \rbrace S \lbrace q_1 \rbrace$ es $\lbrace x = 0 \rbrace S \lbrace F \rbrace$, lo cual no es válido porque si la precondición se cumple, el programa termina, pero la postcondición no se cumple.
+8. En el otro caso, si $p_2$ es $x = 1$, entonces $\lbrace p_2 \rbrace S \lbrace q_2 \rbrace$ es $\lbrace x = 1 \rbrace S \lbrace F \rbrace$, lo cual no es válido por la misma razón que el caso anterior.
+9. Por lo tanto $\lbrace p_1 \land p_2 \rbrace S \lbrace q_1 \land q_2 \rbrace$ es válido, pero ni $\lbrace p_1 \rbrace S \lbrace q_1 \rbrace$ ni $\lbrace p_2 \rbrace S \lbrace q_2 \rbrace$ son válidos.
+10. No vale lo afirmado.
 
 ## 4. Probar por medio del método H las fórmulas de correctitud parcial siguientes, relacionadas respectivamente a programas que calculan el valor absoluto de un número entero y el producto de dos números naturales:
 
