@@ -24,10 +24,11 @@
 
 ## Cómo se aprueba la cursada?
 
-- Hay un único parcial al final del cuatrimestre, con dos recuperatorios.
-- Para la nota de este parcial se tiene en cuenta si el alumno entregó o no las prácticas.
-- El parcial se aprueba con nota 6.
+- Hay dos parciales, uno de Computabilidad y Complejidad y otro de Verificación de Programas.
+- Cada parcial se aprueba con nota 6.
+- Hay dos recuperatorios, en cada uno se puede recuperar un parcial o ambos.
+- Para la nota de los parciales se tiene en cuenta si el alumno entregó o no las prácticas.
 
 ## Cómo se aprueba la promoción?
 
-- Si la nota del parcial es mayor o igual a 7, se obtiene la promoción.
+- Si la nota de ambos parciales es mayor o igual a 7, se obtiene la promoción.
