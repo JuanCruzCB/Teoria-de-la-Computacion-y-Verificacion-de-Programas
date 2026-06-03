@@ -1130,10 +1130,149 @@ y = 1
 
 <h1 align="center">Clase 10 - 2 de junio, 2026</h1>
 
-## ???
+## Sensatez y completitud de $H$ y $H*$
 
----
+### Sensatez de $H$
 
-<h1 align="center">Clase 11 - 9 de junio, 2026</h1>
+No puede pasar que **SÍ se pueda demostrar** en $H$, por ejemplo, $\lbrace x = 0 \rbrace x := x + 1 \lbrace x = 2 \rbrace$, porque ocurre que la precondición es verdadera, pero luego de ejecutar el programa no se cumple la postcondición.
 
-## ???
+### Completitud de $H$
+
+No puede pasar que **NO se pueda demostrar** en $H$, por ejemplo, $\lbrace x = 0 \rbrace y := x \lbrace y = 0 \rbrace$, porque ocurre que la precondición es verdadera y luego de ejecutar el programa se cumple la postcondición, por lo tanto la terna es válida.
+
+### Sensatez de $H*$
+
+No puede pasar que **SÍ se pueda demostrar** en $H*$, por ejemplo, $\langle x = 0 \rangle \text{ while x = 0 do } skip \text{ od} \langle true \rangle$, porque ocurre que la precondición es verdadera, pero el programa no termina.
+
+### Completitud de $H*$
+
+No puede pasar que **NO se pueda demostrar** en $H*$, por ejemplo, $\langle x = 0 \rangle \text{ while x < 10 do } x := x + 1 \text{ od} \langle x = 10 \rangle$,
+
+### Simbología de la sensatez y completitud
+
+- $\vdash_H \lbrace p \rbrace S \lbrace q \rbrace$ expresa que en el sistema $H$ se puede demostrar la fórmula $\lbrace p \rbrace S \lbrace q \rbrace$.
+- $\models \lbrace p \rbrace S \lbrace q \rbrace$ expresa que la fórmula $\lbrace p \rbrace S \lbrace q \rbrace$ se cumple **semánticamente**.
+- $\vdash_{H*} \langle p \rangle S \langle q \rangle$ expresa que en el sistema $H*$ se puede demostrar la fórmula $\langle p \rangle S \langle q \rangle$.
+- $\models \langle p \rangle S \langle q \rangle$ expresa que la fórmula $\langle p \rangle S \langle q \rangle$ se cumple **semánticamente**.
+- Se prueba que:
+  - Si $\vdash_H \lbrace p \rbrace S \lbrace q \rbrace$ entonces $\models \lbrace p \rbrace S \lbrace q \rbrace$ (**sensatez** de $H$).
+  - Si $\models \lbrace p \rbrace S \lbrace q \rbrace$ entonces $\vdash_H \lbrace p \rbrace S \lbrace q \rbrace$ (**completitud** de $H$).
+  - Si $\vdash_{H*} \langle p \rangle S \langle q \rangle$ entonces $\models \langle p \rangle S \langle q \rangle$ (**sensatez** de $H*$).
+  - Si $\models \langle p \rangle S \langle q \rangle$ entonces $\vdash_{H*} \langle p \rangle S \langle q \rangle$ (**completitud** de $H*$).
+- En términos simples:
+  - Las fórmulas que demuestran los sistemas $H$ y $H*$ son verdaderas → **Sensatez**.
+  - Todas las fórmulas que son verdaderas se pueden demostrar en los sistemas $H$ y $H*$ → **Completitud**.
+
+## Inducción matemática
+
+- Sea $P$ una propie dad que se quiere probar en $\mathbb{N}$.
+- Se compone de 3 pasos fundamentales: base inductiva, hipótesis inductiva y paso inductivo.
+- **Base inductiva**: Si se cumple que $P(0)$ es verdadera (donde $0$ es el elemento mínimo de $\mathbb{N}$)
+- **Hipótesis inductiva**: Supongamos que $P(k)$ es verdadera para algún $k \in \mathbb{N}$.
+- **Paso inductivo**: Y además que $\forall k \in \mathbb{N}, P(k) \rightarrow P(k + 1)$, entonces se concluye que para todo $n = 0, 1, 2, \ldots$, $P(n)$ es verdadera.
+- Ejemplo de demostración de la sumatoria de $n$ números naturales usando inducción matemática:
+  - $\sum_{i = 0}^n i = \frac{n(n + 1)}{2}$
+  - **Base inductiva**: $P(0) : \sum_{i = 0}^0 i = \frac{0(0 + 1)}{2}$, es decir, $0 = 0$, lo cual es verdadero.
+  - **Hipótesis inductiva**: Supongamos que $P(k) : \sum_{i = 0}^k i = \frac{k(k + 1)}{2}$ es verdadera para algún $k \in \mathbb{N}$.
+  - **Paso inductivo**: Entonces, $\sum_{i = 0}^{k + 1} i = \sum_{i = 0}^k i + (k + 1)$. Por hipótesis inductiva, esto es igual a $\frac{k(k + 1)}{2} + (k + 1)$. Factorizando, se obtiene $\frac{k(k + 1) + 2(k + 1)}{2} = \frac{(k + 1)(k + 2)}{2}$, lo cual es igual a $\frac{(k + 1)((k + 1) + 1)}{2}$, y por lo tanto se cumple que $\forall k \in \mathbb{N}, P(k) \rightarrow P(k + 1)$.
+
+## Inducción estructural
+
+- Es más general que la inducción matemática.
+- Se usa para definir conjuntos y demostrar sus propiedades.
+- Se aplica a cualquier dominio (los naturales, expresiones aritméticas, árboles, programas, etc).
+- Puede haber varias bases inductivas y varios pasos inductivos.
+- Ejemplo:
+  - Definir por I.E las expresiones aritméticas con símbolos del conjunto $\lbrace 0, 1, x, +, \cdot, (, ) \rbrace$
+  - **Bases inductivas**: $0$, $1$ y $x$ son expresiones aritméticas.
+  - **Pasos inductivos**: si $e$ y $f$ son expresiones aritméticas, entonces $(e + f)$ y $(e \cdot f)$ también lo son.
+  - Probar que $C(e) = 1 + O(e)$, donde $C$ es la cantidad de $0$, $1$ y $x$, y $O$ es la cantidad de operadores $+$ y $\cdot$.
+  - **Bases inductivas**:
+    - $C(0) = 1 + O(0)$
+    - $C(1) = 1 + O(1)$
+    - $C(x) = 1 + O(x)$
+  - **Paso inductivo para el operador $+$**:
+    - Supongamos que $C(e) = 1 + O(e)$ y $C(f) = 1 + O(f)$.
+    - Entonces, $C(e + f) = C(e) + C(f) = (1 + O(e)) + (1 + O(f)) (hipótesis)
+    - Como $O(e + f) = O(e) + 1 + O(f)$, entonces $C(e + f) = 1 + O(e + f)$.
+
+## Semántica del lenguaje de programación
+
+### Conceptos básicos
+
+- Para probar las propiedades de sensatez y completitud de $H$ y $H*$, primero hay que definir formalmente la semántica del lenguaje de programación.
+- Dados un programa $S$ y un estado inicial $\sigma$, a dicha instancia o configuración inicial $(S, \sigma)$ se le asocia una computación $\pi(S, \sigma)$ que es la secuencia de instancias de la ejecución de $S$ a partir de $\sigma$.
+  - Por ejemplo: $(x := 0; y := 1; z := 2, \sigma) \rightarrow (y := 1; z := 2, \sigma[x | 0]) \rightarrow (z := 2, \sigma[x | 0][y | 1]) \rightarrow (E, \sigma[x | 0][ y | 1][z | 2])$.
+- $val(\pi(S, \sigma))$ es el estado final de la computación $\pi(S, \sigma)$. Si $\pi(S, \sigma)$ es infinita, entonces $val(\pi(S, \sigma)) = \perp$ (no se detiene).
+  - Ejemplo 1: $val(\pi(\text{while true do skip od}, \sigma)) = \perp$.
+  - Ejemplo 2: $val(\pi(x := 10; \text{while x > 0 do } x := x - 1 \text{ od}, \sigma)) = \sigma[x | 0]$.
+
+### Definición por inducción estructural
+
+- El lenguaje de programación se define por inducción estructural mediante una relación $\rightarrow$:
+- $(skip, \sigma) \rightarrow (E, \sigma)$
+  - El $skip$ se consume en un paso (es atómico) y no modifica el estado inicial. $E$ es la continuación sintáctica vacía.
+- $(x := e, \sigma) \rightarrow (E, \sigma[x | \sigma(e)])$
+  - La asignación $x := e$ es atómica y el estado final es como el inicial salvo que el valor de $x$ es el de la expresión $e$ según $\sigma$.
+- Para toda instrucción $T$, si $(S, \sigma) \rightarrow (S', \sigma')$ entonces $(S; T, \sigma) \rightarrow (S'; T, \sigma')$
+  - La secuencia $S; T$ se ejecuta de izquierda a derecha. Consumido $S$, si no diverge (si no loopea), se ejecuta $T$.
+- $(\text{if } B \text{ then } S_1 \text{ else } S_2 \text{ fi}, \sigma)\rightarrow (S_1, \sigma)$ si se cumple $\sigma(B) = verdadero$
+- $(\text{if } B \text{ then } S_1 \text{ else } S_2 \text{ fi}, \sigma)\rightarrow (S_2, \sigma)$ si se cumple $\sigma(B) = falso$
+  - La evaluación de la expresión $B$ es atómica y no modifica el estado inicial. Su evaluación establece si se ejecuta $S_1$ o $S_2$.
+- $(\text{while } B \text{ do } S \text{ od}, \sigma) \rightarrow (S; \text{while } B \text{ do } S \text{ od}, \sigma)$ si se cumple $\sigma(B) = verdadero$
+- $(\text{while } B \text{ do } S \text{ od}, \sigma) \rightarrow (E, \sigma)$ si se cumple $\sigma(B) = falso$
+  - La evaluación de la expresión $B$ es atómica y no modifica el estado inicial. Su evaluación establece si se ejecuta el cuerpo $S$ o si se termina el bucle.
+
+### Nota
+
+- Las expresiones $\sigma(e)$ y $\sigma(B)$ son abreviaciones, porque un estado $\sigma$ se define sobre variables y no sobre expresiones.
+- Por ejemplo, si $e :: (x + 8)$, entonces $\sigma(e) = \sigma(x) + \sigma(8)$.
+
+### Definición por extensión de la semántica de las instrucciones
+
+- De la definición por comprensión o inductiva de las instrucciones se puede derivar su definición por extensión.
+- Por ejemplo, en la secuencia, una computación $\pi(S_1; S_2, \sigma)$ tiene tres formas posibles:
+  - Una computación **infinita** $(S_1; S_2, \sigma_0) \rightarrow (T_1; S_2, \sigma_1) \rightarrow (T_2; S_2, \sigma_2) \rightarrow \ldots$ cuando $S_1$ diverge a partir de $\sigma_0$.
+  - Una computación **infinita** $(S_1; S_2, \sigma_0) \rightarrow \ldots \rightarrow (S_2, \sigma_1) \rightarrow (T_1, \sigma_2) \rightarrow (T_2, \sigma_3) \rightarrow \ldots$ cuando $S_1$ termina a partir de $\sigma_0$ pero $S_2$ diverge a partir de $\sigma_1$.
+  - Una computación **finita** $(S_1; S_2, \sigma_0) \rightarrow \ldots \rightarrow (S_2, \sigma_1) \rightarrow \ldots \rightarrow (E, \sigma_2)$ cuando $S_1$ termina a partir de $\sigma_0$ y $S_2$ termina a partir de $\sigma_1$.
+- De forma similar se pueden obtener las formas de las computaciones de los otros tipos de instrucciones.
+
+## Prueba de la sensatez del método $H$
+
+- Se cumple, para todo programa $S$ y toda especificación $(p, q)$ que $\vdash_H \lbrace p \rbrace S \lbrace q \rbrace \rightarrow \models \lbrace p \rbrace S \lbrace q \rbrace$.
+- Se prueba por inducción matemática fuerte, considerando la longitud de la prueba (1 o más pasos):
+  - Base inductiva: los axiomas son verdaderos (pruebas de tamaño 1).
+  - Paso inductivo: las reglas son sensatas, es decir, preservan la verdad de las premisas (pruebas de tamaño $\geq 2$)
+- Ejemplo 1: Prueba de que el axioma $skip$ es verdadero.
+  - Dado $\vdash \lbrace p \rbrace skip \lbrace p \rbrace$, se quiere probar $\models \lbrace p \rbrace skip \lbrace p \rbrace$.
+  - Sea $\vdash \lbrace p \rbrace skip \lbrace p \rbrace$.
+  - Sea $\sigma \models p$.
+  - La semántica del $skip$ es $(skip, \sigma) \rightarrow (E, \sigma)$.
+  - Así, luego de un $skip$ queda $\sigma \models p$.
+  - Por lo tanto, $\models \lbrace p \rbrace skip \lbrace p \rbrace$.
+- Ejemplo 2: Prueba de que la regla SEC es sensata (preserva la verdad de las premisas)
+  - Dado $\vdash \lbrace p \rbrace S_1; S_2 \lbrace q \rbrace$ hay que probar $\models \lbrace p \rbrace S_1; S_2 \lbrace q \rbrace$.
+  - Sea $\vdash \lbrace p \rbrace S_1; S_2 \lbrace q \rbrace$.
+  - Se cumple $\vdash \lbrace p \rbrace S_1 \lbrace r \rbrace$ y $\vdash \lbrace r \rbrace S_2 \lbrace q \rbrace$ para algún $r$.
+  - Las pruebas $\vdash \lbrace p \rbrace S_1 \lbrace r \rbrace$ y $\vdash \lbrace r \rbrace S_2 \lbrace q \rbrace$ son más cortas que la prueba $\vdash \lbrace p \rbrace S_1; S_2 \lbrace q \rbrace$, por lo tanto se puede aplicar inducción.
+  - Por hipótesis inductiva: $\models \lbrace p \rbrace S_1 \lbrace r \rbrace$ y $\models \lbrace r \rbrace S_2 \lbrace q \rbrace$.
+  - Sea $\sigma_1 \models p$.
+  - La semántica de la secuencia es $(S_1; S_2, \sigma_1) \rightarrow \ldots \rightarrow (S_2, \sigma_2) \rightarrow \ldots \rightarrow (E, \sigma_3)$.
+  - Así, como $\models \lbrace p \rbrace S_1 \lbrace r \rbrace$ y $\models \lbrace r \rbrace S_2 \lbrace q \rbrace$, entonces luego de $S_1; S_2$ queda $\sigma_3 \models q$.
+  - Por lo tanto $\models \lbrace p \rbrace S_1; S_2 \lbrace q \rbrace$.
+
+## Prueba de la sensatez del método $H*$
+
+- Solo hay que probar que la regla REP\* es sensata.
+- $\vdash_{H*} \langle p \rangle \text{ while B do } S \text{ od} \langle p \land \lnot B \rangle \rightarrow \models \langle p \rangle \text{ while B do } S \text{ od} \langle p \land \lnot B \rangle$.
+- Sea $\vdash_{H*} \langle p \rangle \text{ while B do } S \text{ od} \langle p \land \lnot B \rangle$.
+- Se cumplen dos cosas:
+  - $\vdash \langle p \land B \rangle S \langle p \rangle$
+  - $\vdash \langle p \land B \land t = Z \rangle S \langle t < Z \rangle, p \rightarrow t \geq 0$
+- Las pruebas $\vdash \langle p \land B \rangle S \langle p \rangle$ y $\vdash \langle p \land B \land t = Z \rangle S \langle t < Z \rangle, p \rightarrow t \geq 0$ son más cortas que la prueba $\vdash_{H*} \langle p \rangle \text{ while B do } S \text{ od} \langle p \land \lnot B \rangle$, por lo tanto se puede aplicar inducción.
+- Por hipótesis inductiva: $\models \langle p \land B \rangle S \langle p \rangle$ y $\models \langle p \land B \land t = Z \rangle S \langle t < Z \rangle, p \rightarrow t \geq 0$.
+- Sea $\sigma_0 \models p$. Hay que probar que el while termina en un estado $\sigma_k \models \langle p \land \lnot B \rangle$.
+- Supongamos que el while loopea a partir de $\sigma_0$.
+- Así, se tiene la computación infinita $(\text{while B do } S \text{ od}, \sigma_0) \rightarrow (\text{while B do } S \text{ od}, \sigma_1) \rightarrow  (\text{while B do } S \text{ od}, \sigma_2) \rightarrow \ldots$ y por hipótesis inductiva, siempre vale $p, t \geq 0$ y $t$ se decrementa en cada iteración.
+- Pero esto no puede pasar, porque si no habría una cadena descendente infinita de números naturales.
+- Por lo tanto el while termina y lo hace en algún estado $\sigma_k \models \langle p \land \lnot B \rangle$
