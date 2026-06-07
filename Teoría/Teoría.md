@@ -1018,12 +1018,10 @@ y = 1
 
 #### Regla de la repetición (REP)
 
-- $\frac{\lbrace p \land B \rbrace S \lbrace p \rbrace, \lbrace p \land B \land t = Z \rbrace S \lbrace t < Z \rbrace, p \rightarrow t \geq 0}{\lbrace p \rbrace \text{ while B do } S \text{ od} \lbrace p \land \lnot B \rbrace}$
-- $p$ y $t$ se definen en términos de las variables del programa $S$.
+- $\frac{\lbrace p \land B \rbrace S \lbrace p \rbrace}{\lbrace p \rbrace \text{ while B do } S \text{ od} \lbrace p \land \lnot B \rbrace}$
+- $p$ se define en términos de las variables del programa $S$.
 - $p$ es un predicado que vale antes y después de toda iteración, es decir, es un **invariante**.
-- $t$ es una función entera que decrece después de toda iteración, es decir, es una **variante**.
 - La regla NO asegura que el while termine.
-- La condición $p \rightarrow t \geq 0$ se incluye porque si $t$ se pasa a los números negativos entonces hay infinitud y por lo tanto el programa no se detiene.
 - Si $p$ vale al comienzo del bucle y mientras vale $B$ el cuerpo $S$ preserva $p$, entonces por razonamiento inductivo $p$ vale al terminar el bucle.
 
 #### Regla de la consecuencia (CONS)
@@ -1105,7 +1103,7 @@ y = 1
   4. $\lbrace true \land \lnot (x > 0) \rbrace y := -x \lbrace y \geq 0 \rbrace$ (2, 5, CONS)
   5. $\lbrace true \rbrace \text{if } x > 0 \text{ then } y := x \text{ else } y := -x \text{ fi} \lbrace y \geq 0 \rbrace$ (4, 6, COND)
 
-### Axiomática para la correctitud total
+### Axiomática para la correctitud total (Regla REP\*)
 
 - La regla REP solo permite probar la invariancia de un predicado $p$.
 - La regla nueva REP\* que se introducirá a continuación permite probar además la terminación del while. Se basa en un predicado invariante $p$ y una función variante $t$ que es entera y está definida, como el invariante, en términos de las variables del programa.
