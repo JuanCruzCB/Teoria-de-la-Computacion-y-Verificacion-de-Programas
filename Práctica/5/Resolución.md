@@ -131,7 +131,97 @@ Contraejemplo:
 
 ### a. $\lbrace x = X \rbrace \text{if } x > 0 \text{ then } y := x \text{ else } y := -x \rbrace \lbrace y = |X| \rbrace$, siendo $|X|$ el valor absoluto de $X$.
 
-### b. $\lbrace x \geq 0 \land y \geq 0 \rbrace \\ \text{prod := 0; k := y; while k > 0 do prod := prod + x; k := k - 1 od} \\ \lbrace prod = x.y \rbrace$.
+**Regla del if**: $\frac{ \lbrace p \land B \rbrace S_1 \lbrace q \rbrace,  \lbrace p \land \neg B \rbrace S_2 \lbrace q \rbrace }{ \lbrace p \rbrace \text{ if } B \text{ then } S_1 \text{ else } S_2 \text{ fi } \lbrace q \rbrace }$
+
+**Regla de asignación**: $\lbrace p[x \mid e] \rbrace x := e \lbrace p \rbrace$
+
+1. Para la regla del if, tenemos lo siguiente:
+   1. $p$ es $x = X$
+   2. $B$ es $x > 0$
+   3. $q$ es $y = |X|$
+2. Rama del then:
+   1. $\lbrace x = X \land x > 0 \rbrace y := x \lbrace y = |X| \rbrace$ (COND)
+   2. $\lbrace y = |X|[y \mid x] \rbrace y := x \lbrace y = |X| \rbrace$ (ASI)
+   3. $\lbrace x = |X| \rbrace y := x \lbrace y = |X| \rbrace$ (reemplazando)
+   4. Ahora queremos ver si $x = X \land x > 0$ implica efectivamente a la nueva precondición que encontramos que es $x = |X|$.
+   5. Como $x > 0$ y $x = X$, entonces claramente $X > 0$.
+   6. Por definición matemática, si un número es positivo, cosa que $X$ lo es, entonces su valor absoluto es el mismo número.
+   7. Por lo tanto $X = |X|$ y entonces $x = |X|$.
+   8. Por ende la implicación lógica se cumple y queda probada la rama del then.
+3. Rama del else:
+   1. $\lbrace x = X \land \neg (x > 0) \rbrace y := -x \lbrace y = |X| \rbrace$ (COND)
+   2. $\lbrace x = X \land x \leq 0 \rbrace y := -x \lbrace y = |X| \rbrace$ (MAT)
+   3. $\lbrace y = |X|[y \mid -x] \rbrace y := -x \lbrace y = |X| \rbrace$ (ASI)
+   4. $\lbrace -x = |X| \rbrace y := -x \lbrace y = |X| \rbrace$ (reemplazando)
+   5. Ahora queremos ver si $x = X \land x \leq 0$ implica efectivamente a la nueva precondición que encontramos que es $-x = |X|$.
+   6. Como $x \leq 0$ y $x = X$, $X \leq 0$.
+   7. Por definición de valor absoluto, si un número es cero o negativo, entonces su valor absoluto es el opuesto de ese número.
+   8. Por lo tanto $-X = |X|$ y entonces $-x = |X|$.
+   9. La implicación lógica se cumple y queda probada la rama del else.
+4. Finalmente, como ambas ramas del if se cumplen, entonces por COND la fórmula de correctitud parcial se cumple.
+
+### b. $\lbrace x \geq 0 \land y \geq 0 \rbrace \\ prod := 0; \\ k := y; \\ \text{while k > 0 do} \\ \quad prod := prod + x; \\ \quad k := k - 1; \\ od \\ \lbrace prod = x.y \rbrace$
+
+**Regla de repetición**: $\frac{\lbrace p \land B \rbrace S \lbrace p \rbrace}{\lbrace p \rbrace \text{ while B do } S \text{ od} \lbrace p \land \lnot B \rbrace}$
+
+**Regla de asignación**: $\lbrace p[x \mid e] \rbrace x := e \lbrace p \rbrace$
+
+1. Elementos:
+   1. Precondición: $p$ es $(x \geq 0 \land y \geq 0)$
+   2. $B$ es $k > 0$
+   3. $S$ es $prod := prod + x; k := k - 1$
+   4. Postcondición: $prod = x \cdot y$
+2. Se debe hallar un invariante $i$. Analizando el programa se pueden notar varias cosas:
+   1. $y$ es la cantidad total de veces que queremos sumar $x$.
+   2. $k$ es la cantidad de veces que aún falta sumar $x$. Siempre vale $y$ al inicio del programa, y siempre vale $0$ al finalizar el programa, porque justamente una vez vale $0$ se sale del loop. Además, se puede ver claramente que $k \geq 0$ siempre, porque empieza siendo igual a $y$ que es mayor o igual a $0$, y al salir del loop obviamente vale $0$, por lo que se cumple trivialmente que $k$ siempre es mayor o igual a $0$.
+   3. Por lo tanto, $y - k$ es la cantidad de veces que ya se sumó $x$.
+   4. Como en cada iteración del while se le suma $x$ a $prod$, entonces $prod$ es igual a $x$ multiplicado por la cantidad de veces que ya se sumó $x$, es decir, $prod = x \cdot (y - k)$.
+   5. Por lo tanto, un invariante es $i \equiv prod = x \cdot (y - k) \land k \geq 0$.
+3. Probando que la precondición $p$, al ejecutar las dos asignaciones previas al while, implica el invariante $i$:
+   1. Formalmente se debe probar $\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$.
+   2. $\lbrace prod = x \cdot (y - k) \land k \geq 0 [k \mid y] \rbrace k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (ASI)
+   3. $\lbrace prod = x \cdot (y - y) \land y \geq 0 \rbrace k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (reemplazando)
+   4. $\lbrace prod = 0 \land y \geq 0 \rbrace k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (MAT)
+   5. $\lbrace prod = 0 \land y \geq 0[prod \mid 0] \rbrace prod := 0; \lbrace prod = 0 \land y \geq 0 \rbrace$ (ASI)
+   6. $\lbrace 0 = 0 \land y \geq 0 \rbrace prod := 0; \lbrace prod = 0 \land y \geq 0\rbrace$ (reemplazando)
+   7. $\lbrace true \land y \geq 0 \rbrace prod := 0; \lbrace prod = 0 \land y \geq 0 \rbrace$ (MAT)
+   8. $\lbrace y \geq 0 \rbrace prod := 0; \lbrace prod = 0 \land y \geq 0 \rbrace$ (MAT)
+   9. $\lbrace y \geq 0 \rbrace prod := 0; k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (8, 4, SEC)
+   10. Se usa la regla CONS con la implicación $(x \geq 0 \land y \geq 0) \rightarrow y \geq 0$, que es trivialmente verdadera porque para que el antecedente sea verdadero, tanto $x \geq 0$ como $y \geq 0$ deben ser verdaderos, pero si $y \geq 0$ es verdadero, entonces el consecuente también es verdadero, por lo tanto la implicación se cumple.
+   11. Así, queda probado: $\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$.
+4. Probando que si el invariante $i$ se cumple y la condición $B$ es verdadera, entonces después de ejecutar el cuerpo del while, el invariante $i$ se sigue cumpliendo:
+   1. Formalmente se debe probar $\lbrace prod = x \cdot (y - k) \land k \geq 0 \land k > 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$.
+   2. $\lbrace prod = x \cdot (y - k) \land k \geq 0 [k \mid k - 1] \rbrace k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (ASI)
+   3. $\lbrace prod = x \cdot (y - (k - 1)) \land k - 1 \geq 0 \rbrace k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (reemplazando)
+   4. $\lbrace prod = x \cdot (y - k + 1) \land k - 1 \geq 0 \rbrace k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (MAT)
+   5. $\lbrace prod = x \cdot (y - k + 1) \land k - 1 \geq 0[prod \mid prod + x] \rbrace prod := prod + x; \lbrace prod = x \cdot (y - k + 1) \land k - 1 \geq 0 \rbrace$ (ASI)
+   6. $\lbrace prod + x = x \cdot (y - k + 1) \land k - 1 \geq 0 \rbrace prod := prod + x; \lbrace prod = x \cdot (y - k + 1) \land k - 1 \geq 0 \rbrace$ (reemplazando)
+   7. $\lbrace prod = x \cdot (y - k + 1) - x \land k - 1 \geq 0 \rbrace prod := prod + x; \lbrace prod = x \cdot (y - k + 1) \land k - 1 \geq 0 \rbrace$ (MAT)
+   8. $\lbrace prod = x \cdot (y - k + 1) - x \land k - 1 \geq 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (7, 4, SEC)
+   9. $\lbrace prod = xy - xk + x - x \land k - 1 \geq 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (MAT)
+   10. $\lbrace prod = xy - xk \land k - 1 \geq 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (MAT)
+   11. $\lbrace prod = x \cdot (y - k) \land k - 1 \geq 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (MAT)
+   12. Queremos ver si se cumple la implicación $prod = x \cdot (y - k) \land k \geq 0 \land k > 0 \rightarrow prod = x \cdot (y - k) \land k - 1 \geq 0$
+   13. Como se cumple tanto $k \geq 0$ como $k > 0$, entonces $k \geq 1$.
+   14. Sumando $1$ a ambos lados de la inecuación del consecuente, se tiene $k - 1 + 1 \geq 0 + 1$ que se simplifica a $k \geq 1$.
+   15. Por lo tanto tenemos $prod = x \cdot (y - k) \land k \geq 1 \rightarrow prod = x \cdot (y - k) \land k \geq 1$, lo cual se cumple trivialmente porque $p \rightarrow p$ es una tautología.
+   16. Por lo tanto queda probado que $\lbrace prod = x \cdot (y - k) \land k \geq 0 \land k > 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$.
+5. Finalmente se debe probar que si el invariante $i$ se cumple y la condición $B$ es falsa, entonces la postcondición se cumple:
+   1. Formalmente se debe probar $(prod = x \cdot (y - k) \land k \geq 0 \land \neg (k > 0))  \rightarrow prod = x \cdot y$.
+   2. $(prod = x \cdot (y - k) \land k \geq 0 \land k \leq 0)  \rightarrow prod = x \cdot y$
+   3. $prod = x \cdot (y - k) \land k = 0 \rightarrow prod = x \cdot y$ (si k es tanto menor o igual a cero como mayor o igual a cero a la vez, evidentemente es porque vale cero)
+   4. $prod = x \cdot (y - 0) \land k = 0 \rightarrow prod = x \cdot y$ (reemplazando)
+   5. $prod = x \cdot y \land k = 0 \rightarrow prod = x \cdot y$
+   6. $prod = x \cdot y \rightarrow prod = x \cdot y$ (por ley de lógica, $p \land q \rightarrow p$ es equivalente a $p \rightarrow p$, por ende se puede eliminar la parte $k = 0$ del antecedente)
+   7. Nuevamente tenemos una tautología.
+   8. Así, queda probado que $(prod = x \cdot (y - k) \land k \geq 0 \land \neg (k > 0))  \rightarrow prod = x \cdot y$.
+6. Finalmente encadenamos todo:
+   1. $\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \lbrace i \rbrace$ (probado en el paso 3)
+   2. $\lbrace i \land k > 0 \rbrace prod := prod + x; k := k - 1; \lbrace i \rbrace$ (probado en el paso 4)
+   3. $\lbrace i \rbrace \text{while } k > 0 \text{ do } prod := prod + x; k := k - 1 \text{ od } \lbrace i \land k \leq 0 \rbrace$ (REP)
+   4. $\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \text{while } k > 0 \text{ do } prod := prod + x; k := k - 1 \text{ od } \lbrace i \land k \leq 0 \rbrace$ (1, 3, SEC)
+   5. $i \land k \leq 0 \rightarrow prod = x \cdot y$ (probado en el paso 5)
+   6. $\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \text{while } k > 0 \text{ do } prod := prod + x; k := k - 1 \text{ od } \lbrace prod = x \cdot y \rbrace$ (4, 5, CONS)
 
 ## 5. Se verificó en clase, usando el método H: $\lbrace x \geq 0 \land y > 0 \rbrace \\ S_{div} :: q := 0; r := x; \text{while } r \geq y \text{ do } r := r - y; q := q + 1 \text{ od} \\ \lbrace x = q \cdot y + r \land 0 \leq r < y \rbrace$ siendo $S_{div}$ un programa que calcula por restas sucesivas la división entera de $x$ sobre $y$ en $q$, dejando el resto en $r$. Se pide ahora probar en $H$: $\lbrace x > 0 \land y = 0 \rbrace S_{div} \lbrace false \rbrace$ que significa que el programa $S_{div}$ no termina a partir de la precondición $(x > 0 \land y = 0)$.
 
