@@ -157,7 +157,7 @@ Contraejemplo:
    2. $\lbrace x = X \land \neg (x > 0) \rbrace y := -x \lbrace y = |X| \rbrace$
    3. **$\lbrace x = X \rbrace \text{if } x > 0 \text{ then } y := x \text{ else } y := -x \rbrace \lbrace y = |X| \rbrace$** (1, 2, COND)
 
-### b. $\lbrace x \geq 0 \land y \geq 0 \rbrace \\ prod := 0; \\ k := y; \\ \text{while k > 0 do} \\ \quad prod := prod + x; \\ \quad k := k - 1; \\ od \\ \lbrace prod = x.y \rbrace$
+### b. $\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \text{while k > 0 do } prod := prod + x; k := k - 1; od \lbrace prod = x.y \rbrace$
 
 1. Elementos:
    1. Precondición: $p$ es $(x \geq 0 \land y \geq 0)$
@@ -203,11 +203,11 @@ Contraejemplo:
    5. $i \land k \leq 0 \rightarrow prod = x \cdot y$ (probado en el paso 5)
    6. $\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \text{while } k > 0 \text{ do } prod := prod + x; k := k - 1 \text{ od } \lbrace prod = x \cdot y \rbrace$ (4, 5, CONS)
 
-## 5. Se verificó en clase, usando el método H: $\lbrace x \geq 0 \land y > 0 \rbrace \\ S_{div} :: q := 0; r := x; \text{while } r \geq y \text{ do } r := r - y; q := q + 1 \text{ od} \\ \lbrace x = q \cdot y + r \land 0 \leq r < y \rbrace$ siendo $S_{div}$ un programa que calcula por restas sucesivas la división entera de $x$ sobre $y$ en $q$, dejando el resto en $r$. Se pide ahora probar en $H$: $\lbrace x > 0 \land y = 0 \rbrace S_{div} \lbrace false \rbrace$ que significa que el programa $S_{div}$ no termina a partir de la precondición $(x > 0 \land y = 0)$.
+## 5. Se verificó en clase, usando el método H: $\lbrace x \geq 0 \land y > 0 \rbrace S_{div} :: q := 0; r := x; \text{while } r \geq y \text{ do } r := r - y; q := q + 1 \text{ od} \lbrace x = q \cdot y + r \land 0 \leq r < y \rbrace$ siendo $S_{div}$ un programa que calcula por restas sucesivas la división entera de $x$ sobre $y$ en $q$, dejando el resto en $r$. Se pide ahora probar en $H$: $\lbrace x > 0 \land y = 0 \rbrace S_{div} \lbrace false \rbrace$ que significa que el programa $S_{div}$ no termina a partir de la precondición $(x > 0 \land y = 0)$.
 
 $\ldots$
 
-## 6. Probar la terminación del programa planteado en el ejercicio 4.b, es decir: $\langle x \geq 0 \land y \geq 0 \rangle \\ S_{prod} :: prod := 0; k := y; \text{while } k > 0 \text{ do } prod := prod + x; k := k - 1 \text{ od } \\ \langle true \rangle$. Ayuda: Notar que $k$ se decrementa en cada iteración y que se mantiene siempre mayor o igual que cero.
+## 6. Probar la terminación del programa planteado en el ejercicio 4.b, es decir: $\langle x \geq 0 \land y \geq 0 \rangle S_{prod} :: prod := 0; k := y; \text{while } k > 0 \text{ do } prod := prod + x; k := k - 1 \text{ od } \langle true \rangle$. Ayuda: Notar que $k$ se decrementa en cada iteración y que se mantiene siempre mayor o igual que cero.
 
 Para probar la correctitud total de una terna de Hoare, se debe probar la correctitud parcial y además que el programa termina. En el ejercicio 4.b ya se demostró la parcial, por lo que ahora solo falta probar la terminación.
 
