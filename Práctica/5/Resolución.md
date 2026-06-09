@@ -205,4 +205,21 @@ Contraejemplo:
 
 ## 5. Se verificó en clase, usando el método H: $\lbrace x \geq 0 \land y > 0 \rbrace \\ S_{div} :: q := 0; r := x; \text{while } r \geq y \text{ do } r := r - y; q := q + 1 \text{ od} \\ \lbrace x = q \cdot y + r \land 0 \leq r < y \rbrace$ siendo $S_{div}$ un programa que calcula por restas sucesivas la división entera de $x$ sobre $y$ en $q$, dejando el resto en $r$. Se pide ahora probar en $H$: $\lbrace x > 0 \land y = 0 \rbrace S_{div} \lbrace false \rbrace$ que significa que el programa $S_{div}$ no termina a partir de la precondición $(x > 0 \land y = 0)$.
 
+$\ldots$
+
 ## 6. Probar la terminación del programa planteado en el ejercicio 4.b, es decir: $\langle x \geq 0 \land y \geq 0 \rangle \\ S_{prod} :: prod := 0; k := y; \text{while } k > 0 \text{ do } prod := prod + x; k := k - 1 \text{ od } \\ \langle true \rangle$. Ayuda: Notar que $k$ se decrementa en cada iteración y que se mantiene siempre mayor o igual que cero.
+
+Para probar la correctitud total de una terna de Hoare, se debe probar la correctitud parcial y además que el programa termina. En el ejercicio 4.b ya se demostró la parcial, por lo que ahora solo falta probar la terminación.
+
+Para probar la terminación, se debe hallar una función variante $f$ que asegure que el número de iteraciones del bucle es finito, ergo que el programa termina. La función debe cumplir dos condiciones: a) decrecer en cada iteración del bucle b) tener un límite inferior → no puede decrecer infinitamente.
+
+Se observó en el ejercicio 4.b que $k$ es la variable que controla cuándo el bucle termina, y además que siempre decrece en una unidad entera en cada iteración del bucle. Además, por el invariante que se encontró, se sabe que siempre $k \geq 0$. Por lo tanto, una función variante posible es $f(k) = k$, porque $f$ decrece en cada iteración del bucle, y además tiene un límite inferior que es $0$, ya que $k$ siempre es mayor o igual a $0$.
+
+Verificamos las dos condiciones de la función variante $f(k) = k$:
+
+1. Acotación inferior: como se sabe que $k \geq 0$ siempre, entonces $f(k) \geq 0$, por lo que $f$ tiene un límite inferior.
+2. Decrecimiento: en cada iteración se ejecuta la instrucción $k := k - 1$. Como la función variante es $f(k) = k$, luego de una iteración se tiene $f'(k) = k - 1$. Como $k - 1 < k$ para cualquier $k$, entonces $f'(k) < f(k)$, por lo que $f$ decrece en cada iteración del bucle.
+
+Como existe una función variante $f$ que está acotada inferiormente y decrece estrictamente en cada iteración, el bucle ejecuta una cantidad finita de iteraciones. Por lo tanto, el programa termina.
+
+Dado que en el ejercicio 4.b ya se probó la correctitud parcial y ahora se probó la terminación, se sigue que el programa es totalmente correcto.
