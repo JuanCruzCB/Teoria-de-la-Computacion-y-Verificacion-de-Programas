@@ -131,34 +131,31 @@ Contraejemplo:
 
 ### a. $\lbrace x = X \rbrace \text{if } x > 0 \text{ then } y := x \text{ else } y := -x \rbrace \lbrace y = |X| \rbrace$, siendo $|X|$ el valor absoluto de $X$.
 
-**Regla del if**: $\frac{ \lbrace p \land B \rbrace S_1 \lbrace q \rbrace,  \lbrace p \land \neg B \rbrace S_2 \lbrace q \rbrace }{ \lbrace p \rbrace \text{ if } B \text{ then } S_1 \text{ else } S_2 \text{ fi } \lbrace q \rbrace }$
-
-**Regla de asignación**: $\lbrace p[x \mid e] \rbrace x := e \lbrace p \rbrace$
-
-1. Para la regla del if, tenemos lo siguiente:
-   1. $p$ es $x = X$
-   2. $B$ es $x > 0$
-   3. $q$ es $y = |X|$
-2. Rama del then:
+1. Se probará la terna de Hoare usando principalmente la regla del if.
+2. Probar **$\lbrace p \land B \rbrace S_1 \lbrace q \rbrace$**:
    1. $\lbrace x = X \land x > 0 \rbrace y := x \lbrace y = |X| \rbrace$ (COND)
-   2. $\lbrace y = |X|[y \mid x] \rbrace y := x \lbrace y = |X| \rbrace$ (ASI)
-   3. $\lbrace x = |X| \rbrace y := x \lbrace y = |X| \rbrace$ (reemplazando)
-   4. Ahora queremos ver si $x = X \land x > 0$ implica efectivamente a la nueva precondición que encontramos que es $x = |X|$.
-   5. Como $x > 0$ y $x = X$, entonces claramente $X > 0$.
-   6. Por definición matemática, si un número es positivo, cosa que $X$ lo es, entonces su valor absoluto es el mismo número.
-   7. Por lo tanto $X = |X|$ y entonces $x = |X|$.
-   8. Por ende la implicación lógica se cumple y queda probada la rama del then.
-3. Rama del else:
+   2. $\lbrace x = |X| \rbrace y := x \lbrace y = |X| \rbrace$ (ASI)
+   3. $x = X \land x > 0$
+   4. $\Rightarrow X > 0$
+   5. $\Rightarrow X = |X|$
+   6. $\Rightarrow x = |X|$
+   7. Conclusión: $(x = X \land x > 0) \rightarrow (x = |X|)$
+   8. **$\lbrace x = X \land x > 0 \rbrace y := x \lbrace y = |X| \rbrace$** (CONS)
+3. Probar **$\lbrace p \land \neg B \rbrace S_2 \lbrace q \rbrace$**:
    1. $\lbrace x = X \land \neg (x > 0) \rbrace y := -x \lbrace y = |X| \rbrace$ (COND)
    2. $\lbrace x = X \land x \leq 0 \rbrace y := -x \lbrace y = |X| \rbrace$ (MAT)
-   3. $\lbrace y = |X|[y \mid -x] \rbrace y := -x \lbrace y = |X| \rbrace$ (ASI)
-   4. $\lbrace -x = |X| \rbrace y := -x \lbrace y = |X| \rbrace$ (reemplazando)
-   5. Ahora queremos ver si $x = X \land x \leq 0$ implica efectivamente a la nueva precondición que encontramos que es $-x = |X|$.
-   6. Como $x \leq 0$ y $x = X$, $X \leq 0$.
-   7. Por definición de valor absoluto, si un número es cero o negativo, entonces su valor absoluto es el opuesto de ese número.
-   8. Por lo tanto $-X = |X|$ y entonces $-x = |X|$.
-   9. La implicación lógica se cumple y queda probada la rama del else.
-4. Finalmente, como ambas ramas del if se cumplen, entonces por COND la fórmula de correctitud parcial se cumple.
+   3. $\lbrace -x = |X| \rbrace y := -x \lbrace y = |X| \rbrace$ (ASI)
+   4. $x = X \land \neg (x > 0)$
+   5. $\Rightarrow x = X \land x \leq 0$
+   6. $\Rightarrow X \leq 0$
+   7. $\Rightarrow -X = |X|$
+   8. $\Rightarrow -x = |X|$
+   9. Conclusión: $(x = X \land \neg (x > 0)) \rightarrow (-x = |X|)$
+   10. **$\lbrace x = X \land \neg (x > 0) \rbrace y := -x \lbrace y = |X| \rbrace$** (CONS)
+4. Finalmente:
+   1. $\lbrace x = X \land x > 0 \rbrace y := x \lbrace y = |X| \rbrace$
+   2. $\lbrace x = X \land \neg (x > 0) \rbrace y := -x \lbrace y = |X| \rbrace$
+   3. **$\lbrace x = X \rbrace \text{if } x > 0 \text{ then } y := x \text{ else } y := -x \rbrace \lbrace y = |X| \rbrace$** (1, 2, COND)
 
 ### b. $\lbrace x \geq 0 \land y \geq 0 \rbrace \\ prod := 0; \\ k := y; \\ \text{while k > 0 do} \\ \quad prod := prod + x; \\ \quad k := k - 1; \\ od \\ \lbrace prod = x.y \rbrace$
 
