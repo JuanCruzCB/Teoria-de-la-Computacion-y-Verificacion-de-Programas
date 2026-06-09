@@ -162,59 +162,42 @@ Contraejemplo:
 
 ### b. $\lbrace x \geq 0 \land y \geq 0 \rbrace \\ prod := 0; \\ k := y; \\ \text{while k > 0 do} \\ \quad prod := prod + x; \\ \quad k := k - 1; \\ od \\ \lbrace prod = x.y \rbrace$
 
-**Regla de repetición**: $\frac{\lbrace p \land B \rbrace S \lbrace p \rbrace}{\lbrace p \rbrace \text{ while B do } S \text{ od} \lbrace p \land \lnot B \rbrace}$
-
-**Regla de asignación**: $\lbrace p[x \mid e] \rbrace x := e \lbrace p \rbrace$
-
 1. Elementos:
    1. Precondición: $p$ es $(x \geq 0 \land y \geq 0)$
-   2. $B$ es $k > 0$
-   3. $S$ es $prod := prod + x; k := k - 1$
-   4. Postcondición: $prod = x \cdot y$
-2. Se debe hallar un invariante $i$. Analizando el programa se pueden notar varias cosas:
+   2. Postcondición: $prod = x \cdot y$
+   3. La condición del while $B$ es $k > 0$
+2. Se debe hallar un invariante $i$ que sea verdadero antes de entrar al while, que sea verdadero en cada iteración del while, y que sea verdadero al salir del while. Analizando el programa se pueden notar varias cosas:
    1. $y$ es la cantidad total de veces que queremos sumar $x$.
    2. $k$ es la cantidad de veces que aún falta sumar $x$. Siempre vale $y$ al inicio del programa, y siempre vale $0$ al finalizar el programa, porque justamente una vez vale $0$ se sale del loop. Además, se puede ver claramente que $k \geq 0$ siempre, porque empieza siendo igual a $y$ que es mayor o igual a $0$, y al salir del loop obviamente vale $0$, por lo que se cumple trivialmente que $k$ siempre es mayor o igual a $0$.
-   3. Por lo tanto, $y - k$ es la cantidad de veces que ya se sumó $x$.
+   3. $y - k$ es la cantidad de veces que ya se sumó $x$.
    4. Como en cada iteración del while se le suma $x$ a $prod$, entonces $prod$ es igual a $x$ multiplicado por la cantidad de veces que ya se sumó $x$, es decir, $prod = x \cdot (y - k)$.
-   5. Por lo tanto, un invariante es $i \equiv prod = x \cdot (y - k) \land k \geq 0$.
-3. Probando que la precondición $p$, al ejecutar las dos asignaciones previas al while, implica el invariante $i$:
-   1. Formalmente se debe probar $\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$.
-   2. $\lbrace prod = x \cdot (y - k) \land k \geq 0 [k \mid y] \rbrace k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (ASI)
-   3. $\lbrace prod = x \cdot (y - y) \land y \geq 0 \rbrace k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (reemplazando)
-   4. $\lbrace prod = 0 \land y \geq 0 \rbrace k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (MAT)
-   5. $\lbrace prod = 0 \land y \geq 0[prod \mid 0] \rbrace prod := 0; \lbrace prod = 0 \land y \geq 0 \rbrace$ (ASI)
-   6. $\lbrace 0 = 0 \land y \geq 0 \rbrace prod := 0; \lbrace prod = 0 \land y \geq 0\rbrace$ (reemplazando)
-   7. $\lbrace true \land y \geq 0 \rbrace prod := 0; \lbrace prod = 0 \land y \geq 0 \rbrace$ (MAT)
-   8. $\lbrace y \geq 0 \rbrace prod := 0; \lbrace prod = 0 \land y \geq 0 \rbrace$ (MAT)
-   9. $\lbrace y \geq 0 \rbrace prod := 0; k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (8, 4, SEC)
-   10. Se usa la regla CONS con la implicación $(x \geq 0 \land y \geq 0) \rightarrow y \geq 0$, que es trivialmente verdadera porque para que el antecedente sea verdadero, tanto $x \geq 0$ como $y \geq 0$ deben ser verdaderos, pero si $y \geq 0$ es verdadero, entonces el consecuente también es verdadero, por lo tanto la implicación se cumple.
-   11. Así, queda probado: $\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$.
-4. Probando que si el invariante $i$ se cumple y la condición $B$ es verdadera, entonces después de ejecutar el cuerpo del while, el invariante $i$ se sigue cumpliendo:
-   1. Formalmente se debe probar $\lbrace prod = x \cdot (y - k) \land k \geq 0 \land k > 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$.
-   2. $\lbrace prod = x \cdot (y - k) \land k \geq 0 [k \mid k - 1] \rbrace k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (ASI)
-   3. $\lbrace prod = x \cdot (y - (k - 1)) \land k - 1 \geq 0 \rbrace k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (reemplazando)
-   4. $\lbrace prod = x \cdot (y - k + 1) \land k - 1 \geq 0 \rbrace k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (MAT)
-   5. $\lbrace prod = x \cdot (y - k + 1) \land k - 1 \geq 0[prod \mid prod + x] \rbrace prod := prod + x; \lbrace prod = x \cdot (y - k + 1) \land k - 1 \geq 0 \rbrace$ (ASI)
-   6. $\lbrace prod + x = x \cdot (y - k + 1) \land k - 1 \geq 0 \rbrace prod := prod + x; \lbrace prod = x \cdot (y - k + 1) \land k - 1 \geq 0 \rbrace$ (reemplazando)
-   7. $\lbrace prod = x \cdot (y - k + 1) - x \land k - 1 \geq 0 \rbrace prod := prod + x; \lbrace prod = x \cdot (y - k + 1) \land k - 1 \geq 0 \rbrace$ (MAT)
-   8. $\lbrace prod = x \cdot (y - k + 1) - x \land k - 1 \geq 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (7, 4, SEC)
-   9. $\lbrace prod = xy - xk + x - x \land k - 1 \geq 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (MAT)
-   10. $\lbrace prod = xy - xk \land k - 1 \geq 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (MAT)
-   11. $\lbrace prod = x \cdot (y - k) \land k - 1 \geq 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (MAT)
-   12. Queremos ver si se cumple la implicación $prod = x \cdot (y - k) \land k \geq 0 \land k > 0 \rightarrow prod = x \cdot (y - k) \land k - 1 \geq 0$
-   13. Como se cumple tanto $k \geq 0$ como $k > 0$, entonces $k \geq 1$.
-   14. Sumando $1$ a ambos lados de la inecuación del consecuente, se tiene $k - 1 + 1 \geq 0 + 1$ que se simplifica a $k \geq 1$.
-   15. Por lo tanto tenemos $prod = x \cdot (y - k) \land k \geq 1 \rightarrow prod = x \cdot (y - k) \land k \geq 1$, lo cual se cumple trivialmente porque $p \rightarrow p$ es una tautología.
-   16. Por lo tanto queda probado que $\lbrace prod = x \cdot (y - k) \land k \geq 0 \land k > 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$.
-5. Finalmente se debe probar que si el invariante $i$ se cumple y la condición $B$ es falsa, entonces la postcondición se cumple:
-   1. Formalmente se debe probar $(prod = x \cdot (y - k) \land k \geq 0 \land \neg (k > 0))  \rightarrow prod = x \cdot y$.
-   2. $(prod = x \cdot (y - k) \land k \geq 0 \land k \leq 0)  \rightarrow prod = x \cdot y$
-   3. $prod = x \cdot (y - k) \land k = 0 \rightarrow prod = x \cdot y$ (si k es tanto menor o igual a cero como mayor o igual a cero a la vez, evidentemente es porque vale cero)
-   4. $prod = x \cdot (y - 0) \land k = 0 \rightarrow prod = x \cdot y$ (reemplazando)
-   5. $prod = x \cdot y \land k = 0 \rightarrow prod = x \cdot y$
-   6. $prod = x \cdot y \rightarrow prod = x \cdot y$ (por ley de lógica, $p \land q \rightarrow p$ es equivalente a $p \rightarrow p$, por ende se puede eliminar la parte $k = 0$ del antecedente)
-   7. Nuevamente tenemos una tautología.
-   8. Así, queda probado que $(prod = x \cdot (y - k) \land k \geq 0 \land \neg (k > 0))  \rightarrow prod = x \cdot y$.
+   5. Por lo tanto, un invariante posible es $i \equiv prod = x \cdot (y - k) \land k \geq 0$.
+3. Probar $p \rightarrow i$ para las primeras dos sentencias antes de entrar al while: **$\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$**
+   1. $\lbrace prod = x \cdot (y - y) \land y \geq 0 \rbrace k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (ASI)
+   2. $\lbrace prod = 0 \land y \geq 0 \rbrace k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (MAT)
+   3. $\lbrace 0 = 0 \land y \geq 0 \rbrace prod := 0; \lbrace prod = 0 \land y \geq 0\rbrace$ (ASI)
+   4. $\lbrace y \geq 0 \rbrace prod := 0; \lbrace prod = 0 \land y \geq 0 \rbrace$ (MAT)
+   5. $\lbrace y \geq 0 \rbrace prod := 0; k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (4, 2, SEC)
+   6. Se reemplaza la precondición del paso 5 por otra precondición que la implique, por la regla CONS: $(x \geq 0 \land y \geq 0) \rightarrow y \geq 0$ trivialmente verdadero porque $(q \land p) \rightarrow p$ es una tautología.
+   7. **$\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$** (CONS)
+4. Probar $i \land B \rightarrow i$: **$\lbrace prod = x \cdot (y - k) \land k \geq 0 \land k > 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$**.
+   1. $\lbrace prod = x \cdot (y - (k - 1)) \land k - 1 \geq 0 \rbrace k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (ASI)
+   2. $\lbrace prod = x \cdot (y - k + 1) \land k - 1 \geq 0 \rbrace k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (MAT)
+   3. $\lbrace prod + x = x \cdot (y - k + 1) \land k - 1 \geq 0 \rbrace prod := prod + x; \lbrace prod = x \cdot (y - k + 1) \land k - 1 \geq 0 \rbrace$ (ASI)
+   4. $\lbrace prod = x \cdot (y - k + 1) - x \land k - 1 \geq 0 \rbrace prod := prod + x; \lbrace prod = x \cdot (y - k + 1) \land k - 1 \geq 0 \rbrace$ (MAT)
+   5. $\lbrace prod = x \cdot (y - k + 1) - x \land k - 1 \geq 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (4, 2, SEC)
+   6. $\lbrace prod = x \cdot (y - k) \land k - 1 \geq 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (MAT)
+   7. Se reemplaza la precondición del paso 6 por otra precondición que la implique, por la regla CONS: $(prod = x \cdot (y - k) \land k \geq 0 \land k > 0) \rightarrow (prod = x \cdot (y - k) \land k - 1 \geq 0)$:
+      1. $k > 0 \Rightarrow k - 1 \geq 0$
+      2. $(prod = x \cdot (y - k) \land k \geq 0 \land k > 0) \Rightarrow (prod = x \cdot (y - k) \land k - 1 \geq 0)$
+   8. **$\lbrace prod = x \cdot (y - k) \land k \geq 0 \land k > 0 \rbrace prod := prod + x; k := k - 1; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$** (CONS)
+5. Probar $i \land \lnot B \rightarrow prod = x \cdot y$: **$(prod = x \cdot (y - k) \land k \geq 0 \land \neg (k > 0))  \rightarrow prod = x \cdot y$**.
+   1. $(prod = x \cdot (y - k) \land k \geq 0 \land \lnot (k > 0))$
+   2. $\Rightarrow (prod = x \cdot (y - k) \land k \geq 0 \land k \leq 0)$
+   3. $\Rightarrow (prod = x \cdot (y - k) \land k = 0)$
+   4. $\Rightarrow (prod = x \cdot y \land k = 0)$
+   5. $\Rightarrow (prod = x \cdot y)$
+   6. Conclusión: **$(prod = x \cdot (y - k) \land k \geq 0 \land \neg (k > 0))  \rightarrow prod = x \cdot y$**.
 6. Finalmente encadenamos todo:
    1. $\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \lbrace i \rbrace$ (probado en el paso 3)
    2. $\lbrace i \land k > 0 \rbrace prod := prod + x; k := k - 1; \lbrace i \rbrace$ (probado en el paso 4)
