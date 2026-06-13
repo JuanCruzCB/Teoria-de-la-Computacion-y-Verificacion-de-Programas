@@ -33,6 +33,12 @@
 
 ## 2. Sea otra vez el lenguaje $$e :: 0 \mid 1 \mid x \mid (e_1 + e_2) \mid (e_1 \cdot e_2)$$ y sea $var(e)$ el conjunto de las variables de la expresión $e$. Definir inductivamente $var(e)$. Ayuda: $var(0) = \emptyset$, $var(e_1 + e_2) = var(e_1) \cup var(e_2)$.
 
+1. $var(0) = \emptyset$ porque la expresión $0$ no contiene variables.
+2. $var(1) = \emptyset$ porque la expresión $1$ no contiene variables.
+3. $var(x) = \lbrace x \rbrace$ porque la expresión $x$ contiene una única variable, que es $x$.
+4. $var(e_1 + e_2) = var(e_1) \cup var(e_2)$ porque la expresión $e_1 + e_2$ contiene las variables de ambas expresiones, y la unión de conjuntos, por definición, une a los dos conjuntos en uno solo ignorando las repeticiones.
+5. $var(e_1 \cdot e_2) = var(e_1) \cup var(e_2)$ por la misma razón que en el caso anterior.
+
 ## 3. Supongamos que agregamos al lenguaje de programación visto en clase, la instrucción $\text{repeat S until B}$, con la semántica habitual. Informalmente: se ejecuta $S$, se evalúa $B$, si se cumple $B$ se termina la repetición, y si no se cumple $B$ se vuelve al comienzo. Definir formalmente dicha semántica. Comentario: puede ayudar revisar cómo definimos en clase la semántica formal del $while$.
 
 ## 4. Probar la sensatez de la siguiente regla de verificación: $$\frac{\lbrace p \rbrace S \lbrace q \rbrace, \lbrace p \rbrace S \lbrace r \rbrace}{\lbrace p \rbrace S \lbrace q \land r \rbrace}$$ Comentario: basarse en los ejemplos que vimos en clase.
