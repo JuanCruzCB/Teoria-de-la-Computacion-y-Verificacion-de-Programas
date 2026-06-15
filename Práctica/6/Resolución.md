@@ -41,4 +41,23 @@
 
 ## 3. Supongamos que agregamos al lenguaje de programación visto en clase, la instrucción $\text{repeat S until B}$, con la semántica habitual. Informalmente: se ejecuta $S$, se evalúa $B$, si se cumple $B$ se termina la repetición, y si no se cumple $B$ se vuelve al comienzo. Definir formalmente dicha semántica. Comentario: puede ayudar revisar cómo definimos en clase la semántica formal del $while$.
 
+Esta instrucción nueva tiene la particularidad de que el bloque $S$ **siempre** se ejecuta al menos una vez, a diferencia del $while$ que puede no ejecutarse nunca.
+
+- $(\text{repeat } S \text{ until } B, \sigma) \rightarrow (S; \text{while } \neg B \text{ do } S, \sigma)$
+
+En palabras, tenemos que el repeat until primero ejecuta $S$, y luego se convierte en un while invertido donde se ejecuta siempre que la condición $B$ no se cumpla.
+
 ## 4. Probar la sensatez de la siguiente regla de verificación: $$\frac{\lbrace p \rbrace S \lbrace q \rbrace, \lbrace p \rbrace S \lbrace r \rbrace}{\lbrace p \rbrace S \lbrace q \land r \rbrace}$$ Comentario: basarse en los ejemplos que vimos en clase.
+
+1. Supongamos que la regla mencionada fue aplicada, es decir, se demostró $\lbrace p \rbrace S \lbrace q \land r \rbrace$ a partir de las premisas:
+   1. $\lbrace p \rbrace S \lbrace q \rbrace$
+   2. $\lbrace p \rbrace S \lbrace r \rbrace$
+2. Por hipótesis inductiva, ambas premisas son semánticamente válidas, es decir:
+   1. $\models \lbrace p \rbrace S \lbrace q \rbrace$
+   2. $\models \lbrace p \rbrace S \lbrace r \rbrace$
+3. Sea $\sigma$ un estado arbitrario tal que $\sigma \models p$.
+4. Supongamos que $S$ termina desde un estado $\sigma$ en un estado $\sigma'$.
+5. Como $\models \lbrace p \rbrace S \lbrace q \rbrace$, y $\sigma \models p$, entonces $\sigma' \models q$.
+6. Como $\models \lbrace p \rbrace S \lbrace r \rbrace$, y $\sigma \models p$, entonces $\sigma' \models r$.
+7. Como se tiene que $\sigma' \models q$ y $\sigma' \models r$, entonces $\sigma' \models q \land r$.
+8. Por lo tanto, $\models \lbrace p \rbrace S \lbrace q \land r \rbrace$.
