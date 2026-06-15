@@ -1,6 +1,6 @@
 <h1 align="center">Trabajo Práctico 6</h1>
 
-## 1. Presentamos en clase el lenguaje de las expresiones enteras: $$e :: 0 \mid 1 \mid x \mid (e_1 + e_2) \mid (e_1 \cdot e_2)$$ y comenzamos a probar por inducción estructural que para toda expresión $e$ se cumple: $C(e) = O(e) + 1$, es decir que el número de constantes o variables de la expresión $e$ es igual al número de operadores de la expresión $e$ más uno. Probamos las bases inductivas y el paso inductivo con $+$. Probar el paso inductivo con $\cdot$.
+## 1. Presentamos en clase el lenguaje de las expresiones enteras: $e :: 0 \mid 1 \mid x \mid (e_1 + e_2) \mid (e_1 \cdot e_2)$ y comenzamos a probar por inducción estructural que para toda expresión $e$ se cumple: $C(e) = O(e) + 1$, es decir que el número de constantes o variables de la expresión $e$ es igual al número de operadores de la expresión $e$ más uno. Probamos las bases inductivas y el paso inductivo con $+$. Probar el paso inductivo con $\cdot$.
 
 **Probar que $C(e) = O(e) + 1$ para toda expresión $e$**:
 
@@ -31,7 +31,7 @@
    5. Sustituyendo: $O(e_1 \cdot e_2) + 1 = C(e_1 \cdot e_2)$.
    6. Reordenando los términos: $C(e_1 \cdot e_2) = O(e_1 \cdot e_2) + 1$.
 
-## 2. Sea otra vez el lenguaje $$e :: 0 \mid 1 \mid x \mid (e_1 + e_2) \mid (e_1 \cdot e_2)$$ y sea $var(e)$ el conjunto de las variables de la expresión $e$. Definir inductivamente $var(e)$. Ayuda: $var(0) = \emptyset$, $var(e_1 + e_2) = var(e_1) \cup var(e_2)$.
+## 2. Sea otra vez el lenguaje $e :: 0 \mid 1 \mid x \mid (e_1 + e_2) \mid (e_1 \cdot e_2)$ y sea $var(e)$ el conjunto de las variables de la expresión $e$. Definir inductivamente $var(e)$. Ayuda: $var(0) = \emptyset$, $var(e_1 + e_2) = var(e_1) \cup var(e_2)$.
 
 1. $var(0) = \emptyset$ porque la expresión $0$ no contiene variables.
 2. $var(1) = \emptyset$ porque la expresión $1$ no contiene variables.
@@ -47,7 +47,7 @@ Esta instrucción nueva tiene la particularidad de que el bloque $S$ **siempre**
 
 En palabras, tenemos que el repeat until primero ejecuta $S$, y luego se convierte en un while invertido donde se ejecuta siempre que la condición $B$ no se cumpla.
 
-## 4. Probar la sensatez de la siguiente regla de verificación: $$\frac{\lbrace p \rbrace S \lbrace q \rbrace, \lbrace p \rbrace S \lbrace r \rbrace}{\lbrace p \rbrace S \lbrace q \land r \rbrace}$$ Comentario: basarse en los ejemplos que vimos en clase.
+## 4. Probar la sensatez de la siguiente regla de verificación: $\frac{\lbrace p \rbrace S \lbrace q \rbrace, \lbrace p \rbrace S \lbrace r \rbrace}{\lbrace p \rbrace S \lbrace q \land r \rbrace}$ Comentario: basarse en los ejemplos que vimos en clase.
 
 1. Supongamos que la regla mencionada fue aplicada, es decir, se demostró $\lbrace p \rbrace S \lbrace q \land r \rbrace$ a partir de las premisas:
    1. $\lbrace p \rbrace S \lbrace q \rbrace$
