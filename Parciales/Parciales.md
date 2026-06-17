@@ -18,45 +18,97 @@ Sí, existen lenguajes que no poseen ninguna MT que siempre se detenga ni siquie
 
 ## 2. Construir (dar sólo la idea general) una MT que acepte los pares de códigos de MT $(\langle M_1 \rangle, \langle M_2 \rangle)$ tales que la MT $M_1$ o la MT $M_2$ acepten la cadena vacía.
 
+$\ldots$
+
 ## 3. Se prueba que todos los lenguajes recursivamente enumerables se reducen al lenguaje $HP$, representante del problema de la detención. Explicar por qué, si $HP$ fuera recursivo, también lo serian todos los lenguajes recursivamente enumerables.
 
+$\ldots$
+
 ## 4. Justificar por qué la siguiente función $f$ no es una reducción del lenguaje $HP$ al lenguaje $HP^C$ (el complemento de $HP$): a todo par $(\langle M_1 \rangle, w)$, $f$ le asigna el par $(\langle M_2 \rangle, w)$, tal que $\langle M_2 \rangle$ es como $\langle M_1 \rangle$ salvo que sus estados finales están invertidos (es decir, donde aparece $q_A$ en $\langle M_1 \rangle$ aparece $q_R$ en $\langle M_2 \rangle$ y viceversa). Comentario: asumir que los pares $(\langle M_1 \rangle, w)$ siempre son sintácticamente correctos.
+
+$\ldots$
 
 ## 5.
 
 ### a. ¿Cuándo un lenguaje pertenece a la clase $P$ y cuándo un lenguaje pertenece a la clase $NP$?
 
+$\ldots$
+
 ### b. Dar un ejemplo de lenguaje en $NP$ que no estaría en $P$, y justificar por qué no estaría en $P$.
+
+$\ldots$
 
 ### c. Dar un ejemplo de lenguaje que no estaría en $NP$, y justificar por qué no estaría en $NP$.
 
+$\ldots$
+
 ## 6. Describir el método que estudiamos para poblar la clase de los lenguajes $NPC$, contando ya al menos con un lenguaje que pertenezca a dicha clase, y justificar por qué es correcto.
+
+$\ldots$
 
 ## 7.
 
 ### a. ¿Qué lenguajes se consideran tratables en la jerarquía espacial? Justificar por qué.
 
+$\ldots$
+
 ### b. Explicar por qué una MT que ocupa espacio $poly(n)$ puede tardar más que tiempo $poly(n)$.
 
+$\ldots$
+
 ### c. Dada una MT $M_1$ que ocupa espacio $S(n)$, explicar cómo se puede construir a partir de ella una MT $M_2$ que en espacio $S(n)$ imprima una cadena con $S(n)$ marcas $X$.
+
+$\ldots$
 
 ## 8.
 
 ### a. Especificar un programa que calcule el $mcd$, es decir el máximo común divisor de dos números enteros. Comentario: en la postcondición se puede usar la notación $mcd(x, y)$.
 
+Asumo que por especificación solo se pide dar la terna de Hoare $\lbrace p \rbrace S \lbrace q \rbrace$ sin necesidad de definir explícitamente $S$.
+
+Una terna posible podria ser $\lbrace x = X \land y = Y \rbrace S \lbrace z = mcd(X, Y) \rbrace$
+
 ### b. Justificar por qué $(x > 0, y = x)$ no es una especificación correcta de un programa que debe devolver, en la variable de salida $y$, el valor de la variable de entrada $x$.
 
+La especificación no es correcta porque no te asegura que la variable $y$ tenga el valor que tenía $x$ al iniciar el programa, ya que $x$ podría haber sido modificado luego de haber iniciado el programa. Se deberían usar variables lógicas.
+
 ### c. El hecho de que un programa satisfaga la especificación $(x > 0, x > 0)$, ¿asegura que la aserción $x > 0$ se cumpla a lo largo de toda su ejecución? Justificar la respuesta.
+
+No, no asegura la aserción. Podría pasar que $x = 8$ al inicio del programa, luego se ejecute la instrucción $x = -5$ y finalmente, antes de terminar el programa, se ejecute la instrucción $x = 2$. Si bien se cumple que $x > 0$ tanto antes de iniciar el programa como después de terminada su ejecución, no se cumplió a lo largo de TODA su ejecución.
 
 ## 9. Asumiendo que se cumple la fórmula de correctitud total $\langle p \rangle S \langle q \rangle$ indicar, justificando la respuesta, si se cumple cada uno de los siguientes enunciados:
 
 ### a. Si $S$ no termina, entonces su estado inicial no satisface $p$.
 
+Por contrapositiva, el enunciado es equivalente a decir: si el estado inicial satisface $p$, entonces $S$ termina. Esto es **verdadero** por definición de correctitud total: si $p$ se cumple entonces necesariamente $S$ termina en un estado que satisface $q$.
+
 ### b. Si $S$ termina en un estado que satisface $q$, entonces su estado inicial satisface $p$.
+
+Nuevamente, por contrapositiva, el enunciado es equivalente a decir: si el estado inicial no satisface $p$, entonces $S$ no termina, o termina en un estado que no satisface $q$. Esto es **falso**, puede ocurrir que $S$ termine en un estado que sí satisface $q$, o incluso que nunca termine. Como ya la precondición no se cumple, todo lo demás es irrelevante.
 
 ### c. Si $S$ termina en un estado que no satisface $q$, entonces su estado inicial no satisface $p$.
 
+Contrapositiva: si el estado inicial satisface $p$, entonces $S$ no termina, o termina en un estado que satisface $q$. Esto necesariamente es **verdadero**, ya que el consecuente posee una disyunción que solo es falsa cuando todas sus condiciones son falsas, y si analizamos lo que tenemos, es imposible que esto suceda. Si $S$ no termina, claramente no termina en un estado que satisface $q$. Si $S$ termina en un estado que satisface $q$, claramente sí terminó. Por lo tanto, suceda lo que suceda, la implicación es verdadera.
+
 ## 10. Probar mediante el método $H$, usando el invariante $p$, la fórmula de correctitud parcial $\lbrace p \rbrace \text{while ¬q do skip od} \lbrace q \rbrace$.
+
+1. Elementos:
+   1. Precondición: $p$
+   2. Postcondición: $q$
+   3. Condición del while: $\lnot q$
+   4. Invariante: $p$
+2. **Probar que la precondición implica al invariante antes de entrar al while**:
+   1. $p \rightarrow p$
+   2. Se cumple trivialmente, toda variable proposicional se implica a sí misma.
+3. **Probar que el invariante se preserva en cada iteración**:
+   1. $\lbrace invariante \land condición \rbrace cuerpo \lbrace invariante \rbrace$
+   2. $\lbrace p \land \lnot q \rbrace skip \lbrace p \rbrace$
+   3. Se cumple trivialmente ya que $(p \land \lnot q) \rightarrow p$ es una tautología.
+4. **Probar la salida del while**:
+   1. $invariante \land \lnot condición \rightarrow postcondición$
+   2. $(p \land \lnot (\lnot q)) \rightarrow q$
+   3. $(p \land q) \rightarrow q$
+   4. Lo anterior se cumple por ser una tautología: la única forma de que la fórmula sea falsa es que el antecedente sea $V$ y el consecuente $F$. Pero si $q = F$, que es la única forma de que el consecuente sea falso, entonces el antecedente también es falso por tener un AND lógico. Por lo tanto la fórmula se cumple siempre.
 
 ---
 
@@ -93,13 +145,37 @@ Por lo tanto $M$ reconoce $L_1 \cap L_2$, y por lo tanto $L_1 \cap L_2 \in RE$.
 
 ## 2. Sea $L_1$ un lenguaje generado con los símbolos del alfabeto $\Sigma_1$. Sea $f: \Sigma_1 \rightarrow \Sigma_2^*$ una función total computable, consistente en asignar a cada símbolo de $\Sigma_1$ una cadena de $\Sigma_2^*$. Y sea $L_2$ el lenguaje formado por las cadenas obtenidas de la aplicación de $f$ sobre las cadenas de $L_1$. Es decir que dado $L_1 = \lbrace w_1, w_2, \ldots \rbrace$, el lenguaje $L_2$ es $\lbrace f(w_1), f(w_2), \ldots \rbrace$, entendiendo que $f(w)$, con $w = w_1 w_2 \ldots w_n$ significa $f(w_1) f(w_2) \ldots f(w_n)$. Por ejemplo, si $abc \in L_1$, entonces $f(a) = 1$, $f(b) = 00$ y $f(c) = 101$, entonces $f(abc) = 100101 \in L_2$. Probar que si $L_1 \in R$, entonces $L_2 \in RE$. Ayuda: Construir una MT que reconozca $L_2$.
 
+$\ldots$
+
 ## 3. El problema $\text{K-CLIQUE}$ consiste en determinar si un grafo no orientado incluye un clique de tamaño $k$, es decir un subgrafo completo de $k$ vértices. El lenguaje que lo representa es $\text{K-CLIQUE} = \lbrace (G, k) \mid G \text{ es un grafo no orientado}, k > 0 \in \mathbb{N}, \text{G incluye un clique de tamaño } k \rbrace$. Probar que $\text{3-CLIQUE} \in P$, es decir, se puede determinar en tiempo deterministíco polinomial si un grafo no orientado incluye un triangulo (clique de tamaño 3).
+
+$\ldots$
 
 ## 4. El problema PARTICIÓN consiste en determinar si un conjunto finito de números naturales se puede partir en dos conjuntos $C_1$ y $C_2$, tales que la suma de los números de $C_1$ sea igual a la suma de los números de $C_2$. $\ldots$
 
-## 5. $\ldots$
+$\ldots$
 
-## 6. $\ldots$
+## 5. La sintaxis de un determinado lenguaje de programación $L$ se define de la siguiente manera. Un programa $S$ pertenece a $L$ si y sólo si $S$ tiene la forma:
+
+### $S :: skip \mid x := e \mid S_1; S_2 \mid \text{case of } B_1 \rightarrow S_1; B_2 \rightarrow S_2; otherwise \rightarrow S_3 \text{ end}$
+
+### $e :: n \mid x \mid e_1 + e_2$
+
+### $B ::= true \mid false \mid e_1 = e_2 \mid \lnot B$
+
+### donde $e$ es una expresión entera, $n$ es una constante entera, $x$ es una variable entera, y $B$ es una expresión booleana. Sea $var(S)$ la expresión que denota el conjunto de las variables que aparecen en el programa $S$. Definir por inducción el conjunto $var(S)$.
+
+$\ldots$
+
+## 6. Probar empleando el método de verificación $H$:
+
+### a. $\lbrace p \rbrace \text{while } true \text{ do skip od} \lbrace q \rbrace$
+
+$\ldots$
+
+### b. $\lbrace p \rbrace \text{while } \lnot q \text{ do skip od} \lbrace q \rbrace$
+
+$\ldots$
 
 ---
 
@@ -279,40 +355,74 @@ $\ldots$
 
 ### a. Probar, construyendo una MT, que $L_1 \cap L_2 \in RE$. Comentario: sólo se pide presentar la idea general de la MT.
 
+$\ldots$
+
 ### b. Encontrar un lenguaje $L_1 \in RE$ y un lenguaje $L_2 \in R$ tales que $L_1 \cap L_2 \notin R$.
 
+$\ldots$
+
 ## 2. Construir una MT que acepte el lenguaje $L = \lbrace (\langle M \rangle, w_1, w_2) \mid \text{la MT M acepta al menos una de las cadenas } w_i \rbrace$. Comentario: sólo se pide presentar la idea general de la MT.
+
+$\ldots$
 
 ## 3. La siguiente es una prueba de que $L_U \notin R$
 
 ### a. Existe un lenguaje $L$ tal que $L^C \notin RE$ y además $L \leq L_U$.
 
+$\ldots$
+
 ### b. Como $L^C \notin RE$, entonces $L \notin R$.
+
+$\ldots$
 
 ### c. Y como $L \notin R$ y $L \leq L_U$, entonces $L_U \notin R$.
 
+$\ldots$
+
 ### Se pide justificar los incisos b y c. Ayuda: tener en cuenta las propiedades estudiadas en clase sobre las clases $R$ y $RE$ y sobre las reducciones de lenguajes.
+
+$\ldots$
 
 ## 4. Probar que si $A$ es Turing-reducible a $B$, entonces $A^C$ es Turing-reducible a $B^C$. Ayuda: teniendo en cuenta la hipótesis, hay que probar que existe una MT con oráculo $B^C$ que acepta $A^C$ y siempre se detiene.
 
+$\ldots$
+
 ## 5. Probar que cualquier lenguaje $L_1 \in P$ se puede reducir polinomialmente a cualquier lenguaje $L_2 \in P$, siempre y cuando $L_1$ y $L_2$ no sean ni $\Sigma^*$ ni $\emptyset$. Comentario: describir la función de reducción de $L_1$ a $L_2$ y probar que la función se computa en tiempo polinomial.
+
+$\ldots$
 
 ## 6. Construir una MT que acepte todos los pares $(\langle M \rangle, n)$ siendo $n$ un número natural, que cumplen que $M$, a partir del input vacío, se detiene en a lo sumo $n^2$ pasos. Ayuda: la función $n^2$ es tiempo-construible. Comentario: sólo presentar la idea general de la MT.
 
+$\ldots$
+
 ## 7. Probar que el siguiente lenguaje está en $NP$: $\text{TRUE-SAT} = \lbrace \phi \mid \phi \text{ es una fórmula booleana sin cuantificadores y satisfactible con al menos dos asignaciones de valores de verdad, en una de las cuales todos los valores de verdad son true} \rbrace$. Ayuda: la evaluación de una asignación sobre una fórmula booleana tarda tiempo polinomial.
+
+$\ldots$
 
 ## 8. Indicar si las siguientes fórmulas de correctitud son verdaderas o falsas. Justificar la respuesta en cada caso. Comentario: no hay que utilizar los métodos $H$ y $H^*$, sólo aplicar las definiciones de correctitud parcial y total, y recordar que las variables son de tipo entero:
 
 ### a. $\lbrace true \rbrace x := x + y \lbrace x \geq y \rbrace$
 
+$\ldots$
+
 ### b. $\lbrace x = 0 \rbrace \text{while } y = 0 \text{ do } z := z + 1 \text{ od} \lbrace x = 0 \rbrace$
 
+$\ldots$
+
 ### c. $\lbrace x > 0 \land y > 0 \rbrace \text{while } y > x \text{ do } y := y-x \text{ od} \lbrace true \rbrace$
+
+$\ldots$
 
 ## 9. Dado un programa $S$ del lenguaje $PLW$ estudiado en clase, justificar en cada caso por qué son verdaderos los siguientes enunciados:
 
 ### a. Que exista algún estado $\sigma$ tal que $\sigma \vDash p$ y $val(\pi(S, \sigma)) \vDash q$ no implica que $\vDash \lbrace p \rbrace S \lbrace q \rbrace$
 
+$\ldots$
+
 ### b. Que exista algún estado $\sigma$ tal que $\sigma \nvDash p$ y $val(\pi(S, \sigma)) \nvDash q$ no implica que $\nvDash \langle p \rangle S \langle q \rangle$
 
+$\ldots$
+
 ## 10. Probar con el método $H$ la fórmula $\lbrace p \rbrace \text{while } p \text{ do } S \text{ od} \lbrace q \rbrace$, asumiendo que en $H$ se prueba la fórmula $\lbrace p \rbrace S \lbrace p \rbrace$. Ayuda: Hay que probar con $H$ la formula $\lbrace p \rbrace \text{while } p \text{ do } S \text{ od} \lbrace a \rbrace$ partiendo de $\lbrace p \rbrace S \lbrace p \rbrace$. Tener en cuenta: (a) a partir de $\lbrace p \rbrace S \lbrace p \rbrace$ se puede probar $\lbrace p \land p \rbrace S \lbrace p \rbrace$ (por la regla de consecuencia CONS), desde donde entonces luego se puede aplicar la regla de la repetición REP. (b) La aserción false implica cualquier otra.
+
+$\ldots$
