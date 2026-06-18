@@ -165,17 +165,38 @@ $\ldots$
 
 ### donde $e$ es una expresión entera, $n$ es una constante entera, $x$ es una variable entera, y $B$ es una expresión booleana. Sea $var(S)$ la expresión que denota el conjunto de las variables que aparecen en el programa $S$. Definir por inducción el conjunto $var(S)$.
 
-$\ldots$
+- **Expresiones enteras**:
+  - $var(n) = \emptyset$ porque $n$ no es una variable.
+  - $var(x) = \lbrace x \rbrace$ porque $x$ es una variable.
+  - $var(e_1 + e_2) = var(e_1) \cup var(e_2)$
+- **Expresiones booleanas**:
+  - $var(true) = \emptyset$
+  - $var(false) = \emptyset$
+  - $var(e_1 = e_2) = var(e_1) \cup var(e_2)$
+  - $var(\lnot B) = var(B)$
+- **Programas**:
+  - $var(skip) = \emptyset$
+  - $var(x := e) = \lbrace x \rbrace \cup var(e)$
+  - $var(S_1; S_2) = var(S_1) \cup var(S_2)$
+  - $var(\text{case of } B_1 \rightarrow S_1; B_2 \rightarrow S_2; otherwise \rightarrow S_3 \text{ end}) = var(B_1) \cup var(S_1) \cup var(B_2) \cup var(S_2) \cup var(S_3)$
 
 ## 6. Probar empleando el método de verificación $H$:
 
 ### a. $\lbrace p \rbrace \text{while } true \text{ do skip od} \lbrace q \rbrace$
 
-$\ldots$
+1. Se elige como invariante a $p$.
+2. $\lbrace p \land true \rbrace skip \lbrace p \rbrace$
+3. $\lbrace p \rbrace skip \lbrace p \rbrace$ (una variable y verdadero siempre es equivalente a la variable)
+4. Lo anterior es válido por la regla del skip.
+5. $\lbrace p \rbrace \text{while } true \text{ do skip od} \lbrace p \land \lnot true \rbrace$ (aplicación de la regla del while)
+6. $\lbrace p \rbrace \text{while } true \text{ do skip od} \lbrace p \land false \rbrace$
+7. $\lbrace p \rbrace \text{while } true \text{ do skip od} \lbrace false \rbrace$
+8. Dado que $false \Rightarrow q$, por regla de consecuencia reemplazamos $false$ por $q$.
+9. $\lbrace p \rbrace \text{while } true \text{ do skip od} \lbrace q \rbrace$
 
 ### b. $\lbrace p \rbrace \text{while } \lnot q \text{ do skip od} \lbrace q \rbrace$
 
-$\ldots$
+Ya resuelto en el parcial anterior.
 
 ---
 
