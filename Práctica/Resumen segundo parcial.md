@@ -83,11 +83,11 @@ La **especificación** es una **descripción** detallada de lo que el software d
 
 #### Axioma de la asignación (ASI)
 
-- $\lbrace p[x | e] \rbrace x := e \lbrace p \rbrace$
+- $\lbrace p[x \mid e] \rbrace x := e \lbrace p \rbrace$
 - Se lee de derecha a izquierda: si luego de ejecutar $x := e$ vale $p$ en términos de $x$, entonces antes de ejecutar $x := e$ valía $p$ en términos de $e$.
 - Por ejemplo:
   - $\lbrace ? \rbrace x := x + 1 \lbrace x \geq 0 \rbrace$
-  - $\lbrace x \geq 0[x | x + 1] \rbrace x := x + 1 \lbrace x \geq 0 \rbrace$
+  - $\lbrace x \geq 0[x \mid x + 1] \rbrace x := x + 1 \lbrace x \geq 0 \rbrace$
   - $\lbrace x + 1 \geq 0 \rbrace x := x + 1 \lbrace x \geq 0 \rbrace$
   - Es decir, si luego de $x := x + 1$ vale $x \geq 0$, entonces antes de $x := x + 1$ valía $x + 1 \geq 0$.
 
@@ -96,11 +96,29 @@ La **especificación** es una **descripción** detallada de lo que el software d
 - $\frac{\lbrace p \rbrace S_1 \lbrace r \rbrace, \lbrace r \rbrace S_2 \lbrace q \rbrace}{\lbrace p \rbrace S_1; S_2 \lbrace q \rbrace}$
 - El predicado $r$ actúa como un nexo entre $S_1$ y $S_2$ y luego se descarta, no se propaga.
 - Se puede generalizar a $n$ instrucciones.
+- Por ejemplo:
+  - $\lbrace p \rbrace S_1; S_2; S_3 \lbrace q \rbrace$ se puede descomponer en:
+    - $\lbrace p \rbrace S_1 \lbrace r_1 \rbrace$
+    - $\lbrace r_1 \rbrace S_2 \lbrace r_2 \rbrace$
+    - $\lbrace r_2 \rbrace S_3 \lbrace q \rbrace$
 
 #### Regla del condicional (COND)
 
 - $\frac{\lbrace p \land B \rbrace S_1 \lbrace q \rbrace, \lbrace p \land \lnot B \rbrace S_2 \lbrace q \rbrace}{\lbrace p \rbrace \text{ if B then } S_1 \text{ else } S_2 \text{ fi} \lbrace q \rbrace}$
 - Formula un modo de verificar una selección condicional fijando un único punto de entrada y un único punto de salida, correspondientes a $p$ y $q$ respectivamente.
+- Por ejemplo:
+  - $\lbrace x \geq 0 \rbrace \text{ if x > 0 then } y := 1 \text{ else } y := 0 \text{ fi} \lbrace y \geq 0 \rbrace$
+  - $\lbrace x \geq 0 \land x > 0 \rbrace y := 1 \lbrace y \geq 0 \rbrace$
+  - $\lbrace x \geq 0 \rbrace y := 1 \lbrace y \geq 0 \rbrace$
+  - $\lbrace y \geq 0 [y \mid 1] \rbrace y := 1 \lbrace y \geq 0 \rbrace$
+  - $\lbrace 1 \geq 0 \rbrace y := 1 \lbrace y \geq 0 \rbrace$
+  - $\lbrace true \rbrace y := 1 \lbrace y \geq 0 \rbrace$
+  - $\lbrace x \geq 0 \land \lnot (x > 0) \rbrace y := 0 \lbrace y \geq 0 \rbrace$
+  - $\lbrace x \geq 0 \land x \leq 0 \rbrace y := 0 \lbrace y \geq 0 \rbrace$
+  - $\lbrace x = 0 \rbrace y := 0 \lbrace y \geq 0 \rbrace$
+  - $\lbrace y \geq 0[y \mid 0] \rbrace y := 0 \lbrace y \geq 0 \rbrace$
+  - $\lbrace 0 \geq 0 \rbrace y := 0 \lbrace y \geq 0 \rbrace$
+  - $\lbrace true \rbrace y := 0 \lbrace y \geq 0 \rbrace$
 
 #### Regla de la repetición (REP)
 
@@ -109,6 +127,11 @@ La **especificación** es una **descripción** detallada de lo que el software d
 - $p$ es un predicado que vale antes y después de toda iteración, es decir, es un **invariante**.
 - La regla NO asegura que el while termine.
 - Si $p$ vale al comienzo del bucle y mientras vale $B$ el cuerpo $S$ preserva $p$, entonces por razonamiento inductivo $p$ vale al terminar el bucle.
+- El procedimiento general para probar una terna con while es:
+  - Encontrar un invariante.
+  - Probar que el invariante vale antes de entrar al while: $Precondición \Rightarrow Invariante$.
+  - Probar que se preserva el invariante en cada iteración: $\lbrace Invariante \land CondiciónWhile \rbrace CuerpoWhile \lbrace Invariante \rbrace$.
+  - Probar que al terminar el while se cumple la postcondición: $Invariante \land \lnot CondiciónWhile \Rightarrow Postcondición$.
 
 #### Regla de la repetición con terminación (REP\*)
 
@@ -120,6 +143,11 @@ La **especificación** es una **descripción** detallada de lo que el software d
 - El objetivo de $Z$ es fijar el valor de $t$ antes de ejecutar $S$.
 - En la tercera premisa, $t$ se mantiene menor o igual a cero a lo largo de todo el bucle.
 - Así, el bucle debe necesariamente terminar, porque en los números naturales no hay cadenas descendentes infinitas.
+- El procedimiento general para probar una terna con while usando REP\* es:
+  - Probar su correctitud parcial con REP.
+  - Encontrar una función variante $t$.
+  - Probar que la función variante $t$ se decrementa en cada iteración: $Invariante \land CondiciónWhile \Rightarrow t_{nuevo} < t_{viejo}$.
+  - Probar que la función variante $t$ está acotada inferiormente por cero: $t \geq 0$.
 
 #### Regla de la consecuencia (CONS)
 
