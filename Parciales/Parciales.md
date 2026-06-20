@@ -433,26 +433,43 @@ $\ldots$
 
 ### a. $\lbrace true \rbrace x := x + y \lbrace x \geq y \rbrace$
 
-$\ldots$
+La precondición $true$ se satisface en todo estado y el programa termina siempre porque es una simple asignación. Sin embargo, tomando el estado inicial $\sigma$ tal que $\sigma(x) = −2$ y $\sigma(y) = 0$, luego de ejecutar $x := x + y$ se obtiene $x = −2$. La postcondición $x \geq y$ resulta falsa, ya que −$2 \ngeq 0$.
+
+Como existe un estado que satisface la precondición para el cual el programa termina pero la postcondición no se cumple, entonces la fórmula de correctitud es **falsa**.
 
 ### b. $\lbrace x = 0 \rbrace \text{while } y = 0 \text{ do } z := z + 1 \text{ od} \lbrace x = 0 \rbrace$
 
-$\ldots$
+Está claro que si $y = 0$ al inicio del programa, el programa no termina.
+
+Si tomamos el estado $\sigma$ tal que $\sigma(x) = 0$ y $\sigma(y) = 0$ tenemos que la precondición se cumple pero el programa no termina por lo tanto nunca se llega a evaluar la postcondición.
+
+Si tomamos el estado $\sigma$ tal que $\sigma(x) = 0$ y $\sigma(y) \neq 0$ tenemos que la precondición se cumple pero el programa termina sin hacer nada por no cumplirse la condición del bucle, y además se cumple la postcondición.
+
+Por lo tanto en cualquier caso donde se cumpla la precondición y el programa termine se cumple la postcondición, por lo tanto la fórmula de correctitud es **verdadera**.
 
 ### c. $\lbrace x > 0 \land y > 0 \rbrace \text{while } y > x \text{ do } y := y-x \text{ od} \lbrace true \rbrace$
 
-$\ldots$
+La única forma de que una fórmula de correctitud parcial sea falsa es que exista un estado inicial que satisfaga la precondición, para el cual el programa termine y la postcondición no se cumpla. Como la postcondición es true, ésta se satisface **para todo estado final**. Por lo tanto, dicho contraejemplo no puede existir y la fórmula de correctitud es **verdadera**.
 
 ## 9. Dado un programa $S$ del lenguaje $PLW$ estudiado en clase, justificar en cada caso por qué son verdaderos los siguientes enunciados:
 
 ### a. Que exista algún estado $\sigma$ tal que $\sigma \vDash p$ y $val(\pi(S, \sigma)) \vDash q$ no implica que $\vDash \lbrace p \rbrace S \lbrace q \rbrace$
 
-$\ldots$
+La implicación no se cumple porque estamos hablando de cosas distintas. En el primer caso solo exigimos que haya UN estado $\sigma$ tal que se cumple la precondición $p$ y al ejecutar $S$ se llega a un estado final que cumple $q$. En el segundo caso requerimos que para TODO estado $\sigma$ tal que se cumple la precondición $p$, al ejecutar $S$ se llegue a un estado final que cumpla $q$.
 
 ### b. Que exista algún estado $\sigma$ tal que $\sigma \nvDash p$ y $val(\pi(S, \sigma)) \nvDash q$ no implica que $\nvDash \langle p \rangle S \langle q \rangle$
 
-$\ldots$
+Por contrarrecíproca: $\vDash \langle p \rangle S \langle q \rangle$ no implica que no pueda existir algún estado $\sigma$ tal que $\sigma \nvDash p$ y $val(\pi(S, \sigma)) \nvDash q$. Contraejemplo:
 
-## 10. Probar con el método $H$ la fórmula $\lbrace p \rbrace \text{while } p \text{ do } S \text{ od} \lbrace q \rbrace$, asumiendo que en $H$ se prueba la fórmula $\lbrace p \rbrace S \lbrace p \rbrace$. Ayuda: Hay que probar con $H$ la formula $\lbrace p \rbrace \text{while } p \text{ do } S \text{ od} \lbrace a \rbrace$ partiendo de $\lbrace p \rbrace S \lbrace p \rbrace$. Tener en cuenta: (a) a partir de $\lbrace p \rbrace S \lbrace p \rbrace$ se puede probar $\lbrace p \land p \rbrace S \lbrace p \rbrace$ (por la regla de consecuencia CONS), desde donde entonces luego se puede aplicar la regla de la repetición REP. (b) La aserción false implica cualquier otra.
+$\langle x = 0 \rangle skip \langle x = 0 \rangle$
 
-$\ldots$
+1. Se cumple $\vDash \langle p \rangle S \langle q \rangle$ por definición.
+2. Sin embargo, existe un estado $\sigma$ tal que $\sigma(x) = 1$ de forma tal que tanto la precondición como la postcondición, luego de ejecutar el programa, son ambas falsas.
+
+## 10. Probar con el método $H$ la fórmula $\lbrace p \rbrace \text{while } p \text{ do } S \text{ od} \lbrace q \rbrace$, asumiendo que en $H$ se prueba la fórmula $\lbrace p \rbrace S \lbrace p \rbrace$. Ayuda: Hay que probar con $H$ la formula $\lbrace p \rbrace \text{while } p \text{ do } S \text{ od} \lbrace q \rbrace$ partiendo de $\lbrace p \rbrace S \lbrace p \rbrace$. Tener en cuenta: (a) a partir de $\lbrace p \rbrace S \lbrace p \rbrace$ se puede probar $\lbrace p \land p \rbrace S \lbrace p \rbrace$ (por la regla de consecuencia CONS), desde donde entonces luego se puede aplicar la regla de la repetición REP. (b) La aserción false implica cualquier otra.
+
+1. $\lbrace p \rbrace S \lbrace p \rbrace$ (hipótesis)
+2. $\lbrace p \land p \rbrace S \lbrace p \rbrace$ (por CONS en 1. ya que $p \Rightarrow p \land p$)
+3. $\lbrace p \rbrace \text{while } p \text{ do } S \text{ od} \lbrace p \land \lnot p \rbrace$ (aplicación de regla REP sobre 2.)
+4. $\lbrace p \rbrace \text{while } p \text{ do } S \text{ od} \lbrace false \rbrace$ (por CONS en 3. ya que $(p \land \lnot p) \Rightarrow false$)
+5. $\lbrace p \rbrace \text{while } p \text{ do } S \text{ od} \lbrace q \rbrace$ (por CONS en 4. ya que como la aserción false implica cualquier otra, tenemos $false \Rightarrow q$)
