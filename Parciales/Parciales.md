@@ -344,29 +344,38 @@ Por teorema, se sabe que si $L_1 \leq L_2$ y $L_2 \in P$, entonces $L_1 \in P$. 
 
 ### a. ¿Cuándo un programa es correcto parcialmente con respecto a una especificación?
 
-$\ldots$
+Un programa es correcto **parcialmente** con respecto a una especificación cuando dada una precondición y una postcondición, si se cumple la precondición y el programa termina entonces la postcondición se cumple.
 
 ### b. ¿Cuándo un programa es correcto totalmente con respecto a una especificación?
 
-$\ldots$
+Un programa es correcto **totalmente** con respecto a una especificación cuando dada una precondición y una postcondición, si se cumple la precondición entonces el programa termina y la postcondición se cumple.
 
 ### c. ¿Por qué se hace la distinción entre correctitud parcial y correctitud total?
 
-$\ldots$
+La distinción se hace primordialmente para diferenciar a los programas que siempre terminan (totalmente correctos) vs los que **pueden** no terminar (parcialmente correctos).
 
 ## 9. Especificar un programa que calcule la raíz cuadrada de un número $x$ que sea entero y mayor estricto que cero, y tal que al final, $x$ tenga el mismo valor que al inicio del programa.
 
-$\ldots$
+$\lbrace x = X \land x \in \mathbb{Z} \land x > 0 \rbrace S \lbrace y = \sqrt{X} \land x = X \rbrace$
 
 ## 10. Probar con el método $H$:
 
 ### a. $\lbrace x = X \land X > 0 \rbrace y := 2x \lbrace x = X \land y \geq 2 \rbrace$.
 
-$\ldots$
+1. $\lbrace x = X \land X > 0 \rbrace y := 2x \lbrace x = X \land y \geq 2 \rbrace$
+2. $\lbrace x = X \land 2x \geq 2 \rbrace y := 2x \lbrace x = X \land y \geq 2 \rbrace$ (ASI)
+3. $(x = X \land X > 0) \Rightarrow (x = X \land 2x \geq 2)$?
+4. $(x = X \land X > 0) \Rightarrow (x > 0) \Rightarrow (x \geq 1) \Rightarrow (2x \geq 2) \Rightarrow (x = X \land 2x \geq 2)$
+5. Por lo tanto, por regla CONS, la precondición original $x = X \land X > 0$ implica a la obtenida $(x = X \land 2x \geq 2)$ y por ende la terna es válida.
 
 ### b. $\lbrace true \rbrace \text{while true do skip od} \lbrace false \rbrace$
 
-$\ldots$
+1. Tomamos como invariante a la misma precondición: $i = true$
+2. $\lbrace true \land true \rbrace skip \lbrace true \rbrace$ (REP)
+3. $\lbrace true \rbrace skip \lbrace true \rbrace$ (lógica)
+4. $\lbrace true \rbrace \text{while true do skip od} \lbrace true \land \lnot true \rbrace$ (REP)
+5. $\lbrace true \rbrace \text{while true do skip od} \lbrace true \land false \rbrace$ (lógica)
+6. $\lbrace true \rbrace \text{while true do skip od} \lbrace false \rbrace$ (lógica)
 
 ---
 
