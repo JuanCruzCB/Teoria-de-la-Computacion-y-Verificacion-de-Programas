@@ -129,11 +129,11 @@ Contraejemplo:
 
 ## 4. Probar por medio del método H las fórmulas de correctitud parcial siguientes, relacionadas respectivamente a programas que calculan el valor absoluto de un número entero y el producto de dos números naturales:
 
-### a. $\lbrace x = X \rbrace \text{if } x > 0 \text{ then } y := x \text{ else } y := -x \rbrace \lbrace y = |X| \rbrace$, siendo $|X|$ el valor absoluto de $X$.
+### a. $\lbrace x = X \rbrace \text{if } x > 0 \text{ then } y := x \text{ else } y := -x  \lbrace y = |X| \rbrace$, siendo $|X|$ el valor absoluto de $X$.
 
-1. Se probará la terna de Hoare usando principalmente la regla del if.
+1. Se probará la terna de Hoare usando la regla del if.
 2. Probar **$\lbrace p \land B \rbrace S_1 \lbrace q \rbrace$**:
-   1. $\lbrace x = X \land x > 0 \rbrace y := x \lbrace y = |X| \rbrace$ (COND)
+   1. $\lbrace x = X \land x > 0 \rbrace y := x \lbrace y = |X| \rbrace$
    2. $\lbrace x = |X| \rbrace y := x \lbrace y = |X| \rbrace$ (ASI)
    3. $x = X \land x > 0$
    4. $\Rightarrow X > 0$
@@ -142,7 +142,7 @@ Contraejemplo:
    7. Conclusión: $(x = X \land x > 0) \rightarrow (x = |X|)$
    8. **$\lbrace x = X \land x > 0 \rbrace y := x \lbrace y = |X| \rbrace$** (CONS)
 3. Probar **$\lbrace p \land \neg B \rbrace S_2 \lbrace q \rbrace$**:
-   1. $\lbrace x = X \land \neg (x > 0) \rbrace y := -x \lbrace y = |X| \rbrace$ (COND)
+   1. $\lbrace x = X \land \neg (x > 0) \rbrace y := -x \lbrace y = |X| \rbrace$
    2. $\lbrace x = X \land x \leq 0 \rbrace y := -x \lbrace y = |X| \rbrace$ (MAT)
    3. $\lbrace -x = |X| \rbrace y := -x \lbrace y = |X| \rbrace$ (ASI)
    4. $x = X \land \neg (x > 0)$
@@ -157,7 +157,7 @@ Contraejemplo:
    2. $\lbrace x = X \land \neg (x > 0) \rbrace y := -x \lbrace y = |X| \rbrace$
    3. **$\lbrace x = X \rbrace \text{if } x > 0 \text{ then } y := x \text{ else } y := -x \rbrace \lbrace y = |X| \rbrace$** (1, 2, COND)
 
-### b. $\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \text{while k > 0 do } prod := prod + x; k := k - 1; od \lbrace prod = x.y \rbrace$
+### b. $\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \text{while k > 0 do } prod := prod + x; k := k - 1; od \lbrace prod = x \cdot y \rbrace$
 
 1. Elementos:
    1. Precondición: $p$ es $(x \geq 0 \land y \geq 0)$
@@ -171,9 +171,9 @@ Contraejemplo:
    5. Por lo tanto, un invariante posible es $i \equiv prod = x \cdot (y - k) \land k \geq 0$.
 3. Probar $p \rightarrow i$ para las primeras dos sentencias antes de entrar al while: **$\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$**
    1. $\lbrace prod = x \cdot (y - y) \land y \geq 0 \rbrace k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (ASI)
-   2. $\lbrace prod = 0 \land y \geq 0 \rbrace k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (MAT)
+   2. $\lbrace prod = 0 \land y \geq 0 \rbrace k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (MAT, CONS)
    3. $\lbrace 0 = 0 \land y \geq 0 \rbrace prod := 0; \lbrace prod = 0 \land y \geq 0\rbrace$ (ASI)
-   4. $\lbrace y \geq 0 \rbrace prod := 0; \lbrace prod = 0 \land y \geq 0 \rbrace$ (MAT)
+   4. $\lbrace y \geq 0 \rbrace prod := 0; \lbrace prod = 0 \land y \geq 0 \rbrace$ (MAT, CONS)
    5. $\lbrace y \geq 0 \rbrace prod := 0; k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (4, 2, SEC)
    6. Se reemplaza la precondición del paso 5 por otra precondición que la implique, por la regla CONS: $(x \geq 0 \land y \geq 0) \rightarrow y \geq 0$ trivialmente verdadero porque $(q \land p) \rightarrow p$ es una tautología.
    7. **$\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$** (CONS)
@@ -209,17 +209,44 @@ $\ldots$
 
 ## 6. Probar la terminación del programa planteado en el ejercicio 4.b, es decir: $\langle x \geq 0 \land y \geq 0 \rangle S_{prod} :: prod := 0; k := y; \text{while } k > 0 \text{ do } prod := prod + x; k := k - 1 \text{ od } \langle true \rangle$. Ayuda: Notar que $k$ se decrementa en cada iteración y que se mantiene siempre mayor o igual que cero.
 
-Para probar la correctitud total de una terna de Hoare, se debe probar la correctitud parcial y además que el programa termina. En el ejercicio 4.b ya se demostró la parcial, por lo que ahora solo falta probar la terminación.
+Para probar la correctitud total de una terna de Hoare usando el método H\*, se necesita:
 
-Para probar la terminación, se debe hallar una función variante $f$ que asegure que el número de iteraciones del bucle es finito, ergo que el programa termina. La función debe cumplir dos condiciones: a) decrecer en cada iteración del bucle b) tener un límite inferior → no puede decrecer infinitamente.
+1. Un invariante $i$.
+2. Una función variante $t$ con valores en $\mathbb{N}$.
+3. Verificar que se cumplen las condiciones de la regla H\*.
 
-Se observó en el ejercicio 4.b que $k$ es la variable que controla cuándo el bucle termina, y además que siempre decrece en una unidad entera en cada iteración del bucle. Además, por el invariante que se encontró, se sabe que siempre $k \geq 0$. Por lo tanto, una función variante posible es $f(k) = k$, porque $f$ decrece en cada iteración del bucle, y además tiene un límite inferior que es $0$, ya que $k$ siempre es mayor o igual a $0$.
+Tomo como invariante a $prod = x \cdot (y - k) \land k \geq 0$ y como variante a $t(k) = k$.
 
-Verificamos las dos condiciones de la función variante $f(k) = k$:
+**Paso 1**: El invariante se preserva.
 
-1. Acotación inferior: como se sabe que $k \geq 0$ siempre, entonces $f(k) \geq 0$, por lo que $f$ tiene un límite inferior.
-2. Decrecimiento: en cada iteración se ejecuta la instrucción $k := k - 1$. Como la función variante es $f(k) = k$, luego de una iteración se tiene $f'(k) = k - 1$. Como $k - 1 < k$ para cualquier $k$, entonces $f'(k) < f(k)$, por lo que $f$ decrece en cada iteración del bucle.
+1. **$\lbrace i \land B \rbrace S \lbrace i \rbrace$**.
+2. Probado en el ejercicio 4.b.
 
-Como existe una función variante $f$ que está acotada inferiormente y decrece estrictamente en cada iteración, el bucle ejecuta una cantidad finita de iteraciones. Por lo tanto, el programa termina.
+**Paso 2**: La variante decrece estrictamente.
 
-Dado que en el ejercicio 4.b ya se probó la correctitud parcial y ahora se probó la terminación, se sigue que el programa es totalmente correcto.
+1. $\lbrace i \land B \land t = Z \rbrace S \lbrace t < Z \rbrace$
+2. $\lbrace prod = x \cdot (y - k) \land k \geq 0 \land k > 0 \land k = Z \rbrace prod := prod + x; k := k - 1 \lbrace k < Z \rbrace$
+3. $\lbrace k - 1 < Z \rbrace k := k - 1 \lbrace k < Z \rbrace$ (ASI)
+4. $\lbrace k - 1 < Z \rbrace prod := prod + x; \lbrace k - 1 < Z \rbrace$ (ASI)
+5. $\lbrace k - 1 < Z \rbrace prod := prod + x; k := k - 1 \lbrace k < Z\rbrace$ (SEC 3, 4)
+6. $prod = x \cdot (y - k) \land k \geq 0 \land k > 0 \land k = Z$
+7. $\Rightarrow k = Z$
+8. $\Rightarrow k - 1 = Z - 1$
+9. $\Rightarrow Z - 1 < Z$
+10. $\Rightarrow k - 1 < Z$
+11. $(prod = x \cdot (y - k) \land k \geq 0 \land k > 0 \land k = Z) \Rightarrow k - 1 < Z$
+12. $\lbrace prod = x \cdot (y - k) \land k \geq 0 \land k > 0 \land k = Z \rbrace prod := prod + x; k := k - 1 \lbrace k < Z \rbrace$ (CONS)
+
+**Paso 3**: La variante es natural.
+
+1. **$i \Rightarrow t \geq 0$**
+2. $prod = x \cdot (y - k) \land k \geq 0$
+3. $\Rightarrow k \geq 0$
+4. $\Rightarrow t \geq 0$
+
+**Paso 4**: Conclusión.
+
+1. $\frac{\langle p \land B \rangle S \langle p \rangle, \langle p \land B \land t = Z \rangle S \langle t < Z \rangle, p \rightarrow t \geq 0}{\langle p \rangle \text{ while B do } S \text{ od} \langle p \land \lnot B \rangle}$
+2. $\langle prod = x \cdot (y - k) \land k \geq 0 \rangle \text{ while k > 0 do } prod := prod + x; k := k - 1 \text{ od} \langle prod = x \cdot (y - k) \land k \geq 0 \land \lnot (k > 0) \rangle$ (REP\*)
+3. $\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \lbrace prod = x \cdot (y - k) \land k \geq 0 \rbrace$ (ejercicio 4.b)
+4. $\lbrace x \geq 0 \land y \geq 0 \rbrace prod := 0; k := y; \text{ while k > 0 do } prod := prod + x; k := k - 1 \text{ od} \langle prod = x \cdot (y - k) \land k \geq 0 \land \lnot (k > 0) \rangle$ (3, 2, SEC)
