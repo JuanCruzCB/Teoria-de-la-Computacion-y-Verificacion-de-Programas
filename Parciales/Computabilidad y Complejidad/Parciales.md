@@ -1,3 +1,79 @@
+<h1 align="center">2013 - 1° fecha</h1>
+
+---
+
+<h1 align="center">2015 - 1° fecha</h1>
+
+---
+
+<h1 align="center">2015 - 2° fecha</h1>
+
+---
+
+<h1 align="center">2016 - 1° fecha</h1>
+
+---
+
+<h1 align="center">2016 - 2° fecha</h1>
+
+---
+
+<h1 align="center">2022 - 1° fecha</h1>
+
+## 1. Sean $L_1 \in RE$ y $L_2 \in R$.
+
+### a. Probar, construyendo una MT, que $L_1 \cap L_2 \in RE$. Comentario: sólo se pide presentar la idea general de la MT.
+
+$\ldots$
+
+### b. Encontrar un lenguaje $L_1 \in RE$ y un lenguaje $L_2 \in R$ tales que $L_1 \cap L_2 \notin R$.
+
+$\ldots$
+
+## 2. Construir una MT que acepte el lenguaje $L = \lbrace (\langle M \rangle, w_1, w_2) \mid \text{la MT M acepta al menos una de las cadenas } w_i \rbrace$. Comentario: sólo se pide presentar la idea general de la MT.
+
+$\ldots$
+
+## 3. La siguiente es una prueba de que $L_U \notin R$
+
+### a. Existe un lenguaje $L$ tal que $L^C \notin RE$ y además $L \leq L_U$.
+
+$\ldots$
+
+### b. Como $L^C \notin RE$, entonces $L \notin R$.
+
+$\ldots$
+
+### c. Y como $L \notin R$ y $L \leq L_U$, entonces $L_U \notin R$.
+
+$\ldots$
+
+### Se pide justificar los incisos b y c. Ayuda: tener en cuenta las propiedades estudiadas en clase sobre las clases $R$ y $RE$ y sobre las reducciones de lenguajes.
+
+$\ldots$
+
+## 4. Probar que si $A$ es Turing-reducible a $B$, entonces $A^C$ es Turing-reducible a $B^C$. Ayuda: teniendo en cuenta la hipótesis, hay que probar que existe una MT con oráculo $B^C$ que acepta $A^C$ y siempre se detiene.
+
+$\ldots$
+
+## 5. Probar que cualquier lenguaje $L_1 \in P$ se puede reducir polinomialmente a cualquier lenguaje $L_2 \in P$, siempre y cuando $L_1$ y $L_2$ no sean ni $\Sigma^*$ ni $\emptyset$. Comentario: describir la función de reducción de $L_1$ a $L_2$ y probar que la función se computa en tiempo polinomial.
+
+$\ldots$
+
+## 6. Construir una MT que acepte todos los pares $(\langle M \rangle, n)$ siendo $n$ un número natural, que cumplen que $M$, a partir del input vacío, se detiene en a lo sumo $n^2$ pasos. Ayuda: la función $n^2$ es tiempo-construible. Comentario: sólo presentar la idea general de la MT.
+
+$\ldots$
+
+## 7. Probar que el siguiente lenguaje está en $NP$: $\text{TRUE-SAT} = \lbrace \phi \mid \phi \text{ es una fórmula booleana sin cuantificadores y satisfactible con al menos dos asignaciones de valores de verdad, en una de las cuales todos los valores de verdad son true} \rbrace$. Ayuda: la evaluación de una asignación sobre una fórmula booleana tarda tiempo polinomial.
+
+$\ldots$
+
+---
+
+<h1 align="center">2022 - 2° fecha</h1>
+
+---
+
 <h1 align="center">2024 - 1° fecha</h1>
 
 ## 1.
@@ -246,55 +322,3 @@ Puede pasar que $L$ sea $NPH$ pero no $NPC$, como por ejemplo $HP$.
 **Verdadero**.
 
 Por teorema, se sabe que si $L_1 \leq L_2$ y $L_2 \in P$, entonces $L_1 \in P$. Como $SAT \leq_p L$ y $L \in P$, entonces $SAT \in P$. Como $SAT$ es $NPC$, todo lenguaje de $NP$ se reduce polinomialmente a $SAT$, y como $SAT \in P$, todo lenguaje de $NP$ se reduce polinomialmente a un lenguaje de $P$. Por lo tanto no solo se cumple $P \subseteq NP$, sino que también se cumple $NP \subseteq P$. Por lo tanto $P = NP$.
-
----
-
-<h1 align="center">Desconocido</h1>
-
-## 1. Sean $L_1 \in RE$ y $L_2 \in R$.
-
-### a. Probar, construyendo una MT, que $L_1 \cap L_2 \in RE$. Comentario: sólo se pide presentar la idea general de la MT.
-
-$\ldots$
-
-### b. Encontrar un lenguaje $L_1 \in RE$ y un lenguaje $L_2 \in R$ tales que $L_1 \cap L_2 \notin R$.
-
-$\ldots$
-
-## 2. Construir una MT que acepte el lenguaje $L = \lbrace (\langle M \rangle, w_1, w_2) \mid \text{la MT M acepta al menos una de las cadenas } w_i \rbrace$. Comentario: sólo se pide presentar la idea general de la MT.
-
-$\ldots$
-
-## 3. La siguiente es una prueba de que $L_U \notin R$
-
-### a. Existe un lenguaje $L$ tal que $L^C \notin RE$ y además $L \leq L_U$.
-
-$\ldots$
-
-### b. Como $L^C \notin RE$, entonces $L \notin R$.
-
-$\ldots$
-
-### c. Y como $L \notin R$ y $L \leq L_U$, entonces $L_U \notin R$.
-
-$\ldots$
-
-### Se pide justificar los incisos b y c. Ayuda: tener en cuenta las propiedades estudiadas en clase sobre las clases $R$ y $RE$ y sobre las reducciones de lenguajes.
-
-$\ldots$
-
-## 4. Probar que si $A$ es Turing-reducible a $B$, entonces $A^C$ es Turing-reducible a $B^C$. Ayuda: teniendo en cuenta la hipótesis, hay que probar que existe una MT con oráculo $B^C$ que acepta $A^C$ y siempre se detiene.
-
-$\ldots$
-
-## 5. Probar que cualquier lenguaje $L_1 \in P$ se puede reducir polinomialmente a cualquier lenguaje $L_2 \in P$, siempre y cuando $L_1$ y $L_2$ no sean ni $\Sigma^*$ ni $\emptyset$. Comentario: describir la función de reducción de $L_1$ a $L_2$ y probar que la función se computa en tiempo polinomial.
-
-$\ldots$
-
-## 6. Construir una MT que acepte todos los pares $(\langle M \rangle, n)$ siendo $n$ un número natural, que cumplen que $M$, a partir del input vacío, se detiene en a lo sumo $n^2$ pasos. Ayuda: la función $n^2$ es tiempo-construible. Comentario: sólo presentar la idea general de la MT.
-
-$\ldots$
-
-## 7. Probar que el siguiente lenguaje está en $NP$: $\text{TRUE-SAT} = \lbrace \phi \mid \phi \text{ es una fórmula booleana sin cuantificadores y satisfactible con al menos dos asignaciones de valores de verdad, en una de las cuales todos los valores de verdad son true} \rbrace$. Ayuda: la evaluación de una asignación sobre una fórmula booleana tarda tiempo polinomial.
-
-$\ldots$
