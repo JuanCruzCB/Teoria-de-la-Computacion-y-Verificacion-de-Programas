@@ -214,3 +214,67 @@ $\lbrace x = X \land x \in \mathbb{Z} \land x > 0 \rbrace S \lbrace y = \sqrt{X}
 4. $\lbrace true \rbrace \text{while true do skip od} \lbrace true \land \lnot true \rbrace$ (REP)
 5. $\lbrace true \rbrace \text{while true do skip od} \lbrace true \land false \rbrace$ (lógica)
 6. $\lbrace true \rbrace \text{while true do skip od} \lbrace false \rbrace$ (lógica)
+
+---
+
+<h1 align="center">2026 - 1° fecha (VdP)</h1>
+
+## 1. Especificar un programa que calcule el cuadrado de un número mayor que cero.
+
+$(x = X \land X > 0, y = X^2)$
+
+## 2. ¿Por qué se diferencia la correctitud parcial de la correctitud total de un programa?
+
+Porque se prueban con métodos distintos: La primera por inducción, y la segunda en base a una relación de orden bien fundada.
+
+## 3. Indicar y justificar si se cumple el siguiente enunciado: Si existe un estado $\sigma_1$ que satisface un predicado $p$, a partir del cual un programa $S$ termina en un estado $\sigma_2$ que satisface un predicado $q$, entonces se cumple $\langle p \rangle S \langle q \rangle$.
+
+No se cumple, porque $\langle p \rangle S \langle q \rangle$ expresa que a partir de **TODO** estado que satisface $p$, el programa $S$ termina en un estado que satisface $q$. El enunciado original solo dice que existe **UN** estado que satisface $p$ y que termina en un estado que satisface $q$, lo cual no es suficiente para garantizar la validez de la terna.
+
+## 4. El método de prueba H es composicional. ¿Qué significa esta propiedad?
+
+Significa que las ternas $\lbrace p \rbrace S \lbrace q \rbrace$ y $\langle p \rangle S \langle q \rangle$ se pueden combinar para formar ternas más complejas sin tener en cuenta los contenidos de los programas $S$, los cuales se toman como cajas negras.
+
+## 5. Explicar por qué no sirve la forma del axioma de asignación $\lbrace true \rbrace x := e \lbrace x = e \rbrace$, donde $e$ es una expresión entera
+
+Aplicando dicha forma del axioma se obtiene, por ejemplo, $\lbrace true \rbrace x := x + 1 \lbrace x = x + 1 \rbrace$ que es una fórmula falsa.
+
+## 6. Probar con el método de prueba H la terna $\lbrace x = y \rbrace x := x + 1 ; y := y + 1 \lbrace x = y \rbrace$.
+
+1. $\lbrace x = y + 1 \rbrace y := y + 1 \lbrace x = y \rbrace$ (ASI)
+2. $\lbrace x + 1 = y + 1 \rbrace x := x + 1 \lbrace x = y + 1 \rbrace$ (ASI)
+3. $\lbrace x + 1 = y + 1 \rbrace x := x + 1 ; y := y + 1 \lbrace x = y \rbrace$ (SEC 1, 2)
+4. $x = y \Rightarrow x + 1 = y + 1$ (MAT)
+5. $\lbrace x = y \rbrace x := x + 1 ; y := y + 1 \lbrace x = y \rbrace$ (CONS 3, 4)
+
+## 7. Definir, de la forma que vimos en clase, la semántica de la instrucción $\text{if B then S fi}$.
+
+- $(\text{if B then S fi}, \sigma) \rightarrow (S, \sigma)$ si $\sigma(B) = verdadero$
+- $(\text{if B then S fi}, \sigma) \rightarrow (E, \sigma)$ si $\sigma(B) = falso$
+
+## 8. Una expresión booleana $B$ se define de la siguiente manera: $B :: true \mid false \mid b \mid \lnot B_1 \mid (B_1 \lor B_2) \mid (B_1 \land B_2)$ donde $true$ y $false$ son las constantes booleanas y $b$ es una variable booleana. Se pide definir por inducción, como vimos en clase, el conjunto $cons(B)$ de las constantes booleanas de $B$
+
+- $cons(true) = \lbrace true \rbrace$
+- $cons(false) = \lbrace false \rbrace$
+- $cons(b) = \emptyset$
+- $cons(\lnot B_1) = cons(B_1)$
+- $cons(B_1 \lor B_2) = cons(B_1) \cup cons(B_2)$
+- $cons(B_1 \land B_2) = cons(B_1) \cup cons(B_2)$
+
+## 9. Se cumple que el método de prueba $H$ es sensato y completo. ¿Qué significa cada una de dichas propiedades?
+
+- $H$ es **sensato** porque todas las fórmulas que permite probar son verdaderas.
+- $H$ es **completo** porque permite probar todas las fórmulas verdaderas.
+
+## 10. Probar usando inducción, como vimos en clase, la sensatez de la siguiente regla: $\frac{\lbrace p \rbrace S \lbrace q \rbrace, \lbrace r \rbrace S \lbrace s \rbrace}{\lbrace p \lor r \rbrace S \lbrace q \lor s \rbrace}$
+
+Hay que probar que si se cumple $\vdash_H \lbrace p \lor r \rbrace S \lbrace q \lor s \rbrace$, aplicando la regla indicada, entonces se cumple $\models \lbrace p \lor r \rbrace S \lbrace q \lor s \rbrace$.
+
+Supongamos que se cumple $\vdash_H \lbrace p \lor r \rbrace S \lbrace q \lor s \rbrace$, aplicando la regla indicada.
+
+Esto significa que también se cumple $\vdash_H \lbrace p \rbrace S \lbrace q \rbrace$ y $\vdash_H \lbrace r \rbrace S \lbrace s \rbrace$.
+
+Entonces, como ambas pruebas son más cortas que la prueba original, se puede aplicar la hipótesis inductiva, quedando $\models \lbrace p \rbrace S \lbrace q \rbrace$ y $\models \lbrace r \rbrace S \lbrace s \rbrace$. Veamos que a partir de esto se puede probar $\models \lbrace p \lor r \rbrace S \lbrace q \lor s \rbrace$. Dado $\sigma \models p \lor r$:
+
+- Si $\sigma \models p$, como $\models \lbrace p \rbrace S \lbrace q \rbrace$, entonces también se cumple $\models \lbrace p \lor r \rbrace S \lbrace q \rbrace$ y a su vez $\models \lbrace p \lor r \rbrace S \lbrace q \lor s \rbrace$.
+- Si $\sigma \models r$, como $\models \lbrace r \rbrace S \lbrace s \rbrace$, entonces también se cumple $\models \lbrace p \lor r \rbrace S \lbrace s \rbrace$ y a su vez $\models \lbrace p \lor r \rbrace S \lbrace q \lor s \rbrace$.
